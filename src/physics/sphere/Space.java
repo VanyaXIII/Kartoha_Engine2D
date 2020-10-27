@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Space {
     public ArrayList<LineEq> lines;
     public ArrayList<AST> things;
-    public ArrayList<Gravity> gravities;
     private final double dt;
     private double time;
     private final double g;
@@ -20,8 +19,8 @@ public class Space {
         this.time = 0;
         this.height = height;
         this.width = width;
-        lines = new ArrayList<LineEq>();
-        things = new ArrayList<AST>();
+        lines = new ArrayList<>();
+        things = new ArrayList<>();
         correctEn = 0.0;
         energy = 0.0;
         amOfTh = 0;
@@ -34,11 +33,15 @@ public class Space {
             e.printStackTrace();
         }
         time += dt;
+        long time1 = System.nanoTime();
         for (AST thing : things) {
             thing.changeCoord();
         }
+        AST.collisionMode = !AST.collisionMode;
+        long time2 = System.nanoTime();
         countEn();
 //        fixEnergy();
+        System.out.println("calculating: "+(time2-time1));
     }
 
     private void countCorrectEn(AST thing) {
@@ -60,17 +63,11 @@ public class Space {
         countEn();
     }
 
-    public double getDt() {
-        return dt;
-    }
 
     public double getTime() {
         return time;
     }
 
-    public double getG() {
-        return g;
-    }
 
     public void addLine(double x1, double y1, double x2, double y2) {
         LineEq line = new LineEq(x1, y1, x2, y2);
@@ -89,10 +86,6 @@ public class Space {
         this.things.add(thing);
         this.countCorrectEn(thing);
         amOfTh++;
-    }
-
-    public void addGravities(double x0, double y0, double r, double k) {
-        Gravity gravity = new Gravity(x0, y0, r, k, this.g, this.dt);
     }
 
     public void printEnergy() {

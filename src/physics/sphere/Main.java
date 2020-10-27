@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 class Main extends JPanel {
-    private final static Space space = new Space(0.05, 10,  1680, 1000);
+    private final static Space space = new Space(0.05, 0,  1680, 1000);
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Brownian motion");
@@ -26,11 +26,11 @@ class Main extends JPanel {
 //        panel.space.addLine(500,1000,0,0);
         panel.space.addLine(0,1000,0,0);
         panel.space.addLine(1679,0,1679,1000);
-        panel.space.addLine(0,999,1680,999);
+        panel.space.addLine(0,990,1680,990);
         panel.space.addLine(0,0,300,1000);
-        for (int i=0; i<40; i++) {
-            int x = 200 + i*20;
-            int y = 100;
+        for (int i=0; i<20; i++) {
+            int x = 500 + i*20;
+            int y = 170;
             for(int j=0; j<10; j++)
             panel.space.addThing(new Vector2D(0, 0), x, y+25*j, 10);
         }
@@ -38,7 +38,7 @@ class Main extends JPanel {
         panel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                panel.space.addThing(new Vector2D(0, 100), e.getX(), e.getY(), 50, Material.Steel);
+                panel.space.addThing(new Vector2D(0,0 ), e.getX(), e.getY(), 50, Material.Steel);
                 panel.space.printThings();
             }
             @Override
@@ -93,7 +93,7 @@ class Main extends JPanel {
         }
         //g.drawOval(gg.drawcoords()[0],gg.drawcoords()[1],gg.drawcoords()[2],gg.drawcoords()[2]);
         space.changeTime();
-        space.printEnergy();
+//        space.printEnergy();
 
 
     }

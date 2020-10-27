@@ -1,14 +1,13 @@
 package physics.sphere;
 
 import physics.utils.Tools;
-
 import java.awt.*;
 
 public class AST extends Sphere2D implements Drawable {
     public Vector2D v;
     public Energy energy;
     private final double time, g;
-    private Space space;
+    private final Space space;
     public static boolean collisionMode = true;
 
     AST(Space space, Vector2D v, double x0, double y0, double r, double g, double dt) {
@@ -31,9 +30,14 @@ public class AST extends Sphere2D implements Drawable {
 
     public void changeCoord() {
         changeSpeed();
+        double oldx = x0;
+        double oldy = y0;
         x0 += v.getX() * time;
         y0 += v.getY() * time;
-//        sphereCollision();
+        if (lineCollision()) {
+            x0 = oldx;
+            y0 = oldy;
+        }
     }
 
     private void changeSpeed() {
@@ -57,27 +61,31 @@ public class AST extends Sphere2D implements Drawable {
 
     private void processClash() {
         for (AST thing : space.things) {
-            if (checkSphereIntersection(thing, true).isIntersected) reflectSpeed(thing);
-            if (checkSphereIntersection(thing, false).isIntersected) sphereCollision(checkSphereIntersection(thing, false), thing);
+            if (checkSphereIntersection(thing, true).isIntersected)
+                reflectSpeed(thing);
+
+            if(collisionMode) {
+                if (checkSphereIntersection(thing, false).isIntersected)
+                    sphereCollision(checkSphereIntersection(thing, false));
+            }
         }
         for (LineEq line : space.lines) {
             if (checkLineIntersection(line, true)) reflectSpeed(line);
         }
     }
 
-    private void sphereCollision(Intersection intersection, AST thing) {
-            if (intersection.isIntersected) {
-                Point2D nCoords1 = intersection.centralLine.movePoint(new Point2D(this.x0, this.y0), intersection.getValue());
-                Point2D nCoords2 = intersection.centralLine.createOpVect().movePoint(new Point2D(thing.x0, thing.y0), intersection.getValue());
-                this.x0 = nCoords1.x;
-                this.y0 = nCoords1.y;
-                thing.x0 = nCoords2.x;
-                thing.y0 = nCoords2.y;
-            }
+    private void sphereCollision(Intersection intersection) {
+        Point2D nCoords = intersection.centralLine.movePoint(new Point2D(this.x0, this.y0), intersection.getValue());
+            this.x0 = nCoords.x;
+            this.y0 = nCoords.y;
     }
-//        for (LineEq line : space.lines) {
-//            if (checkLineIntersection(line, false)) return true;
-//        }
+
+    private boolean lineCollision(){
+        for (LineEq line : space.lines) {
+            checkLineIntersection(line, false);
+        }
+        return false;
+    }
 
     private boolean checkLineIntersection(LineEq line, boolean mode) {
         double x = countCoords(mode)[0];
@@ -85,12 +93,11 @@ public class AST extends Sphere2D implements Drawable {
         double d = line.calcDistance(x, y);
         if (d <= r) {
             if (line.y1 == line.y2) {
-                if (x >= line.minX() && x <= line.maxX()) return true;
+                return x >= line.minX() && x <= line.maxX();
             } else {
-                if (y >= line.minY() && y <= line.maxY()) return true;
+                return y >= line.minY() && y <= line.maxY();
             }
         } else return false;
-        return false;
     }
 
     private void reflectSpeed(LineEq line) {
@@ -132,12 +139,10 @@ public class AST extends Sphere2D implements Drawable {
         double v2y = thing.v.countProjectionOn(axisY);
         double u1x = ((ratio - 1) / (ratio + 1)) * v1x + (2 / (ratio + 1)) * v2x;
         double u2x = ((ratio * 2) / (ratio + 1)) * v1x + ((1 - ratio) / (ratio + 1)) * v2x;
-        double u1y = v1y;
-        double u2y = v2y;
         Vector2D fv1x = axisX.createByDouble(u1x);
         Vector2D fv2x = axisX.createByDouble(u2x);
-        Vector2D fv1y = axisY.createByDouble(u1y);
-        Vector2D fv2y = axisY.createByDouble(u2y);
+        Vector2D fv1y = axisY.createByDouble(v1y);
+        Vector2D fv2y = axisY.createByDouble(v2y);
         this.v = new Vector2D(fv1x, fv1y);
         thing.v = new Vector2D(fv2x, fv2y);
     }
