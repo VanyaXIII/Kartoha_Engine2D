@@ -9,6 +9,7 @@ public class AST extends Sphere2D implements Drawable {
     public Energy energy;
     private final double time, g;
     private Space space;
+    public static boolean collisionMode = true;
 
     AST(Space space, Vector2D v, double x0, double y0, double r, double g, double dt) {
         super(x0, y0, r);
@@ -30,7 +31,6 @@ public class AST extends Sphere2D implements Drawable {
 
     public void changeCoord() {
         changeSpeed();
-        sphereCollision();
         x0 += v.getX() * time;
         y0 += v.getY() * time;
 //        sphereCollision();
@@ -58,15 +58,14 @@ public class AST extends Sphere2D implements Drawable {
     private void processClash() {
         for (AST thing : space.things) {
             if (checkSphereIntersection(thing, true).isIntersected) reflectSpeed(thing);
+            if (checkSphereIntersection(thing, false).isIntersected) sphereCollision(checkSphereIntersection(thing, false), thing);
         }
         for (LineEq line : space.lines) {
             if (checkLineIntersection(line, true)) reflectSpeed(line);
         }
     }
 
-    private void sphereCollision() {
-        for (AST thing : space.things) {
-            Intersection intersection = checkSphereIntersection(thing, false);
+    private void sphereCollision(Intersection intersection, AST thing) {
             if (intersection.isIntersected) {
                 Point2D nCoords1 = intersection.centralLine.movePoint(new Point2D(this.x0, this.y0), intersection.getValue());
                 Point2D nCoords2 = intersection.centralLine.createOpVect().movePoint(new Point2D(thing.x0, thing.y0), intersection.getValue());
@@ -75,11 +74,10 @@ public class AST extends Sphere2D implements Drawable {
                 thing.x0 = nCoords2.x;
                 thing.y0 = nCoords2.y;
             }
-        }
+    }
 //        for (LineEq line : space.lines) {
 //            if (checkLineIntersection(line, false)) return true;
 //        }
-    }
 
     private boolean checkLineIntersection(LineEq line, boolean mode) {
         double x = countCoords(mode)[0];
@@ -117,7 +115,7 @@ public class AST extends Sphere2D implements Drawable {
             if (this.equals(thing)) {
                 return new Intersection(false);
             } else {
-                return new Intersection(true, this, thing, dvector, this.r + thing.r - distance);
+                return new Intersection(true, dvector, this.r + thing.r - distance);
             }
         }
         return new Intersection(false);
@@ -183,9 +181,8 @@ class Intersection {
     public boolean isIntersected;
     public Vector2D centralLine;
     private double value;
-    public AST thing1, thing2;
 
-    Intersection(boolean isIntersected, AST thing1, AST thing2, Vector2D cl, double value) {
+    Intersection(boolean isIntersected, Vector2D cl, double value) {
         this.isIntersected = isIntersected;
         this.centralLine = cl;
         this.value = value;
