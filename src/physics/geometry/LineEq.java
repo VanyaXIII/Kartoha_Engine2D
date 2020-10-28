@@ -46,11 +46,11 @@ public class LineEq implements Drawable {
         return Math.min(x1, x2);
     }
 
-    public Vector2D makeNormalVector() {
-        Vector2D n;
+    public Vector2 makeNormalVector() {
+        Vector2 n;
         if (k >= 0) {
-            n = new Vector2D(minY() - maxY(), maxX() - minX());
-        } else n = new Vector2D(maxY() - minY(), maxX() - minX());
+            n = new Vector2(minY() - maxY(), maxX() - minX());
+        } else n = new Vector2(maxY() - minY(), maxX() - minX());
         return n;
     }
 

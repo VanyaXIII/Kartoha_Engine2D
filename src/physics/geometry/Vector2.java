@@ -1,19 +1,19 @@
 package physics.geometry;
 
-public class Vector2D {
+public class Vector2 {
     private double x, y;
 
-    public Vector2D(double x, double y) {
+    public Vector2(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public Vector2D(Vector2D vector1, Vector2D vector2) {
+    public Vector2(Vector2 vector1, Vector2 vector2) {
         this.x = vector1.x + vector2.x;
         this.y = vector1.y + vector2.y;
     }
 
-    public Vector2D(Point2D point1, Point2D point2){
+    public Vector2(Point2 point1, Point2 point2){
         this.x = point2.x - point1.x;
         this.y = point2.y - point1.y;
     }
@@ -49,8 +49,8 @@ public class Vector2D {
         makeOpY();
     }
 
-    public Vector2D createOpVect(){
-        return new Vector2D(-x, -y);
+    public Vector2 createOpVect(){
+        return new Vector2(-x, -y);
     }
 
     public double length() {
@@ -63,12 +63,12 @@ public class Vector2D {
         y /= d;
     }
 
-    public Vector2D createByDouble(double l) {
+    public Vector2 createByDouble(double l) {
         double d = this.length();
-        return new Vector2D((x/d)*l, (y/d)*l);
+        return new Vector2((x/d)*l, (y/d)*l);
     }
 
-    public double dot(Vector2D vector) {
+    public double dot(Vector2 vector) {
         return this.getY() * vector.getY() + this.getX() * vector.getX();
     }
 
@@ -77,9 +77,9 @@ public class Vector2D {
         this.y *= number;
     }
 
-    public Point2D movePoint(Point2D point, double movement){
-        Vector2D mv = createByDouble(movement);
-        return new Point2D(point.x + mv.getX(), point.y + mv.getY());
+    public Point2 movePoint(Point2 point, double movement){
+        Vector2 mv = createByDouble(movement);
+        return new Point2(point.x + mv.getX(), point.y + mv.getY());
 
     }
 
@@ -91,11 +91,11 @@ public class Vector2D {
         this.y = y;
     }
 
-    public Vector2D createNormal() {
-        return new Vector2D(-y, x);
+    public Vector2 createNormal() {
+        return new Vector2(-y, x);
     }
 
-    public double countProjectionOn(Vector2D vector) {
+    public double countProjectionOn(Vector2 vector) {
         double projection = this.dot(vector) / vector.length();
         return projection;
     }

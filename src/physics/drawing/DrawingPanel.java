@@ -16,34 +16,19 @@ public class DrawingPanel extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-//        Thread thread1 = new Thread(new Runnable() {
+//        Thread thread = new Thread(new Runnable() {
 //            @Override
 //            public void run() {
-//                for (LineEq line : space.lines) {
-//                    g.setColor(Color.ORANGE);
-//                    g.drawLine((int) line.x1, (int) line.y1, (int) line.x2, (int) line.y2);
-//                }
-//                for (ASS thing : space.things) {
-//                    //System.out.println(thing.v.length());
-//                    thing.draw(g);
-//                    //g.drawLine(thing.getVectorCoords()[0],thing.getVectorCoords()[1],thing.getVectorCoords()[2],thing.getVectorCoords()[3]);
+//                for (Drawable drawable : space.drawables) {
+//                    drawable.draw(g);
+//
 //                }
 //            }
 //        });
-//        thread1.start();
+//        thread.start();
         for (Drawable drawable : space.drawables){
             drawable.draw(g);
         }
-//        for (LineEq line : space.lines) {
-//            g.setColor(Color.ORANGE);
-//            g.drawLine((int) line.x1, (int) line.y1, (int) line.x2, (int) line.y2);
-//        }
-//        for (ASS thing : space.things) {
-//            //System.out.println(thing.v.length());
-//            thing.draw(g);
-//            //g.drawLine(thing.getVectorCoords()[0],thing.getVectorCoords()[1],thing.getVectorCoords()[2],thing.getVectorCoords()[3]);
-//        }
-        //g.drawOval(gg.drawcoords()[0],gg.drawcoords()[1],gg.drawcoords()[2],gg.drawcoords()[2]);
         space.changeTime();
 //        space.printEnergy();
     }
