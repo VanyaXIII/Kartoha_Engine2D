@@ -62,6 +62,7 @@ public class LineEq implements Drawable {
 
     @Override
     public void draw(Graphics g) {
+        g.setColor(Color.BLUE);
         g.drawLine(Tools.transformDouble(x1), Tools.transformDouble(y1),
                 Tools.transformDouble(x2), Tools.transformDouble(y2));
     }

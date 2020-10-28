@@ -1,5 +1,6 @@
 package physics.sphere;
 
+import physics.drawing.Drawable;
 import physics.geometry.LineEq;
 import physics.geometry.Vector2D;
 
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 public class Space {
     public ArrayList<LineEq> lines;
     public ArrayList<ASS> things;
+    public ArrayList<Drawable> drawables;
     private final double dt;
     private double time;
     private final double g;
@@ -24,6 +26,7 @@ public class Space {
         this.width = width;
         lines = new ArrayList<>();
         things = new ArrayList<>();
+        drawables = new ArrayList<>();
         correctEn = 0.0;
         energy = 0.0;
         amOfTh = 0;
@@ -74,13 +77,15 @@ public class Space {
 
     public void addLine(double x1, double y1, double x2, double y2) {
         LineEq line = new LineEq(x1, y1, x2, y2);
-        this.lines.add(line);
+        lines.add(line);
+        drawables.add(line);
     }
 
     public void addThing(Vector2D v, double x0, double y0, double r) {
         ASS thing = new ASS(this, v, x0, y0, r, this.g, this.dt);
-        this.things.add(thing);
-        this.countCorrectEn(thing);
+        things.add(thing);
+        countCorrectEn(thing);
+        drawables.add(thing);
         amOfTh++;
     }
 
@@ -88,6 +93,7 @@ public class Space {
         ASS thing = new ASS(this, v, x0, y0, r, this.g, this.dt, material);
         this.things.add(thing);
         this.countCorrectEn(thing);
+        drawables.add(thing);
         amOfTh++;
     }
 
