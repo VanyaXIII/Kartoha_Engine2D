@@ -1,5 +1,7 @@
 package physics.sphere;
 
+import physics.drawing.Drawable;
+import physics.geometry.Vector2D;
 import physics.utils.Tools;
 
 import java.awt.*;

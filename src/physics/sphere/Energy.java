@@ -2,10 +2,10 @@ package physics.sphere;
 
 public class Energy {
     private double wp, wk, g;
-    private AST thing;
+    private ASS thing;
     private Space space;
 
-    Energy(AST ast, double g, Space space) {
+    Energy(ASS ast, double g, Space space) {
         this.g = g;
         this.thing = ast;
         this.space = space;

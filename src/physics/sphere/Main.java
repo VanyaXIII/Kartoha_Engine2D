@@ -1,5 +1,8 @@
 package physics.sphere;
 
+import physics.drawing.DrawingPanel;
+import physics.geometry.LineEq;
+import physics.geometry.Vector2D;
 import physics.utils.Tools;
 
 import javax.swing.*;
@@ -7,17 +10,17 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-class Main extends JPanel {
-    private final static Space space = new Space(0.05, 0,  1680, 1000);
+class Main {
 
     public static void main(String[] args) {
+        DrawingPanel panel = new DrawingPanel();
+        panel.addSpace(0.05, 9.81,  1680, 1000);
         JFrame frame = new JFrame("Brownian motion");
-        frame.setSize(Tools.transformDouble(space.width), Tools.transformDouble(space.height));
+        frame.setSize(Tools.transformDouble(panel.space.width), Tools.transformDouble(panel.space.height));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBackground(Color.BLACK);
         frame.setLocation(100,0);
         frame.setResizable(false);
-        Main panel = new Main();
         frame.add(panel);
         frame.setUndecorated(true);
         frame.setVisible(true);
@@ -38,7 +41,7 @@ class Main extends JPanel {
         panel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                panel.space.addThing(new Vector2D(0,0 ), e.getX(), e.getY(), 50, Material.Steel);
+                panel.space.addThing(new Vector2D(20,0 ), e.getX(), e.getY(), 50, Material.Steel);
                 panel.space.printThings();
             }
             @Override
@@ -64,37 +67,5 @@ class Main extends JPanel {
             frame.repaint();
         }
     }
-
-    @Override
-    public void paint(Graphics g) {
-//        Thread thread1 = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                for (LineEq line : space.lines) {
-//                    g.setColor(Color.ORANGE);
-//                    g.drawLine((int) line.x1, (int) line.y1, (int) line.x2, (int) line.y2);
-//                }
-//                for (AST thing : space.things) {
-//                    //System.out.println(thing.v.length());
-//                    thing.draw(g);
-//                    //g.drawLine(thing.getVectorCoords()[0],thing.getVectorCoords()[1],thing.getVectorCoords()[2],thing.getVectorCoords()[3]);
-//                }
-//            }
-//        });
-//        thread1.start();
-        for (LineEq line : space.lines) {
-            g.setColor(Color.ORANGE);
-            g.drawLine((int) line.x1, (int) line.y1, (int) line.x2, (int) line.y2);
-        }
-        for (AST thing : space.things) {
-            //System.out.println(thing.v.length());
-            thing.draw(g);
-            //g.drawLine(thing.getVectorCoords()[0],thing.getVectorCoords()[1],thing.getVectorCoords()[2],thing.getVectorCoords()[3]);
-        }
-        //g.drawOval(gg.drawcoords()[0],gg.drawcoords()[1],gg.drawcoords()[2],gg.drawcoords()[2]);
-        space.changeTime();
-//        space.printEnergy();
-
-
-    }
 }
+

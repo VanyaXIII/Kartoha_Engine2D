@@ -1,4 +1,4 @@
-package physics.sphere;
+package physics.drawing;
 
 import java.awt.*;
 

@@ -1,16 +1,22 @@
 package physics.sphere;
 
+import physics.drawing.Drawable;
+import physics.geometry.LineEq;
+import physics.geometry.Point2D;
+import physics.geometry.Vector2D;
 import physics.utils.Tools;
 import java.awt.*;
 
-public class AST extends Sphere2D implements Drawable {
+//TODO сделать просчет траектории
+
+public class ASS extends Sphere2D implements Drawable {
     public Vector2D v;
     public Energy energy;
     private final double time, g;
     private final Space space;
     public static boolean collisionMode = true;
 
-    AST(Space space, Vector2D v, double x0, double y0, double r, double g, double dt) {
+    ASS(Space space, Vector2D v, double x0, double y0, double r, double g, double dt) {
         super(x0, y0, r);
         this.space = space;
         this.time = dt;
@@ -19,7 +25,7 @@ public class AST extends Sphere2D implements Drawable {
         this.energy = new Energy(this, g, space);
     }
 
-    AST(Space space, Vector2D v, double x0, double y0, double r, double g, double dt, Material material) {
+    ASS(Space space, Vector2D v, double x0, double y0, double r, double g, double dt, Material material) {
         super(x0, y0, r, material);
         this.space = space;
         this.time = dt;
@@ -60,7 +66,7 @@ public class AST extends Sphere2D implements Drawable {
     }
 
     private void processClash() {
-        for (AST thing : space.things) {
+        for (ASS thing : space.things) {
             if (checkSphereIntersection(thing, true).isIntersected)
                 reflectSpeed(thing);
 
@@ -73,7 +79,7 @@ public class AST extends Sphere2D implements Drawable {
             if (checkLineIntersection(line, true)) reflectSpeed(line);
         }
     }
-
+    //TODO сделать коллизию только для шарика с меньшей массой
     private void sphereCollision(Intersection intersection) {
         Point2D nCoords = intersection.centralLine.movePoint(new Point2D(this.x0, this.y0), intersection.getValue());
             this.x0 = nCoords.x;
@@ -110,7 +116,7 @@ public class AST extends Sphere2D implements Drawable {
     }
 
 
-    private Intersection checkSphereIntersection(AST thing, boolean mode) {
+    private Intersection checkSphereIntersection(ASS thing, boolean mode) {
         double x1 = this.countCoords(mode)[0];
         double y1 = this.countCoords(mode)[1];
         double x2 = thing.countCoords(mode)[0];
@@ -128,7 +134,7 @@ public class AST extends Sphere2D implements Drawable {
         return new Intersection(false);
     }
 
-    private void reflectSpeed(AST thing) {
+    private void reflectSpeed(ASS thing) {
         Vector2D axisX = new Vector2D(this.countCoords(true)[0] - thing.countCoords(true)[0],
                 this.countCoords(true)[1] - thing.countCoords(true)[1]);
         Vector2D axisY = axisX.createNormal();

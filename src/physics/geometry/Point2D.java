@@ -1,9 +1,9 @@
-package physics.sphere;
+package physics.geometry;
 
 public class Point2D {
     public double x, y;
 
-    Point2D(double x, double y) {
+    public Point2D(double x, double y) {
         this.x = x;
         this.y = y;
     }

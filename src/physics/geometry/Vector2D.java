@@ -1,22 +1,24 @@
-package physics.sphere;
+package physics.geometry;
 
 public class Vector2D {
     private double x, y;
 
-    Vector2D(double x, double y) {
+    public Vector2D(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    Vector2D(Vector2D vector1, Vector2D vector2) {
+    public Vector2D(Vector2D vector1, Vector2D vector2) {
         this.x = vector1.x + vector2.x;
         this.y = vector1.y + vector2.y;
     }
 
-    Vector2D(Point2D point1, Point2D point2){
+    public Vector2D(Point2D point1, Point2D point2){
         this.x = point2.x - point1.x;
         this.y = point2.y - point1.y;
     }
+
+
 
     public double getX() {
         return x;

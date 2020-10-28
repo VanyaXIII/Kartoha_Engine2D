@@ -1,11 +1,16 @@
-package physics.sphere;
+package physics.geometry;
 
-public class LineEq {
+import physics.drawing.Drawable;
+import physics.utils.Tools;
+
+import java.awt.*;
+
+public class LineEq implements Drawable {
     public double x1, x2, y1, y2;
     private double k, b;
     private double A, B, C;
 
-    LineEq(double x1, double y1, double x2, double y2) {
+    public LineEq(double x1, double y1, double x2, double y2) {
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;
@@ -53,5 +58,11 @@ public class LineEq {
         double d = Math.abs(A * x + B * y + C)
                 / Math.sqrt(A * A + B * B);
         return d;
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        g.drawLine(Tools.transformDouble(x1), Tools.transformDouble(y1),
+                Tools.transformDouble(x2), Tools.transformDouble(y2));
     }
 }

@@ -1,10 +1,13 @@
 package physics.sphere;
 
+import physics.geometry.LineEq;
+import physics.geometry.Vector2D;
+
 import java.util.ArrayList;
 
 public class Space {
     public ArrayList<LineEq> lines;
-    public ArrayList<AST> things;
+    public ArrayList<ASS> things;
     private final double dt;
     private double time;
     private final double g;
@@ -13,7 +16,7 @@ public class Space {
     private double energy;
     private int amOfTh;
 
-    Space(double dt, double g, int width, int height) {
+    public Space(double dt, double g, int width, int height) {
         this.dt = dt;
         this.g = g;
         this.time = 0;
@@ -34,30 +37,30 @@ public class Space {
         }
         time += dt;
         long time1 = System.nanoTime();
-        for (AST thing : things) {
+        for (ASS thing : things) {
             thing.changeCoord();
         }
-        AST.collisionMode = !AST.collisionMode;
+        ASS.collisionMode = !ASS.collisionMode;
         long time2 = System.nanoTime();
         countEn();
 //        fixEnergy();
         System.out.println("calculating: "+(time2-time1));
     }
 
-    private void countCorrectEn(AST thing) {
+    private void countCorrectEn(ASS thing) {
         correctEn += thing.energy.count();
     }
 
     public void countEn() {
         energy = 1.0;
-        for (AST thing : things) {
+        for (ASS thing : things) {
             energy += thing.energy.count();
         }
     }
 
     public void fixEnergy() {
         double ratio = correctEn / energy;
-        for (AST thing : things) {
+        for (ASS thing : things) {
             thing.v.mul(Math.sqrt(ratio));
         }
         countEn();
@@ -75,14 +78,14 @@ public class Space {
     }
 
     public void addThing(Vector2D v, double x0, double y0, double r) {
-        AST thing = new AST(this, v, x0, y0, r, this.g, this.dt);
+        ASS thing = new ASS(this, v, x0, y0, r, this.g, this.dt);
         this.things.add(thing);
         this.countCorrectEn(thing);
         amOfTh++;
     }
 
     public void addThing(Vector2D v, double x0, double y0, double r, Material material) {
-        AST thing = new AST(this, v, x0, y0, r, this.g, this.dt, material);
+        ASS thing = new ASS(this, v, x0, y0, r, this.g, this.dt, material);
         this.things.add(thing);
         this.countCorrectEn(thing);
         amOfTh++;
