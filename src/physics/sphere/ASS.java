@@ -10,6 +10,7 @@ import java.awt.*;
 //TODO сначала у одного шарик меняется скорость, а потом уже запускается расчет для другого, с учетом изменения скорости первого
 //TODO надо все разюить по методам, чтобы сначала у всех менялась скорость
 //TODO сделать просчет траектории
+//TODO доделать коллизию, чтобы учитывались прямые
 
 public class ASS extends Sphere2D implements Drawable {
     public Vector2 v;
@@ -17,6 +18,7 @@ public class ASS extends Sphere2D implements Drawable {
     private final double g;
     private final Space space;
     public static boolean collisionMode = true;
+    private boolean aflag = true;
     // TODO подумать над полем пространства
     ASS(Space space, Vector2 v, double x0, double y0, double r) {
         super(x0, y0, r);
@@ -40,15 +42,13 @@ public class ASS extends Sphere2D implements Drawable {
         double oldy = y0;
         x0 += v.getX();
         y0 += v.getY();
-        if (lineCollision()) {
-            x0 = oldx;
-            y0 = oldy;
-        }
     }
 
     private void changeSpeed() {
+        aflag = true;
         reflectSpeed();
         processClash();
+        if(aflag)
         v.addY(g);
         energy.change();
     }
@@ -57,11 +57,13 @@ public class ASS extends Sphere2D implements Drawable {
         if (((y0 - (r) + v.getY()> 0.0) && (x0 + r + v.getX()) > space.width) || (x0 + v.getX() - r < 0.0)) {
             v.makeOpX();
         }
-        if ((x0 - r + v.getX()  > 0.0) && (y0 - r + v.getX()  < 0.0)) {
+        if ((x0 - r + v.getX()  > 0.0) && (y0 - r + v.getY()  < 0.0)) {
             v.makeOpY();
+            aflag = false;
         }
         if ((x0 + v.getX() + r > 0.0) && (y0 + v.getY() + r > space.height)) {
             v.makeOpY();
+            aflag = false;
         }
     }
 
@@ -78,9 +80,12 @@ public class ASS extends Sphere2D implements Drawable {
                 }
             }
         }
-        // TODO сделать вот это нормальным
+        // TODO пересекает ли вектор v с началом x0 y0 прямую
         for (LineEq line : space.lines) {
-            if (checkLineIntersection(line, true)) reflectSpeed(line);
+            if (checkLineIntersection(line, true)) {
+                reflectSpeed(line);
+                aflag = false;
+            }
         }
     }
 
@@ -110,7 +115,7 @@ public class ASS extends Sphere2D implements Drawable {
             } else {
                 return y >= line.minY() && y <= line.maxY();
             }
-        } else return false;
+        } else return line.doesIntersect(new LineEq(new Point2(x0, y0), v));
     }
 
     private void reflectSpeed(LineEq line) {
@@ -172,7 +177,7 @@ public class ASS extends Sphere2D implements Drawable {
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(this.getColor());
+        g.setColor(getColor());
         int[] coords = new int[]{Tools.transformDouble(x0 - r), Tools.transformDouble(y0 - r), Tools.transformDouble(r * 2)};
         g.drawOval(coords[0], coords[1], coords[2], coords[2]);
         g.fillOval(coords[0], coords[1], coords[2], coords[2]);

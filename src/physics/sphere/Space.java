@@ -2,17 +2,25 @@ package physics.sphere;
 
 import physics.drawing.Drawable;
 import physics.geometry.LineEq;
-import physics.geometry.Vector2D;
+import physics.geometry.Vector2;
+import physics.triangle.AST;
+import physics.triangle.Triangle;
+import physics.utils.Tools;
+import physics.utils.threads.SphereThread;
+import physics.utils.threads.TriangleThread;
 
 import java.util.ArrayList;
 
+//TODO бить пространство на части
+//TODO слушатель столкновений и всего такого, не забыть про wait()
 public class Space {
-    public ArrayList<LineEq> lines;
-    public ArrayList<ASS> things;
+    public ArrayList<LineEq> lines, tlines;
+    public ArrayList<ASS> spheres;
     public ArrayList<Drawable> drawables;
-    private final double dt;
+    public ArrayList<AST> triangles;
+    public final double dt;
     private double time;
-    private final double g;
+    public final double g;
     public final double height, width;
     private double correctEn;
     private double energy;
@@ -25,29 +33,43 @@ public class Space {
         this.height = height;
         this.width = width;
         lines = new ArrayList<>();
-        things = new ArrayList<>();
+        tlines = new ArrayList<>();
+        spheres = new ArrayList<>();
+        triangles = new ArrayList<>();
         drawables = new ArrayList<>();
         correctEn = 0.0;
         energy = 0.0;
         amOfTh = 0;
     }
 
-    public void changeTime() {
+    public void changeTime(){
+        long time1 = System.nanoTime();
+        SphereThread sthread = new SphereThread(this);
+        TriangleThread tthread = new TriangleThread(this);
+        sthread.start();
+        tthread.start();
+        ASS.collisionMode = !ASS.collisionMode;
         try {
-            Thread.sleep((int) (100 * dt));
+            sthread.join();
+            tthread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        double cTime = (System.nanoTime() - time1) / 1000000.0;
+        System.out.println("Counting: "+cTime);
+        countEn();
+//        fixEnergy();
+        double sleepTime = 0;
+        if ( dt * 1000.0 - cTime > 0) {
+            sleepTime = dt * 1000.0 - cTime;
+        }
+        System.out.println("Sleeping: "+sleepTime);
+        try {
+            Thread.sleep(Tools.transformDouble(sleepTime));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         time += dt;
-        long time1 = System.nanoTime();
-        for (ASS thing : things) {
-            thing.changeCoord();
-        }
-        ASS.collisionMode = !ASS.collisionMode;
-        long time2 = System.nanoTime();
-        countEn();
-//        fixEnergy();
-        System.out.println("calculating: "+(time2-time1));
     }
 
     private void countCorrectEn(ASS thing) {
@@ -56,14 +78,14 @@ public class Space {
 
     public void countEn() {
         energy = 1.0;
-        for (ASS thing : things) {
+        for (ASS thing : spheres) {
             energy += thing.energy.count();
         }
     }
 
     public void fixEnergy() {
         double ratio = correctEn / energy;
-        for (ASS thing : things) {
+        for (ASS thing : spheres) {
             thing.v.mul(Math.sqrt(ratio));
         }
         countEn();
@@ -81,22 +103,39 @@ public class Space {
         drawables.add(line);
     }
 
-    public void addThing(Vector2D v, double x0, double y0, double r) {
-        ASS thing = new ASS(this, v, x0, y0, r, this.g, this.dt);
-        things.add(thing);
+    public void addThing(Vector2 v, double x0, double y0, double r) {
+        ASS thing = new ASS(this, v, x0, y0, r);
+        spheres.add(thing);
         countCorrectEn(thing);
         drawables.add(thing);
         amOfTh++;
     }
 
-    public void addThing(Vector2D v, double x0, double y0, double r, Material material) {
-        ASS thing = new ASS(this, v, x0, y0, r, this.g, this.dt, material);
-        this.things.add(thing);
-        this.countCorrectEn(thing);
-        drawables.add(thing);
+    public void addThing(Vector2 v, double x0, double y0, double r, Material material) {
+        ASS sphere = new ASS(this, v, x0, y0, r, material);
+        spheres.add(sphere);
+        countCorrectEn(sphere);
+        drawables.add(sphere);
         amOfTh++;
     }
 
+    public void addTriangle(Vector2 v, double w, double x0, double y0, double r, Material material) {
+        AST triangle = new AST(this, v, w, x0, y0, r, material);
+        triangles.add(triangle);
+        drawables.add(triangle);
+    }
+
+    public void addTriangle(Vector2 v, double w, double x0, double y0, double r) {
+        AST triangle = new AST(this, v, w, x0, y0, r);
+        triangles.add(triangle);
+        drawables.add(triangle);
+    }
+
+    public void fillTLines(){
+        for(AST triangle : triangles){
+            triangle.returnLines(tlines);
+        }
+    }
     public void printEnergy() {
         System.out.printf("Correct energy:\t%.5f\nReal energy:\t%.5f\n", correctEn, energy);
     }

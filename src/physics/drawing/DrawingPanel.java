@@ -16,20 +16,25 @@ public class DrawingPanel extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                for (Drawable drawable : space.drawables) {
-//                    drawable.draw(g);
-//
-//                }
-//            }
-//        });
-//        thread.start();
-        for (Drawable drawable : space.drawables){
-            drawable.draw(g);
-        }
         space.changeTime();
-//        space.printEnergy();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (Drawable drawable : space.drawables) {
+                    drawable.draw(g);
+
+                }
+            }
+        });
+        thread.start();
+//        for (Drawable drawable : space.drawables){
+//            drawable.draw(g);
+//        }
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        space.printEnergy();
     }
 }

@@ -15,8 +15,26 @@ public class LineEq implements Drawable {
         this.x2 = x2;
         this.y1 = y1;
         this.y2 = y2;
+        calcEq();
         this.calcNormaleq();
-        this.calcEq();
+    }
+
+    public LineEq(Point2 point1, Point2 point2) {
+        this.x1 = point1.x;
+        this.x2 = point2.x;
+        this.y1 = point1.y;
+        this.y2 = point2.y;
+        calcEq();
+        this.calcNormaleq();
+    }
+
+    public LineEq(Point2 point, Vector2 vector) {
+        this.x1 = point.x;
+        this.x2 = point.x + vector.getX();
+        this.y1 = point.y;
+        this.y2 = point.y + vector.getY();
+        calcEq();
+        this.calcNormaleq();
     }
 
     void calcEq() {
@@ -58,6 +76,23 @@ public class LineEq implements Drawable {
         double d = Math.abs(A * x + B * y + C)
                 / Math.sqrt(A * A + B * B);
         return d;
+    }
+
+    public boolean doesIntersect(LineEq line) {
+        if (this.A * line.B != this.B * line.A) {
+            double ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
+            double iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
+            return (this.minX() <= ix && ix <= this.maxX() &&
+                    line.minX() <= ix && ix <= line.maxX() &&
+                    this.minY() <= iy && iy <= this.maxY() &&
+                    line.minY() <= iy && iy <= line.maxY());
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return x1 + "; " + y1 + "  " + x2 + "; " + y2;
     }
 
     @Override

@@ -36,6 +36,7 @@ public class AST extends Triangle implements Drawable {
         changeSpeed();
         rotate();
         movePoints();
+        pullPoints();
         x0 += v.getX();
         y0 += v.getY();
     }
@@ -45,17 +46,14 @@ public class AST extends Triangle implements Drawable {
     }
 
     private void movePoints(){
-        System.out.println(point1);
         point2.x += v.getX();
         point3.x += v.getX();
         point1.x += v.getX();
         point2.y += v.getY();
         point3.y += v.getY();
         point1.y += v.getY();
-        System.out.println(point2);
 
     }
-
     private void rotate(){
         Point2 centre = new Point2(x0, y0);
         point1.rotate(centre, w);
@@ -63,12 +61,23 @@ public class AST extends Triangle implements Drawable {
         point3.rotate(centre, w);
 
     }
+//TODO подумать над памятью
+    private void pullPoints(){
+        Point2 o = new Point2(x0,y0);
+        Vector2 v1 = new Vector2(o, point1);
+        Vector2 v2 = new Vector2(o, point2);
+        Vector2 v3 = new Vector2(o, point3);
+        point1 = v1.movePoint(point1, r - v1.length());
+        point2 = v2.movePoint(point2, r - v2.length());
+        point3 = v3.movePoint(point3, r - v3.length());
+    }
 
     @Override
     public void draw(Graphics g) {
         g.setColor(getColor());
         TPolygon polygon = new TPolygon(point1, point2, point3);
-        g.fillPolygon(polygon);
+        g.drawPolygon(polygon);
+//        g.fillPolygon(polygon);
         g.setColor(Color.WHITE);
         g.drawLine(Tools.transformDouble(x0),
                 Tools.transformDouble(y0),

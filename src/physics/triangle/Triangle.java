@@ -2,12 +2,14 @@ package physics.triangle;
 
 
 import physics.drawing.Drawable;
+import physics.geometry.LineEq;
 import physics.geometry.Point2;
 import physics.geometry.TPolygon;
 import physics.sphere.Material;
 import physics.utils.Tools;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public abstract class Triangle implements Drawable {
     public double x0, y0;
@@ -36,6 +38,14 @@ public abstract class Triangle implements Drawable {
         point2 = new Point2(x0, y0 - r);
         point3 = new Point2(x0 + Math.sqrt(3) / 2.0 * r, y0 + r / 2.0);
     }
+
+    public void returnLines(ArrayList<LineEq> tlines){
+        tlines.add(new LineEq(point1, point2));
+        tlines.add(new LineEq(point1, point3));
+        tlines.add(new LineEq(point2, point3));
+
+    }
+
 
     public Color getColor() {
         return material.color;
