@@ -5,12 +5,12 @@ import physics.utils.Tools;
 
 import java.awt.*;
 
-public class LineEq implements Drawable {
+public class Line implements Drawable {
     public double x1, x2, y1, y2;
     private double k, b;
     private double A, B, C;
 
-    public LineEq(double x1, double y1, double x2, double y2) {
+    public Line(double x1, double y1, double x2, double y2) {
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;
@@ -19,7 +19,7 @@ public class LineEq implements Drawable {
         this.calcNormaleq();
     }
 
-    public LineEq(Point2 point1, Point2 point2) {
+    public Line(Point2 point1, Point2 point2) {
         this.x1 = point1.x;
         this.x2 = point2.x;
         this.y1 = point1.y;
@@ -28,7 +28,7 @@ public class LineEq implements Drawable {
         this.calcNormaleq();
     }
 
-    public LineEq(Point2 point, Vector2 vector) {
+    public Line(Point2 point, Vector2 vector) {
         this.x1 = point.x;
         this.x2 = point.x + vector.getX();
         this.y1 = point.y;
@@ -64,13 +64,6 @@ public class LineEq implements Drawable {
         return Math.min(x1, x2);
     }
 
-    public Vector2 makeNormalVector() {
-        Vector2 n;
-        if (k >= 0) {
-            n = new Vector2(minY() - maxY(), maxX() - minX());
-        } else n = new Vector2(maxY() - minY(), maxX() - minX());
-        return n;
-    }
 
     public double calcDistance(double x, double y) {
         double d = Math.abs(A * x + B * y + C)
@@ -78,7 +71,7 @@ public class LineEq implements Drawable {
         return d;
     }
 
-    public boolean doesIntersect(LineEq line) {
+    public boolean doesIntersect(Line line) {
         if (this.A * line.B != this.B * line.A) {
             double ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
             double iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
@@ -88,6 +81,12 @@ public class LineEq implements Drawable {
                     line.minY() <= iy && iy <= line.maxY());
         }
         return false;
+    }
+
+    public Point2 findIntPoint(Line line){
+        double ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
+        double iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
+        return new Point2(ix, iy);
     }
 
     @Override

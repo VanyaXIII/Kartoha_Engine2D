@@ -1,5 +1,6 @@
 package physics.utils.threads;
 
+import physics.geometry.Line;
 import physics.sphere.ASS;
 import physics.sphere.Space;
 

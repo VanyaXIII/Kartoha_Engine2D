@@ -1,10 +1,9 @@
 package physics.sphere;
 
 import physics.drawing.Drawable;
-import physics.geometry.LineEq;
+import physics.geometry.Line;
 import physics.geometry.Vector2;
 import physics.triangle.AST;
-import physics.triangle.Triangle;
 import physics.utils.Tools;
 import physics.utils.threads.SphereThread;
 import physics.utils.threads.TriangleThread;
@@ -14,8 +13,9 @@ import java.util.ArrayList;
 //TODO бить пространство на части
 //TODO слушатель столкновений и всего такого, не забыть про wait()
 public class Space {
-    public ArrayList<LineEq> lines, tlines;
+    public ArrayList<Line> lines;
     public ArrayList<ASS> spheres;
+    public ArrayList<ASS> countableSpheres;
     public ArrayList<Drawable> drawables;
     public ArrayList<AST> triangles;
     public final double dt;
@@ -33,7 +33,6 @@ public class Space {
         this.height = height;
         this.width = width;
         lines = new ArrayList<>();
-        tlines = new ArrayList<>();
         spheres = new ArrayList<>();
         triangles = new ArrayList<>();
         drawables = new ArrayList<>();
@@ -42,28 +41,29 @@ public class Space {
         amOfTh = 0;
     }
 
-    public void changeTime(){
+    public void changeTime() {
         long time1 = System.nanoTime();
+        countableSpheres = (ArrayList<ASS>) spheres.clone();
         SphereThread sthread = new SphereThread(this);
         TriangleThread tthread = new TriangleThread(this);
         sthread.start();
         tthread.start();
-        ASS.collisionMode = !ASS.collisionMode;
         try {
             sthread.join();
             tthread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        ASS.collisionMode = !ASS.collisionMode;
         double cTime = (System.nanoTime() - time1) / 1000000.0;
-        System.out.println("Counting: "+cTime);
+//        System.out.println("Counting: " + cTime);
         countEn();
 //        fixEnergy();
         double sleepTime = 0;
-        if ( dt * 1000.0 - cTime > 0) {
+        if (dt * 1000.0 - cTime > 0) {
             sleepTime = dt * 1000.0 - cTime;
         }
-        System.out.println("Sleeping: "+sleepTime);
+//        System.out.println("Sleeping: " + sleepTime);
         try {
             Thread.sleep(Tools.transformDouble(sleepTime));
         } catch (InterruptedException e) {
@@ -98,7 +98,7 @@ public class Space {
 
 
     public void addLine(double x1, double y1, double x2, double y2) {
-        LineEq line = new LineEq(x1, y1, x2, y2);
+        Line line = new Line(x1, y1, x2, y2);
         lines.add(line);
         drawables.add(line);
     }
@@ -131,11 +131,6 @@ public class Space {
         drawables.add(triangle);
     }
 
-    public void fillTLines(){
-        for(AST triangle : triangles){
-            triangle.returnLines(tlines);
-        }
-    }
     public void printEnergy() {
         System.out.printf("Correct energy:\t%.5f\nReal energy:\t%.5f\n", correctEn, energy);
     }

@@ -13,10 +13,10 @@ public class TriangleThread extends Thread {
 
     @Override
     public void run(){
-        for (AST triangle : space.triangles) {
-            space.tlines.clear();
-            triangle.changeCoord();
-            space.fillTLines();
-        }
+            for (AST triangle : space.triangles) {
+                synchronized (triangle) {
+                    triangle.changeCoord();
+                }
+            }
     }
 }

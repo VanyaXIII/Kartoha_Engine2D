@@ -1,6 +1,7 @@
 package physics.triangle;
 
 import physics.drawing.Drawable;
+import physics.geometry.Line;
 import physics.geometry.Point2;
 import physics.geometry.TPolygon;
 import physics.geometry.Vector2;
@@ -29,14 +30,13 @@ public class AST extends Triangle implements Drawable {
         this.space = space;
         this.v = v;
         this.w = w;
-        this.g = space.g;
+        this.g = 0;
     }
 
     public void changeCoord() {
         changeSpeed();
         rotate();
         movePoints();
-        pullPoints();
         x0 += v.getX();
         y0 += v.getY();
     }
@@ -45,7 +45,7 @@ public class AST extends Triangle implements Drawable {
         v.addY(g);
     }
 
-    private void movePoints(){
+    private void movePoints() {
         point2.x += v.getX();
         point3.x += v.getX();
         point1.x += v.getX();
@@ -54,23 +54,30 @@ public class AST extends Triangle implements Drawable {
         point1.y += v.getY();
 
     }
-    private void rotate(){
+
+    private void rotate() {
         Point2 centre = new Point2(x0, y0);
         point1.rotate(centre, w);
         point2.rotate(centre, w);
         point3.rotate(centre, w);
 
     }
-//TODO подумать над памятью
-    private void pullPoints(){
-        Point2 o = new Point2(x0,y0);
-        Vector2 v1 = new Vector2(o, point1);
-        Vector2 v2 = new Vector2(o, point2);
-        Vector2 v3 = new Vector2(o, point3);
-        point1 = v1.movePoint(point1, r - v1.length());
-        point2 = v2.movePoint(point2, r - v2.length());
-        point3 = v3.movePoint(point3, r - v3.length());
+
+
+    public Line[] getLines(boolean mode) {
+        double m = mode ? 1.0 : 0.0;
+        Point2 centre = new Point2(x0 + v.getX() * m, y0 + v.getY()*m);
+        Point2 newPoint1 = new Point2(point1.x + m * v.getX(), point1.y + m * v.getY());
+        Point2 newPoint2 = new Point2(point2.x + m * v.getX(), point2.y + m * v.getY());
+        Point2 newPoint3 = new Point2(point3.x + m * v.getX(), point3.y + m * v.getY());
+        newPoint1.rotate(centre, w*m);
+        newPoint2.rotate(centre, w*m);
+        newPoint3.rotate(centre, w*m);
+        return new Line[] {new Line(newPoint1, newPoint2),
+                new Line(newPoint3, newPoint2),
+                new Line(newPoint1, newPoint3)};
     }
+
 
     @Override
     public void draw(Graphics g) {

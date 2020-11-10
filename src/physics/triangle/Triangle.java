@@ -2,11 +2,10 @@ package physics.triangle;
 
 
 import physics.drawing.Drawable;
-import physics.geometry.LineEq;
+import physics.geometry.Line;
 import physics.geometry.Point2;
 import physics.geometry.TPolygon;
 import physics.sphere.Material;
-import physics.utils.Tools;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ public abstract class Triangle implements Drawable {
     public final double r;
     private Material material;
     public Point2 point1, point2, point3;
-
     public Triangle(double x0, double y0, double r, Material material) {
         this.x0 = x0;
         this.y0 = y0;
@@ -39,13 +37,16 @@ public abstract class Triangle implements Drawable {
         point3 = new Point2(x0 + Math.sqrt(3) / 2.0 * r, y0 + r / 2.0);
     }
 
-    public void returnLines(ArrayList<LineEq> tlines){
-        tlines.add(new LineEq(point1, point2));
-        tlines.add(new LineEq(point1, point3));
-        tlines.add(new LineEq(point2, point3));
+    public void returnLines(ArrayList<Line> tlines) {
+        tlines.add(new Line(point1, point2));
+        tlines.add(new Line(point1, point3));
+        tlines.add(new Line(point2, point3));
 
     }
 
+    public int numberOfFixed() {
+        return (point1.isFixed() ? 1 : 0) + (point2.isFixed() ? 1 : 0) + (point3.isFixed() ? 1 : 0);
+    }
 
     public Color getColor() {
         return material.color;

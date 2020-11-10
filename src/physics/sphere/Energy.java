@@ -1,7 +1,7 @@
 package physics.sphere;
 
 public class Energy {
-    private double wp, wk, g;
+    public double wp, wk, g;
     private ASS thing;
     private Space space;
 
@@ -9,15 +9,20 @@ public class Energy {
         this.g = g;
         this.thing = ast;
         this.space = space;
-        this.change();
+        this.update();
     }
 
-    public void change() {
-        wp = thing.m * g * (space.height - thing.y0);
-        wk = (thing.m * (thing.v.getX() * thing.v.getX() + thing.v.getY() * thing.v.getY())) / 2.0;
+    public void update() {
+        wp = thing.m * g * (space.height - thing.y0 - thing.r);
+        wk = thing.m * (thing.v.getX() * thing.v.getX() + thing.v.getY() * thing.v.getY()) / 2.0;
     }
 
     public double count() {
         return wk + wp;
+    }
+
+    @Override
+    public String toString(){
+        return String.valueOf(count());
     }
 }

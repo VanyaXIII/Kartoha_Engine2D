@@ -18,6 +18,11 @@ public class Vector2 {
         this.y = point2.y - point1.y;
     }
 
+    public Vector2(Line line){
+        this.x = line.x2 - line.x1;
+        this.y = line.y2 - line.y1;
+    }
+
 
 
     public double getX() {
@@ -29,7 +34,7 @@ public class Vector2 {
     }
 
     public void addY(double a) {
-        this.y += a;
+        y += a;
     }
 
     public void addX(double a) {
@@ -81,6 +86,14 @@ public class Vector2 {
         Vector2 mv = createByDouble(movement);
         return new Point2(point.x + mv.getX(), point.y + mv.getY());
 
+    }
+
+    public void rotate(double angle) {
+        double x1, y1;
+        x1 = x;
+        y1 = y;
+        x = x1 * Math.cos(angle) - y1 * Math.sin(angle);
+        y = y1 * Math.cos(angle) + x1 * Math.sin(angle);
     }
 
     public void setX(double x) {

@@ -1,7 +1,5 @@
 package physics.drawing;
 
-import physics.geometry.LineEq;
-import physics.sphere.ASS;
 import physics.sphere.Space;
 
 import javax.swing.*;
