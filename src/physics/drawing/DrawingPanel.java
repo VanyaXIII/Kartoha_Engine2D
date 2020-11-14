@@ -8,7 +8,7 @@ import java.awt.*;
 public class DrawingPanel extends JPanel {
     public Space space;
 
-    public void addSpace(double dt, double g, int width, int height) {
+    public void addSpace(float dt, float g, int width, int height) {
         space = new Space(dt, g, width, height);
     }
 
@@ -33,6 +33,6 @@ public class DrawingPanel extends JPanel {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        space.printEnergy();
+//        space.printEnergy();
     }
 }

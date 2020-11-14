@@ -4,7 +4,6 @@ import physics.drawing.Drawable;
 import physics.geometry.Line;
 import physics.geometry.Point2;
 import physics.geometry.Vector2;
-import physics.triangle.AST;
 import physics.utils.Tools;
 
 import java.awt.*;
@@ -15,32 +14,29 @@ import java.awt.*;
 
 public class ASS extends Sphere2D implements Drawable {
     public Vector2 v;
+    public float w;
     public Energy energy;
     public static boolean collisionMode = true;
-    private final double g;
+    private final float g;
+    private Vector2 orientation = new Vector2(0, r);
     private final Space space;
     private boolean flag = true;
 
     // TODO подумать над полем пространства
-    ASS(Space space, Vector2 v, double x0, double y0, double r) {
-        super(x0, y0, r);
-        this.space = space;
-        this.v = v;
-        this.g = space.g;
-        this.energy = new Energy(this, g, space);
-    }
-
-    ASS(Space space, Vector2 v, double x0, double y0, double r, Material material) {
+    
+    ASS(Space space, Vector2 v, float w, float x0, float y0, float r, Material material) {
         super(x0, y0, r, material);
         this.space = space;
         this.v = v;
+        this.w = w;
         this.g = space.g;
         this.energy = new Energy(this, g, space);
     }
 
     public void changeCoord() {
-        double vy1 = v.getY();
+        float vy1 = v.getY();
         changeSpeed();
+        rotate();
         x0 += v.getX();
         y0 += (vy1 + v.getY()) / 2.0;
         energy.update();
@@ -49,15 +45,16 @@ public class ASS extends Sphere2D implements Drawable {
 
     private void changeSpeed() {
         flag = true;
-        processLineCollision();
+        processSceneCollision();
         processCollision();
         energy.update();
         if (flag) {
             v.addY(g);
         }
+        processCollision();
     }
 
-    private void processLineCollision() {
+    private void processSceneCollision() {
         if (((y0 - (r) + v.getY() > 0.0) && (x0 + r + v.getX()) > space.width) || (x0 + v.getX() - r < 0.0)) {
             v.makeOpX();
         }
@@ -69,6 +66,10 @@ public class ASS extends Sphere2D implements Drawable {
         }
     }
 
+    private void rotate(){
+        orientation.rotate(w);
+    }
+
     private void processCollision() {
         for (ASS thing : space.countableSpheres) {
             if (checkSphereIntersection(thing, true).isIntersected) {
@@ -76,61 +77,57 @@ public class ASS extends Sphere2D implements Drawable {
             }
             if (collisionMode) {
                 if (checkSphereIntersection(thing, false).isIntersected) {
-                    pullSpeheres(checkSphereIntersection(thing, false));
+                    pullSpheres(checkSphereIntersection(thing, false));
                 }
             }
         }
+
         space.countableSpheres.remove(this);
-        for (Line line : space.lines) {
-            if (checkLineIntersection(line, true)) {
-                processLineCollision(line);
+
+        for (Wall wall : space.walls) {
+            if (checkLineIntersection(wall, true)) {
+                processWallCollision(wall);
                 flag = false;
             }
         }
-        for (AST triangle : space.triangles) {
-            synchronized (triangle) {
-                for (Line line : triangle.getLines(true)) {
-                    if (checkLineIntersection(line, true)) {
-                        processLineCollision(line);
-                        flag = false;
-                    }
-                }
-            }
-        }
+//        for (AST triangle : space.triangles) {
+//            synchronized (triangle) {
+//                for (Line line : triangle.getLines(true)) {
+//                    if (checkLineIntersection(line, true)) {
+//                        processWallCollision(line);
+//                        flag = false;
+//                    }
+//                }
+//            }
+//        }
     }
 
-    private void pullSpeheres(SphereIntersection intersection) {
+    private void pullSpheres(SphereIntersection intersection) {
         if (intersection.getValue() != 0) {
-            Point2 nCoords = intersection.centralLine.movePoint(new Point2(this.x0, this.y0), intersection.getValue());
-            this.x0 = nCoords.x;
-            this.y0 = nCoords.y;
+            Point2 nCords = intersection.centralLine.movePoint(new Point2(x0, y0), intersection.getValue());
+            this.x0 = nCords.x;
+            this.y0 = nCords.y;
         }
     }
 
-    private void dragSphereToLine(Line line) {
-        double x = countCoords(true)[0];
-        double y = countCoords(true)[1];
-        double fy = y0;
-        double vy = v.getY();
-        double d = line.calcDistance(x0, y0);
-        Point2 intersectPoint = line.findIntPoint(new Line(x0, y0, x, y));
-        double len = Math.sqrt((intersectPoint.x - x0) * (intersectPoint.x - x0) + (intersectPoint.y - y0) * (intersectPoint.y - y0));
+    private void dragSphereToWall(Wall wall) {
+        float x = countCoords(true)[0];
+        float y = countCoords(true)[1];
+        float fy = y0;
+        float vy = v.getY();
+        float d = wall.calcDistance(x0, y0);
+        Point2 intersectPoint = wall.findIntPoint(new Line(x0, y0, x, y));
+        float len = (float) Math.sqrt((intersectPoint.x - x0) * (intersectPoint.x - x0) + (intersectPoint.y - y0) * (intersectPoint.y - y0));
         Point2 nCords = v.movePoint(new Point2(x0, y0), len - len * r / d);
         x0 = nCords.x;
         y0 = nCords.y;
     }
 
-    private boolean lineCollision() {
-        for (Line line : space.lines) {
-            checkLineIntersection(line, false);
-        }
-        return false;
-    }
 
     private boolean checkLineIntersection(Line line, boolean mode) {
-        double x = countCoords(mode)[0];
-        double y = countCoords(mode)[1];
-        double d = line.calcDistance(x, y);
+        float x = countCoords(mode)[0];
+        float y = countCoords(mode)[1];
+        float d = line.calcDistance(x, y);
         if (d <= r) {
             if (line.y1 == line.y2) {
                 return x >= line.minX() && x <= line.maxX();
@@ -140,27 +137,28 @@ public class ASS extends Sphere2D implements Drawable {
         } else return line.doesIntersect(new Line(new Point2(x0, y0), v));
     }
 
-    private void processLineCollision(Line line) {
-        Vector2 axisX = new Vector2(line);
+    private void processWallCollision(Wall wall) {
+        Vector2 axisX = new Vector2(wall);
         Vector2 axisY = axisX.createNormal();
-        double v1x = v.countProjectionOn(axisX);
-        double v1y = v.countProjectionOn(axisY);
-        Vector2 fv1x = axisX.createByDouble(v1x);
-        Vector2 fv1y = axisY.createByDouble(-v1y);
+        float v1x = v.countProjectionOn(axisX);
+        float v1y = v.countProjectionOn(axisY);
+        Vector2 fv1x = axisX.createByFloat(v1x);
+        Vector2 fv1y = axisY.createByFloat(-v1y);
         v = new Vector2(fv1x, fv1y);
-        dragSphereToLine(line);
+//        dragSphereToWall(wall);
+        float red = Tools.countAverage(material.coefOfReduction, wall.material.coefOfReduction);
+        v.mul(red);
         energy.update();
-        System.out.println(energy);
     }
 
     private SphereIntersection checkSphereIntersection(ASS thing, boolean mode) {
-        double x1 = this.countCoords(mode)[0];
-        double y1 = this.countCoords(mode)[1];
-        double x2 = thing.countCoords(mode)[0];
-        double y2 = thing.countCoords(mode)[1];
+        float x1 = this.countCoords(mode)[0];
+        float y1 = this.countCoords(mode)[1];
+        float x2 = thing.countCoords(mode)[0];
+        float y2 = thing.countCoords(mode)[1];
         Vector2 dvector = new Vector2(x1 - x2,
                 y1 - y2);
-        double distance = dvector.length();
+        float distance = dvector.length();
         if (distance < this.r + thing.r) {
             if (this.equals(thing)) {
                 return new SphereIntersection(false);
@@ -180,33 +178,33 @@ public class ASS extends Sphere2D implements Drawable {
                 this.countCoords(true)[1] - thing.countCoords(true)[1]);
         if (axisX.length() != 0.0) {
             Vector2 axisY = axisX.createNormal();
-            double ratio = this.m / thing.m;
-            double v1x = this.v.countProjectionOn(axisX);
-            double v2x = thing.v.countProjectionOn(axisX);
-            double v1y = this.v.countProjectionOn(axisY);
-            double v2y = thing.v.countProjectionOn(axisY);
-            double u1x = ((ratio - 1) / (ratio + 1)) * v1x + (2 / (ratio + 1)) * v2x;
-            double u2x = ((ratio * 2) / (ratio + 1)) * v1x + ((1 - ratio) / (ratio + 1)) * v2x;
-            Vector2 fv1x = axisX.createByDouble(u1x);
-            Vector2 fv2x = axisX.createByDouble(u2x);
-            Vector2 fv1y = axisY.createByDouble(v1y);
-            Vector2 fv2y = axisY.createByDouble(v2y);
+            float ratio = this.m / thing.m;
+            float v1x = this.v.countProjectionOn(axisX);
+            float v2x = thing.v.countProjectionOn(axisX);
+            float v1y = this.v.countProjectionOn(axisY);
+            float v2y = thing.v.countProjectionOn(axisY);
+            float u1x = ((ratio - 1) / (ratio + 1)) * v1x + (2 / (ratio + 1)) * v2x;
+            float u2x = ((ratio * 2) / (ratio + 1)) * v1x + ((1 - ratio) / (ratio + 1)) * v2x;
+            Vector2 fv1x = axisX.createByFloat(u1x);
+            Vector2 fv2x = axisX.createByFloat(u2x);
+            Vector2 fv1y = axisY.createByFloat(v1y);
+            Vector2 fv2y = axisY.createByFloat(v2y);
             this.v = new Vector2(fv1x, fv1y);
             thing.v = new Vector2(fv2x, fv2y);
         }
     }
 
-    public double[] countCoords(boolean mode) {
-        double m = mode ? 1.0 : 0.0;
-        return new double[]{x0 + m * v.getX(), y0 + m * (v.getY() + v.getY() + g) / 2.0};
+    public float[] countCoords(boolean mode) {
+        float m = mode ? 1.0f : 0.0f;
+        return new float[]{x0 + m * v.getX(), y0 + m * (v.getY() + v.getY() + g) / 2.0f};
     }
 
     @Override
     public void draw(Graphics g) {
         g.setColor(getColor());
-        int[] coords = new int[]{Tools.transformDouble(x0 - r), Tools.transformDouble(y0 - r), Tools.transformDouble(r * 2)};
+        int[] coords = new int[]{Tools.transformFloat(x0 - r), Tools.transformFloat(y0 - r), Tools.transformFloat(r * 2)};
         g.drawOval(coords[0], coords[1], coords[2], coords[2]);
-        g.fillOval(coords[0], coords[1], coords[2], coords[2]);
+//        g.fillOval(coords[0], coords[1], coords[2], coords[2]);
 //        g.drawLine(Tools.transformDouble(x0),
 //                Tools.transformDouble(y0),
 //                Tools.transformDouble(x0 + v.getX()),
@@ -222,10 +220,10 @@ public class ASS extends Sphere2D implements Drawable {
 //                Tools.transformDouble(x0 + v.getX()),
 //                Tools.transformDouble(y0 + v.getY()));
 
-//        g.drawLine(Tools.transformDouble(x0),
-//                Tools.transformDouble(y0),
-//                Tools.transformDouble(x0 + turnId.getX()),
-//                Tools.transformDouble(y0 + turnId.getY()));
+        g.drawLine(Tools.transformFloat(x0),
+                Tools.transformFloat(y0),
+                Tools.transformFloat(x0 + orientation.getX()),
+                Tools.transformFloat(y0 + orientation.getY()));
     }
 
 }
@@ -233,9 +231,9 @@ public class ASS extends Sphere2D implements Drawable {
 class SphereIntersection {
     public boolean isIntersected;
     public Vector2 centralLine;
-    private double value;
+    private float value;
 
-    SphereIntersection(boolean isIntersected, Vector2 cl, double value) {
+    SphereIntersection(boolean isIntersected, Vector2 cl, float value) {
         this.isIntersected = isIntersected;
         this.centralLine = cl;
         this.value = value;
@@ -245,9 +243,7 @@ class SphereIntersection {
         this.isIntersected = isIntersected;
     }
 
-    public double getValue() {
+    public float getValue() {
         return value;
     }
 }
-
-

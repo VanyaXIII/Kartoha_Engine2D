@@ -8,31 +8,32 @@ import physics.utils.Tools;
 import physics.utils.threads.SphereThread;
 import physics.utils.threads.TriangleThread;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 //TODO бить пространство на части
 //TODO слушатель столкновений и всего такого, не забыть про wait()
 public class Space {
-    public ArrayList<Line> lines;
+    public ArrayList<Wall> walls;
     public ArrayList<ASS> spheres;
     public ArrayList<ASS> countableSpheres;
     public ArrayList<Drawable> drawables;
     public ArrayList<AST> triangles;
-    public final double dt;
-    private double time;
-    public final double g;
+    public final float dt;
+    public final float g;
     public final double height, width;
+    private double time;
     private double correctEn;
     private double energy;
     private int amOfTh;
 
-    public Space(double dt, double g, int width, int height) {
+    public Space(float dt, float g, int width, int height) {
         this.dt = dt;
         this.g = g;
         this.time = 0;
         this.height = height;
         this.width = width;
-        lines = new ArrayList<>();
+        walls = new ArrayList<>();
         spheres = new ArrayList<>();
         triangles = new ArrayList<>();
         drawables = new ArrayList<>();
@@ -55,17 +56,17 @@ public class Space {
             e.printStackTrace();
         }
         ASS.collisionMode = !ASS.collisionMode;
-        double cTime = (System.nanoTime() - time1) / 1000000.0;
+        float cTime = (float) ((System.nanoTime() - time1) / 1000000.0);
 //        System.out.println("Counting: " + cTime);
         countEn();
 //        fixEnergy();
-        double sleepTime = 0;
+        float sleepTime = 0;
         if (dt * 1000.0 - cTime > 0) {
-            sleepTime = dt * 1000.0 - cTime;
+            sleepTime = dt * 1000.0f - cTime;
         }
 //        System.out.println("Sleeping: " + sleepTime);
         try {
-            Thread.sleep(Tools.transformDouble(sleepTime));
+            Thread.sleep(Tools.transformFloat(sleepTime));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -97,36 +98,43 @@ public class Space {
     }
 
 
-    public void addLine(double x1, double y1, double x2, double y2) {
-        Line line = new Line(x1, y1, x2, y2);
-        lines.add(line);
-        drawables.add(line);
+    public void addWall(float x1, float y1, float x2, float y2, Material material) {
+        Wall wall = new Wall(x1, y1, x2, y2, material);
+        walls.add(wall);
+        drawables.add(wall);
     }
 
-    public void addThing(Vector2 v, double x0, double y0, double r) {
-        ASS thing = new ASS(this, v, x0, y0, r);
+
+    public void addWall(float x1, float y1, float x2, float y2) {
+        Wall wall = new Wall(x1, y1, x2, y2, Material.Constantin);
+        walls.add(wall);
+        drawables.add(wall);
+    }
+
+    public void addThing(Vector2 v, float w, float x0, float y0, float r) {
+        ASS thing = new ASS(this, v, w, x0, y0, r, Material.Constantin);
         spheres.add(thing);
         countCorrectEn(thing);
         drawables.add(thing);
         amOfTh++;
     }
 
-    public void addThing(Vector2 v, double x0, double y0, double r, Material material) {
-        ASS sphere = new ASS(this, v, x0, y0, r, material);
+    public void addThing(Vector2 v, float w, float x0, float y0, float r, Material material) {
+        ASS sphere = new ASS(this, v, w, x0, y0, r, material);
         spheres.add(sphere);
         countCorrectEn(sphere);
         drawables.add(sphere);
         amOfTh++;
     }
 
-    public void addTriangle(Vector2 v, double w, double x0, double y0, double r, Material material) {
+    public void addTriangle(Vector2 v, float w, float x0, float y0, float r, Material material) {
         AST triangle = new AST(this, v, w, x0, y0, r, material);
         triangles.add(triangle);
         drawables.add(triangle);
     }
 
-    public void addTriangle(Vector2 v, double w, double x0, double y0, double r) {
-        AST triangle = new AST(this, v, w, x0, y0, r);
+    public void addTriangle(Vector2 v, float w, float x0, float y0, float r) {
+        AST triangle = new AST(this, v, w, x0, y0, r, Material.Constantin);
         triangles.add(triangle);
         drawables.add(triangle);
     }

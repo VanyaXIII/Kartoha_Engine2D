@@ -1,26 +1,26 @@
 package physics.geometry;
 
 public class Point2 {
-    public double x, y;
+    public float x, y;
     private boolean fixed;
 
-    public Point2(double x, double y) {
+    public Point2(float x, float y) {
         this.x = x;
         this.y = y;
         this.fixed = false;
     }
 
-    public Point2(double x, double y, boolean fixed) {
+    public Point2(float x, float y, boolean fixed) {
         this.x = x;
         this.y = y;
         this.fixed = fixed;
     }
 
-    public void rotate(Point2 rotatePoint, double angle) {
+    public void rotate(Point2 rotatePoint, float angle) {
         if (!fixed) {
-            double sx = x;
-            x = (sx - rotatePoint.x) * Math.cos(angle) - (this.y - rotatePoint.y) * Math.sin(angle) + rotatePoint.x;
-            y = (sx - rotatePoint.x) * Math.sin(angle) + (this.y - rotatePoint.y) * Math.cos(angle) + rotatePoint.y;
+            float sx = x;
+            x = (float) ((sx - rotatePoint.x) * Math.cos(angle) - (this.y - rotatePoint.y) * Math.sin(angle) + rotatePoint.x);
+            y = (float) ((sx - rotatePoint.x) * Math.sin(angle) + (this.y - rotatePoint.y) * Math.cos(angle) + rotatePoint.y);
         }
     }
 

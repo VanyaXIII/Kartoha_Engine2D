@@ -6,17 +6,17 @@ import physics.utils.Tools;
 import java.awt.*;
 
 public class Line implements Drawable {
-    public double x1, x2, y1, y2;
-    private double k, b;
-    private double A, B, C;
+    public float x1, x2, y1, y2;
+    private float k, b;
+    private float A, B, C;
 
-    public Line(double x1, double y1, double x2, double y2) {
+    public Line(float x1, float y1, float x2, float y2) {
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;
         this.y2 = y2;
         calcEq();
-        this.calcNormaleq();
+        this.calcNormalEq();
     }
 
     public Line(Point2 point1, Point2 point2) {
@@ -25,7 +25,7 @@ public class Line implements Drawable {
         this.y1 = point1.y;
         this.y2 = point2.y;
         calcEq();
-        this.calcNormaleq();
+        this.calcNormalEq();
     }
 
     public Line(Point2 point, Vector2 vector) {
@@ -34,7 +34,7 @@ public class Line implements Drawable {
         this.y1 = point.y;
         this.y2 = point.y + vector.getY();
         calcEq();
-        this.calcNormaleq();
+        this.calcNormalEq();
     }
 
     void calcEq() {
@@ -42,7 +42,7 @@ public class Line implements Drawable {
         b = y1 - k * x1;
     }
 
-    void calcNormaleq() {
+    void calcNormalEq() {
         A = y1 - y2;
         B = x2 - x1;
         C = x1 * y2 - x2 * y1;
@@ -65,9 +65,9 @@ public class Line implements Drawable {
     }
 
 
-    public double calcDistance(double x, double y) {
-        double d = Math.abs(A * x + B * y + C)
-                / Math.sqrt(A * A + B * B);
+    public float calcDistance(float x, float y) {
+        float d = (float) (Math.abs(A * x + B * y + C)
+                        / Math.sqrt(A * A + B * B));
         return d;
     }
 
@@ -84,8 +84,8 @@ public class Line implements Drawable {
     }
 
     public Point2 findIntPoint(Line line){
-        double ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
-        double iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
+        float ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
+        float iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
         return new Point2(ix, iy);
     }
 
@@ -97,7 +97,7 @@ public class Line implements Drawable {
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.BLUE);
-        g.drawLine(Tools.transformDouble(x1), Tools.transformDouble(y1),
-                Tools.transformDouble(x2), Tools.transformDouble(y2));
+        g.drawLine(Tools.transformFloat(x1), Tools.transformFloat(y1),
+                Tools.transformFloat(x2), Tools.transformFloat(y2));
     }
 }

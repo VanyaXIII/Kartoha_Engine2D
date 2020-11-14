@@ -6,8 +6,8 @@ public class Gravity extends Sphere2D {
     public double g;
     private double k;
 
-    Gravity(double x0, double y0, double r, double k, double g, double dt) {
-        super(x0, y0, r);
+    Gravity(float x0, float y0, float r, double k, double g, double dt) {
+        super(x0, y0, r, Material.Constantin);
         this.g = g;
         this.k = k;
         this.time = dt;

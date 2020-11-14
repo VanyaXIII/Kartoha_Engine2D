@@ -11,11 +11,12 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Triangle implements Drawable {
-    public double x0, y0;
-    public final double r;
+    public float x0, y0;
+    public final float r;
     private Material material;
     public Point2 point1, point2, point3;
-    public Triangle(double x0, double y0, double r, Material material) {
+
+    public Triangle(float x0, float y0, float r, Material material) {
         this.x0 = x0;
         this.y0 = y0;
         this.r = r;
@@ -23,18 +24,11 @@ public abstract class Triangle implements Drawable {
         this.material = material;
     }
 
-    public Triangle(double x0, double y0, double r) {
-        this.x0 = x0;
-        this.y0 = y0;
-        this.r = r;
-        setPoints();
-        this.material = new Material(1000, Color.RED);
-    }
 
     public void setPoints() {
-        point1 = new Point2(x0 - Math.sqrt(3) / 2.0 * r, y0 + r / 2.0);
+        point1 = new Point2((float) (x0 - Math.sqrt(3f) / 2.0f * r), y0 + r / 2.0f);
         point2 = new Point2(x0, y0 - r);
-        point3 = new Point2(x0 + Math.sqrt(3) / 2.0 * r, y0 + r / 2.0);
+        point3 = new Point2((float) (x0 + Math.sqrt(3) / 2.0f * r), y0 + r / 2.0f);
     }
 
     public void returnLines(ArrayList<Line> tlines) {

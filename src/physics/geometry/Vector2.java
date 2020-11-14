@@ -1,9 +1,9 @@
 package physics.geometry;
 
 public class Vector2 {
-    private double x, y;
+    private float x, y;
 
-    public Vector2(double x, double y) {
+    public Vector2(float x, float y) {
         this.x = x;
         this.y = y;
     }
@@ -13,31 +13,35 @@ public class Vector2 {
         this.y = vector1.y + vector2.y;
     }
 
-    public Vector2(Point2 point1, Point2 point2){
+    public Vector2(Point2 point1, Point2 point2) {
         this.x = point2.x - point1.x;
         this.y = point2.y - point1.y;
     }
 
-    public Vector2(Line line){
+    public Vector2(Line line) {
         this.x = line.x2 - line.x1;
         this.y = line.y2 - line.y1;
     }
 
 
+    public void mul(float m) {
+        x *= m;
+        y *= m;
+    }
 
-    public double getX() {
+    public float getX() {
         return x;
     }
 
-    public double getY() {
+    public float getY() {
         return y;
     }
 
-    public void addY(double a) {
+    public void addY(float a) {
         y += a;
     }
 
-    public void addX(double a) {
+    public void addX(float a) {
         this.x += a;
     }
 
@@ -49,17 +53,17 @@ public class Vector2 {
         this.y = -this.y;
     }
 
-    public void makeOpVect(){
+    public void makeOpVect() {
         makeOpX();
         makeOpY();
     }
 
-    public Vector2 createOpVect(){
+    public Vector2 createOpVect() {
         return new Vector2(-x, -y);
     }
 
-    public double length() {
-        return Math.sqrt(x * x + y * y);
+    public float length() {
+        return (float) Math.sqrt(x * x + y * y);
     }
 
     public void makeUnit() {
@@ -68,12 +72,12 @@ public class Vector2 {
         y /= d;
     }
 
-    public Vector2 createByDouble(double l) {
-        double d = this.length();
-        return new Vector2((x/d)*l, (y/d)*l);
+    public Vector2 createByFloat(float l) {
+        float d = this.length();
+        return new Vector2((x / d) * l, (y / d) * l);
     }
 
-    public double dot(Vector2 vector) {
+    public float dot(Vector2 vector) {
         return this.getY() * vector.getY() + this.getX() * vector.getX();
     }
 
@@ -82,8 +86,8 @@ public class Vector2 {
         this.y *= number;
     }
 
-    public Point2 movePoint(Point2 point, double movement){
-        Vector2 mv = createByDouble(movement);
+    public Point2 movePoint(Point2 point, float movement) {
+        Vector2 mv = createByFloat(movement);
         return new Point2(point.x + mv.getX(), point.y + mv.getY());
 
     }
@@ -92,15 +96,15 @@ public class Vector2 {
         double x1, y1;
         x1 = x;
         y1 = y;
-        x = x1 * Math.cos(angle) - y1 * Math.sin(angle);
-        y = y1 * Math.cos(angle) + x1 * Math.sin(angle);
+        x = (float) (x1 * Math.cos(angle) - y1 * Math.sin(angle));
+        y = (float) (y1 * Math.cos(angle) + x1 * Math.sin(angle));
     }
 
-    public void setX(double x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public void setY(double y) {
+    public void setY(float y) {
         this.y = y;
     }
 
@@ -108,8 +112,8 @@ public class Vector2 {
         return new Vector2(-y, x);
     }
 
-    public double countProjectionOn(Vector2 vector) {
-        double projection = this.dot(vector) / vector.length();
+    public float countProjectionOn(Vector2 vector) {
+        float projection = this.dot(vector) / vector.length();
         return projection;
     }
 

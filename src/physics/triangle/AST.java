@@ -13,19 +13,13 @@ import java.awt.*;
 
 public class AST extends Triangle implements Drawable {
     public Vector2 v;
-    private final double g;
+    private final float g;
     private final Space space;
-    public double w;
+    public float w;
 
-    public AST(Space space, Vector2 v, double w, double x0, double y0, double r) {
-        super(x0, y0, r);
-        this.space = space;
-        this.v = v;
-        this.w = w;
-        this.g = space.g;
-    }
 
-    public AST(Space space, Vector2 v, double w, double x0, double y0, double r, Material material) {
+
+    public AST(Space space, Vector2 v, float w, float x0, float y0, float r, Material material) {
         super(x0, y0, r, material);
         this.space = space;
         this.v = v;
@@ -65,7 +59,7 @@ public class AST extends Triangle implements Drawable {
 
 
     public Line[] getLines(boolean mode) {
-        double m = mode ? 1.0 : 0.0;
+        float m = mode ? 1.0f : 0.0f;
         Point2 centre = new Point2(x0 + v.getX() * m, y0 + v.getY()*m);
         Point2 newPoint1 = new Point2(point1.x + m * v.getX(), point1.y + m * v.getY());
         Point2 newPoint2 = new Point2(point2.x + m * v.getX(), point2.y + m * v.getY());
@@ -86,9 +80,9 @@ public class AST extends Triangle implements Drawable {
         g.drawPolygon(polygon);
 //        g.fillPolygon(polygon);
         g.setColor(Color.WHITE);
-        g.drawLine(Tools.transformDouble(x0),
-                Tools.transformDouble(y0),
-                Tools.transformDouble(x0 + v.getX()),
-                Tools.transformDouble(y0 + v.getY()));
+        g.drawLine(Tools.transformFloat(x0),
+                Tools.transformFloat(y0),
+                Tools.transformFloat(x0 + v.getX()),
+                Tools.transformFloat(y0 + v.getY()));
     }
 }
