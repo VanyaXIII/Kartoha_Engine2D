@@ -1,14 +1,13 @@
-package physics.sphere;
+package physics.physics;
 
 import physics.drawing.Drawable;
-import physics.geometry.Line;
 import physics.geometry.Vector2;
+import physics.sphere.ASS;
 import physics.triangle.AST;
 import physics.utils.Tools;
 import physics.utils.threads.SphereThread;
 import physics.utils.threads.TriangleThread;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 //TODO бить пространство на части
@@ -19,17 +18,18 @@ public class Space {
     public ArrayList<ASS> countableSpheres;
     public ArrayList<Drawable> drawables;
     public ArrayList<AST> triangles;
-    public final float dt;
-    public final float g;
     public final double height, width;
+    private final float DT;
+    private final float G;
     private double time;
     private double correctEn;
     private double energy;
     private int amOfTh;
+    private float fps = 0;
 
     public Space(float dt, float g, int width, int height) {
-        this.dt = dt;
-        this.g = g;
+        this.DT = dt;
+        this.G = g;
         this.time = 0;
         this.height = height;
         this.width = width;
@@ -61,8 +61,8 @@ public class Space {
         countEn();
 //        fixEnergy();
         float sleepTime = 0;
-        if (dt * 1000.0 - cTime > 0) {
-            sleepTime = dt * 1000.0f - cTime;
+        if (DT * 1000.0 - cTime > 0) {
+            sleepTime = DT * 1000.0f - cTime;
         }
 //        System.out.println("Sleeping: " + sleepTime);
         try {
@@ -70,7 +70,9 @@ public class Space {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        time += dt;
+        time += DT;
+        long time2 = System.nanoTime();
+        fps = 1000f / ((time2 - time1) / 1000000f);
     }
 
     private void countCorrectEn(ASS thing) {
@@ -92,10 +94,6 @@ public class Space {
         countEn();
     }
 
-
-    public double getTime() {
-        return time;
-    }
 
 
     public void addWall(float x1, float y1, float x2, float y2, Material material) {
@@ -146,4 +144,21 @@ public class Space {
     public void printThings() {
         System.out.printf("Total amount of things:\t%d\n", amOfTh);
     }
+
+    public double getTime() {
+        return time;
+    }
+
+    public float getFps() {
+        return fps;
+    }
+
+    public float getDT(){
+        return DT;
+    }
+
+    public float getG(){
+        return G;
+    }
+
 }

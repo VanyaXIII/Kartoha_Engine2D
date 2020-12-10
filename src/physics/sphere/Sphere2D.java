@@ -1,8 +1,7 @@
 package physics.sphere;
 
 import physics.drawing.Drawable;
-import physics.geometry.Vector2;
-import physics.utils.Tools;
+import physics.physics.Material;
 
 import java.awt.*;
 
@@ -25,7 +24,7 @@ public abstract class Sphere2D implements Drawable {
         return material.color;
     }
 
-    //TODO подумать как лучше наследование материала
+
     @Override
     public void draw(Graphics g) {
         int[] coords = new int[]{(int) Math.round(x0 - (double) r), (int) Math.round(y0 - (double) r), (int) Math.round(r * 2)};

@@ -1,11 +1,13 @@
-package physics.sphere;
+package physics.physics;
+
+import physics.sphere.ASS;
 
 public class Energy {
     public double wp, wk, g;
     private ASS thing;
     private Space space;
 
-    Energy(ASS ast, double g, Space space) {
+    public Energy(ASS ast, double g, Space space) {
         this.g = g;
         this.thing = ast;
         this.space = space;

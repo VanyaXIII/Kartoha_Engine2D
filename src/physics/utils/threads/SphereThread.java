@@ -1,8 +1,7 @@
 package physics.utils.threads;
 
-import physics.geometry.Line;
 import physics.sphere.ASS;
-import physics.sphere.Space;
+import physics.physics.Space;
 
 public class SphereThread extends Thread{
     private Space space;
@@ -14,7 +13,7 @@ public class SphereThread extends Thread{
     @Override
     public void run(){
         for (ASS sphere : space.spheres){
-            sphere.changeCoord();
+            sphere.changeCord();
         }
     }
 }

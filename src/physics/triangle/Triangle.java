@@ -5,7 +5,7 @@ import physics.drawing.Drawable;
 import physics.geometry.Line;
 import physics.geometry.Point2;
 import physics.geometry.TPolygon;
-import physics.sphere.Material;
+import physics.physics.Material;
 
 import java.awt.*;
 import java.util.ArrayList;

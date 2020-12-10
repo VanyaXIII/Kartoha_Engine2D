@@ -29,6 +29,10 @@ public class Vector2 {
         y *= m;
     }
 
+    public Vector2 getMultipliedVector(float mul) {
+        return new Vector2(x * mul, y * mul);
+    }
+
     public float getX() {
         return x;
     }

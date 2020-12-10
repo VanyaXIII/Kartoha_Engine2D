@@ -1,8 +1,7 @@
 package physics.utils.threads;
 
-import physics.sphere.Space;
+import physics.physics.Space;
 import physics.triangle.AST;
-import physics.triangle.Triangle;
 
 public class TriangleThread extends Thread {
     private Space space;
@@ -15,7 +14,7 @@ public class TriangleThread extends Thread {
     public void run(){
             for (AST triangle : space.triangles) {
                 synchronized (triangle) {
-                    triangle.changeCoord();
+                    triangle.changeCord();
                 }
             }
     }

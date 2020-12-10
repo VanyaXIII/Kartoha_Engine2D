@@ -1,14 +1,17 @@
-package physics.sphere;
+package physics.physics;
 
 import physics.drawing.Drawable;
+import physics.drawing.Primitive;
+import physics.geometry.Intersectional;
 import physics.geometry.Line;
 import physics.geometry.Point2;
 import physics.geometry.Vector2;
+import physics.physics.Material;
 import physics.utils.Tools;
 
 import java.awt.*;
 
-public class Wall extends Line implements Drawable {
+public class Wall extends Line implements Drawable, Intersectional {
     public Material material;
 
     public Wall(float x1, float y1, float x2, float y2, Material material) {
@@ -31,5 +34,10 @@ public class Wall extends Line implements Drawable {
         g.setColor(material.color);
         g.drawLine(Tools.transformFloat(x1), Tools.transformFloat(y1),
                 Tools.transformFloat(x2), Tools.transformFloat(y2));
+    }
+
+    @Override
+    public Primitive getType() {
+        return Primitive.WALL;
     }
 }

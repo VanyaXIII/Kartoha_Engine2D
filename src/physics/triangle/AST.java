@@ -5,15 +5,14 @@ import physics.geometry.Line;
 import physics.geometry.Point2;
 import physics.geometry.TPolygon;
 import physics.geometry.Vector2;
-import physics.sphere.Material;
-import physics.sphere.Space;
+import physics.physics.Material;
+import physics.physics.Space;
 import physics.utils.Tools;
 
 import java.awt.*;
 
 public class AST extends Triangle implements Drawable {
     public Vector2 v;
-    private final float g;
     private final Space space;
     public float w;
 
@@ -24,19 +23,18 @@ public class AST extends Triangle implements Drawable {
         this.space = space;
         this.v = v;
         this.w = w;
-        this.g = 0;
     }
 
-    public void changeCoord() {
+    public void changeCord() {
         changeSpeed();
         rotate();
         movePoints();
-        x0 += v.getX();
-        y0 += v.getY();
+        x0 += v.getX() * space.getDT();
+        y0 += ((v.getY() + v.getY() - space.getG())/2.0f) * space.getDT();
     }
 
     private void changeSpeed() {
-        v.addY(g);
+        v.addY(space.getG());
     }
 
     private void movePoints() {

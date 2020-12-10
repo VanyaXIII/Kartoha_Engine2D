@@ -1,5 +1,7 @@
 package physics.sphere;
 
+import physics.physics.Material;
+
 public class Gravity extends Sphere2D {
     public double vy = 0;
     public double time;
