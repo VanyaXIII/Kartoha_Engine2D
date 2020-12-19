@@ -57,9 +57,13 @@ public class Vector2 {
         this.y = -this.y;
     }
 
-    public void makeOpVect() {
+    public void makeOp() {
         makeOpX();
         makeOpY();
+    }
+
+    public float getSquare() {
+        return x * x + y * y;
     }
 
     public Vector2 createOpVect() {
@@ -96,12 +100,25 @@ public class Vector2 {
 
     }
 
-    public void rotate(double angle) {
+    public void rotate(float angle) {
         double x1, y1;
         x1 = x;
         y1 = y;
         x = (float) (x1 * Math.cos(angle) - y1 * Math.sin(angle));
         y = (float) (y1 * Math.cos(angle) + x1 * Math.sin(angle));
+    }
+
+    public Vector2 getRotatedVector(float angle) {
+        float x1, y1;
+        x1 = (float) (x * Math.cos(angle) - y * Math.sin(angle));
+        y1 = (float) (y * Math.cos(angle) + x * Math.sin(angle));
+        return new Vector2(x1, y1);
+    }
+
+    public void setLength(float len) {
+        float d = length();
+        x = (x / d) * len;
+        y = (y / d) * len;
     }
 
     public void setX(float x) {
@@ -117,8 +134,7 @@ public class Vector2 {
     }
 
     public float countProjectionOn(Vector2 vector) {
-        float projection = this.dot(vector) / vector.length();
-        return projection;
+        return this.dot(vector) / vector.length();
     }
 
     @Override

@@ -21,7 +21,7 @@ public abstract class Sphere2D implements Drawable {
     }
 
     public Color getColor() {
-        return material.color;
+        return material.outlineColor;
     }
 
 

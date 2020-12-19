@@ -43,14 +43,14 @@ public abstract class Triangle implements Drawable {
     }
 
     public Color getColor() {
-        return material.color;
+        return material.outlineColor;
     }
     /*TODO подумать над отрисовкой и столконовением шариков
         треугольник как массив линий, продумать измененеие всех сразу */
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(material.color);
+        g.setColor(material.outlineColor);
         TPolygon polygon = new TPolygon(point1, point2, point3);
         g.fillPolygon(polygon);
     }

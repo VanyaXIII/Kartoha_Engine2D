@@ -8,10 +8,11 @@ import physics.physics.Material;
 import physics.physics.Space;
 import physics.physics.Wall;
 import physics.utils.Tools;
-import physics.utils.threads.SphereThread;
 
+import javax.sound.midi.Soundbank;
+import javax.swing.plaf.metal.MetalTheme;
 import java.awt.*;
-import java.util.ArrayList;
+import java.sql.SQLOutput;
 //TODO сначала у одного шарик меняется скорость, а потом уже запускается расчет для другого, с учетом изменения скорости первого
 //TODO надо все разюить по методам, чтобы сначала у всех менялась скорость
 //TODO сделать просчет траектории
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 
 public class ASS extends Sphere2D implements Drawable, Intersectional {
     public Vector2 v;
-    public double w;
+    public float w;
     public Energy energy;
     public static boolean collisionMode = true;
     private Vector2 orientationVector;
@@ -43,7 +44,7 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
         changeSpeed();
         rotate();
         x0 += v.getX() * space.getDT();
-        y0 += (v.getY() + v.getY() - space.getG()*space.getDT()) * space.getDT() / 2.0f;
+        y0 += (v.getY() + v.getY() - space.getG() * space.getDT()) * space.getDT() / 2.0f;
         energy.update();
 
     }
@@ -53,7 +54,7 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
         processSceneCollision();
         processCollision();
         energy.update();
-        v.addY(space.getG()*space.getDT());
+        v.addY(space.getG() * space.getDT());
         processCollision();
         processSceneCollision();
     }
@@ -71,12 +72,12 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
     }
 
     private void rotate() {
-        orientationVector.rotate(w);
+        orientationVector.rotate(w * space.getDT());
     }
 
     private void processCollision() {
         for (ASS thing : space.countableSpheres) {
-            if (new Pair<ASS, ASS>( this, thing, true).isIntersected()) {
+            if (new Pair<ASS, ASS>(this, thing, true).isIntersected()) {
                 processSphereCollision(thing);
             }
             if (collisionMode) {
@@ -89,7 +90,7 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
         space.countableSpheres.remove(this);
 
         for (Wall wall : space.walls) {
-            if (new Pair<ASS, Wall>(this, wall, true).isIntersected()){
+            if (new Pair<ASS, Wall>(this, wall, true).isIntersected()) {
                 processWallCollision(wall);
                 flag = false;
             }
@@ -131,17 +132,30 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
         Vector2 axisX = new Vector2(wall);
         Vector2 axisY = axisX.createNormal();
         float fr = Tools.countAverage(material.coefOfFriction, wall.material.coefOfFriction);
+        float k = Tools.countAverage(material.coefOfReduction, wall.material.coefOfReduction);
+        if (v.countProjectionOn(axisY) > 0f) axisY.makeOp();
+        float w1x = -w;
         float v1x = v.countProjectionOn(axisX);
         float v1y = v.countProjectionOn(axisY);
-//        float v2x = v1x - Math.abs(2.0f * fr * v1y);
-//        w += Math.abs((4.0f * fr * v1y * -1.0f * Math.signum(v1x)) / (m * r * r));
-//        System.out.println(w);
-        Vector2 fv1x = axisX.createByFloat(v1x);
-        Vector2 fv1y = axisY.createByFloat(-v1y);
+        float v2x;
+        float w2x;
+        boolean slips = true;
+        if (-0.5f * Math.abs(Math.abs(v1x) - Math.abs(w1x*r)) / (v1y * (1 + k) * 1.5f) < fr) slips = false;
+        if (Math.signum(v1x) == Math.signum(w1x) && Math.signum(v1y) != 0 && slips) {
+            v2x = v1x + fr * v1y * (1 + k);
+            w2x = w1x + 2 * fr * v1y * (1 + k) / r;
+        } else if (slips && Math.signum(v1y) !=0) {
+            float sign = Math.signum(Math.abs(v1x) - Math.abs(w1x*r));
+            v2x = v1x + Math.signum(v1x) * sign * fr * v1y * (1 + k);
+            w2x = w1x + -2 * Math.signum(w1x) * sign * fr * v1y * (1 + k) / r;
+        } else {
+            v2x = (-0.5f * w1x*r + v1x) / 1.5f;
+            w2x = -v2x / r;
+        }
+        w = Math.signum(w1x) == Math.signum(w2x) ? Math.signum(w) * Math.abs(w2x) : -Math.signum(w) * Math.abs(w2x);
+        Vector2 fv1x = axisX.createByFloat(v2x);
+        Vector2 fv1y = axisY.createByFloat(-v1y * k);
         v = new Vector2(fv1x, fv1y);
-        float red = Tools.countAverage(material.coefOfReduction, wall.material.coefOfReduction);
-        v.mul(red);
-        energy.update();
     }
 
     //TODO зафигачить перемещение при столкновении до положения столкновения
@@ -170,11 +184,16 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
 
     public float[] getCords(boolean mode) {
         float m = mode ? 1.0f : 0.0f;
-        return new float[]{x0 + m * v.getX() * space.getDT(), y0 + m*((v.getY() + v.getY() - space.getG()*space.getDT()) * space.getDT() / 2.0f)};
+        return new float[]{x0 + m * v.getX() * space.getDT(), y0 + m * ((v.getY() + v.getY() - space.getG() * space.getDT()) * space.getDT() / 2.0f)};
     }
 
+//    public Point2 getCords(boolean mode){
+//        float m = mode ? 1.0f : 0.0f;
+//        return new Point2(x0 + m * v.getX() * space.getDT(), y0 + m * ((v.getY() + v.getY() - space.getG() * space.getDT()) * space.getDT() / 2.0f));
+//    }
 
-    public float getDT(){
+
+    public float getDT() {
         return space.getDT();
     }
 
@@ -185,7 +204,7 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(getColor());
+        g.setColor(material.outlineColor);
         int[] coords = new int[]{Tools.transformFloat(x0 - r), Tools.transformFloat(y0 - r), Tools.transformFloat(r * 2)};
         g.drawOval(coords[0], coords[1], coords[2], coords[2]);
 //        g.fillOval(coords[0], coords[1], coords[2], coords[2]);
@@ -199,9 +218,10 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
         g.drawLine(Tools.transformFloat(x0),
                 Tools.transformFloat(y0),
                 Tools.transformFloat(x0 + v.getX() * space.getDT()),
-                Tools.transformFloat(y0 + v.getY()*space.getDT()));
+                Tools.transformFloat(y0 + v.getY() * space.getDT()));
 
-
+        g.setColor(material.fillColor);
+        g.fillOval(coords[0], coords[1], coords[2], coords[2]);
     }
 
 }

@@ -6,7 +6,6 @@ import physics.geometry.Intersectional;
 import physics.geometry.Line;
 import physics.geometry.Point2;
 import physics.geometry.Vector2;
-import physics.physics.Material;
 import physics.utils.Tools;
 
 import java.awt.*;
@@ -31,7 +30,7 @@ public class Wall extends Line implements Drawable, Intersectional {
 
     @Override
     public void draw(Graphics g){
-        g.setColor(material.color);
+        g.setColor(material.outlineColor);
         g.drawLine(Tools.transformFloat(x1), Tools.transformFloat(y1),
                 Tools.transformFloat(x2), Tools.transformFloat(y2));
     }

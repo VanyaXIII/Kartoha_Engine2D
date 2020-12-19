@@ -16,7 +16,7 @@ public class Line implements Drawable {
         this.y1 = y1;
         this.y2 = y2;
         calcEq();
-        this.calcNormalEq();
+        calcNormalEq();
     }
 
     public Line(Point2 point1, Point2 point2) {
@@ -25,7 +25,7 @@ public class Line implements Drawable {
         this.y1 = point1.y;
         this.y2 = point2.y;
         calcEq();
-        this.calcNormalEq();
+        calcNormalEq();
     }
 
     public Line(Point2 point, Vector2 vector) {
@@ -34,7 +34,7 @@ public class Line implements Drawable {
         this.y1 = point.y;
         this.y2 = point.y + vector.getY();
         calcEq();
-        this.calcNormalEq();
+        calcNormalEq();
     }
 
     void calcEq() {
@@ -48,26 +48,26 @@ public class Line implements Drawable {
         C = x1 * y2 - x2 * y1;
     }
 
-    public double maxY() {
+    public float maxY() {
         return Math.max(y1, y2);
     }
 
-    public double maxX() {
+    public float maxX() {
         return Math.max(x1, x2);
     }
 
-    public double minY() {
+    public float minY() {
         return Math.min(y1, y2);
     }
 
-    public double minX() {
+    public float minX() {
         return Math.min(x1, x2);
     }
 
 
     public float calcDistance(float x, float y) {
         float d = (float) (Math.abs(A * x + B * y + C)
-                        / Math.sqrt(A * A + B * B));
+                / Math.sqrt(A * A + B * B));
         return d;
     }
 
@@ -83,10 +83,14 @@ public class Line implements Drawable {
         return false;
     }
 
-    public Point2 findIntPoint(Line line){
+    public Point2 findIntPoint(Line line) {
         float ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
         float iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
         return new Point2(ix, iy);
+    }
+
+    public boolean isPointOn(Point2 point) {
+        return point.x <= maxX() && point.x >= minX() && point.y >= minY() && point.y <= maxY();
     }
 
     @Override

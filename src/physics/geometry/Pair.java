@@ -25,33 +25,28 @@ public class Pair<FirstThing extends Intersectional, SecondThing extends Interse
         return false;
     }
 
+    //TODO подумать над диапазоном координат
     private boolean sphereToWall(ASS sphere, Line line) {
-        float x = sphere.getCords(mode)[0];
-        float y = sphere.getCords(mode)[1];
-        float d = line.calcDistance(x, y);
+        if (!new AABB(sphere, mode).isIntersectedWith(new AABB(line))) return false;
+        float[] cords = sphere.getCords(mode);
+        float d = line.calcDistance(cords[0], cords[1]);
         if (d <= sphere.r) {
-            if (line.y1 == line.y2) {
-                return x >= line.minX() && x <= line.maxX();
-            } else {
-                return y >= line.minY() && y <= line.maxY();
-            }
+            Point2 collisionPoint = line.findIntPoint(new Line(new Point2(cords[0], cords[1]), new Vector2(line).createNormal()));
+            return line.isPointOn(collisionPoint);
         } else
             return line.doesIntersect(new Line(new Point2(sphere.x0, sphere.y0), sphere.v.getMultipliedVector(sphere.getDT())));
     }
 
     private boolean sphereToSphere(ASS sphere1, ASS sphere2) {
+        if (!new AABB(sphere1, mode).isIntersectedWith(new AABB(sphere2, mode))) return false;
         float x1 = sphere1.getCords(mode)[0];
         float y1 = sphere1.getCords(mode)[1];
         float x2 = sphere2.getCords(mode)[0];
         float y2 = sphere2.getCords(mode)[1];
         Vector2 dvector = new Vector2(x1 - x2,
                 y1 - y2);
-        float distance = dvector.length();
-        if (distance < sphere1.r + sphere2.r) {
-            if (sphere2.equals(sphere1)) return false;
-            else {
-                return true;
-            }
+        if (dvector.getSquare() <= (sphere1.r + sphere2.r) * (sphere1.r + sphere2.r)) {
+            return !sphere2.equals(sphere1);
         }
         return false;
     }
@@ -59,6 +54,7 @@ public class Pair<FirstThing extends Intersectional, SecondThing extends Interse
     public SphereIntersection getSphereIntersection() {
         if (firstThing.getType() != Primitive.SPHERE || secondThing.getType() != Primitive.SPHERE)
             return new SphereIntersection(false);
+        if (!new AABB((ASS) firstThing, mode).isIntersectedWith(new AABB((ASS) secondThing, mode))) return new SphereIntersection(false);
         ASS sphere1 = (ASS) firstThing;
         ASS sphere2 = (ASS) secondThing;
         float x1 = sphere1.getCords(mode)[0];

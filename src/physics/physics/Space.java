@@ -17,6 +17,7 @@ public class Space {
     public ArrayList<ASS> spheres;
     public ArrayList<ASS> countableSpheres;
     public ArrayList<Drawable> drawables;
+    public ArrayList<Block> blocks;
     public ArrayList<AST> triangles;
     public final double height, width;
     private final float DT;
@@ -27,16 +28,20 @@ public class Space {
     private int amOfTh;
     private float fps = 0;
 
+    {
+        walls = new ArrayList<>();
+        spheres = new ArrayList<>();
+        triangles = new ArrayList<>();
+        drawables = new ArrayList<>();
+        blocks = new ArrayList<>();
+    }
+
     public Space(float dt, float g, int width, int height) {
         this.DT = dt;
         this.G = g;
         this.time = 0;
         this.height = height;
         this.width = width;
-        walls = new ArrayList<>();
-        spheres = new ArrayList<>();
-        triangles = new ArrayList<>();
-        drawables = new ArrayList<>();
         correctEn = 0.0;
         energy = 0.0;
         amOfTh = 0;
@@ -95,7 +100,6 @@ public class Space {
     }
 
 
-
     public void addWall(float x1, float y1, float x2, float y2, Material material) {
         Wall wall = new Wall(x1, y1, x2, y2, material);
         walls.add(wall);
@@ -107,6 +111,28 @@ public class Space {
         Wall wall = new Wall(x1, y1, x2, y2, Material.Constantin);
         walls.add(wall);
         drawables.add(wall);
+    }
+
+    public void addBlock(float x, float y, float w, float h) {
+        Block block = new Block(x, y, w, h, Material.Constantin);
+        blocks.add(block);
+        drawables.add(block);
+        Wall[] blockWalls = block.getWalls();
+        walls.add(blockWalls[0]);
+        walls.add(blockWalls[1]);
+        walls.add(blockWalls[2]);
+        walls.add(blockWalls[3]);
+    }
+
+    public void addBlock(float x, float y, float w, float h, Material material) {
+        Block block = new Block(x, y, w, h, material);
+        blocks.add(new Block(x, y, w, h, material));
+        drawables.add(block);
+        Wall[] blockWalls = block.getWalls();
+        walls.add(blockWalls[0]);
+        walls.add(blockWalls[1]);
+        walls.add(blockWalls[2]);
+        walls.add(blockWalls[3]);
     }
 
     public void addThing(Vector2 v, float w, float x0, float y0, float r) {
@@ -153,11 +179,11 @@ public class Space {
         return fps;
     }
 
-    public float getDT(){
+    public float getDT() {
         return DT;
     }
 
-    public float getG(){
+    public float getG() {
         return G;
     }
 
