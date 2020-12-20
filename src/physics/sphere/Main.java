@@ -32,12 +32,12 @@ class Main {
 //        panel.space.addLine(0, 1000, 0, 0);
 //        panel.space.addTriangle(new Vector2(0,0), 0.05f, 500,600, 100, Material.LapisLazuli);
 //        panel.space.addLine(900, 0, 700, 1000);
-       panel.space.addWall(600,900,1400,400);
+       panel.space.addWall(600,900,1400,600);
 //        panel.space.addWall(1200,550,200,200);
         panel.space.addBlock(-1,900,2000,200);
-//        panel.space.addBlock(1400,600-1,500,300);
+        panel.space.addBlock(1400,600-1,500,300);
 //        panel.space.addBlock(100,200,100,20);
-        panel.space.addThing(new Vector2(0,0), -0.4f, 600, 850, 30, Material.Steel);
+        panel.space.addThing(new Vector2(0,0), +0.4f, 400, 850, 30, Material.Steel);
 //        panel.space.addThing(new Vector2(0,0), 0, 150, 160, 20, Material.Steel);
 //        panel.space.addWall(0, 901, 1800, 901);
 //        panel.space.addLine(0, 902, 1800, 902);

@@ -53,6 +53,10 @@ public class Vector2 {
         this.x = -this.x;
     }
 
+    public Vector2 getCrossProduct(float c) {
+        return new Vector2(-c * y, c * x);
+    }
+
     public void makeOpY() {
         this.y = -this.y;
     }

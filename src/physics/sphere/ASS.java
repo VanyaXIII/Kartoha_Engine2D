@@ -134,22 +134,23 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
         float fr = Tools.countAverage(material.coefOfFriction, wall.material.coefOfFriction);
         float k = Tools.countAverage(material.coefOfReduction, wall.material.coefOfReduction);
         if (v.countProjectionOn(axisY) > 0f) axisY.makeOp();
-        float w1x = -w;
+        Vector2 radVector = axisY.createByFloat(-r);
+        float w1x = radVector.getCrossProduct(w).countProjectionOn(axisX) / r;
         float v1x = v.countProjectionOn(axisX);
         float v1y = v.countProjectionOn(axisY);
         float v2x;
         float w2x;
         boolean slips = true;
-        if (-0.5f * Math.abs(Math.abs(v1x) - Math.abs(w1x*r)) / (v1y * (1 + k) * 1.5f) < fr) slips = false;
+        if (-0.5f * Math.abs(v1x + w1x * r) / (v1y * (1 + k) * 1.5f) < fr) slips = false;
         if (Math.signum(v1x) == Math.signum(w1x) && Math.signum(v1y) != 0 && slips) {
-            v2x = v1x + fr * v1y * (1 + k);
-            w2x = w1x + 2 * fr * v1y * (1 + k) / r;
-        } else if (slips && Math.signum(v1y) !=0) {
-            float sign = Math.signum(Math.abs(v1x) - Math.abs(w1x*r));
+            v2x = v1x + Math.signum(v1x)*fr * v1y * (1 + k);
+            w2x = w1x + Math.signum(w1x) * 2 * fr * v1y * (1 + k) / r;
+        } else if (slips && Math.signum(v1y) != 0) {
+            float sign = Math.signum(Math.abs(v1x) - Math.abs(w1x * r));
             v2x = v1x + Math.signum(v1x) * sign * fr * v1y * (1 + k);
             w2x = w1x + -2 * Math.signum(w1x) * sign * fr * v1y * (1 + k) / r;
         } else {
-            v2x = (-0.5f * w1x*r + v1x) / 1.5f;
+            v2x = (-0.5f * w1x * r + v1x) / 1.5f;
             w2x = -v2x / r;
         }
         w = Math.signum(w1x) == Math.signum(w2x) ? Math.signum(w) * Math.abs(w2x) : -Math.signum(w) * Math.abs(w2x);
