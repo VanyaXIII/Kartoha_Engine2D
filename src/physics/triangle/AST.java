@@ -1,17 +1,16 @@
 package physics.triangle;
 
 import physics.drawing.Drawable;
-import physics.geometry.Line;
-import physics.geometry.Point2;
-import physics.geometry.TPolygon;
-import physics.geometry.Vector2;
+import physics.drawing.Primitive;
+import physics.geometry.*;
 import physics.physics.Material;
 import physics.physics.Space;
 import physics.utils.Tools;
 
 import java.awt.*;
-
-public class AST extends Triangle implements Drawable {
+import java.util.ArrayList;
+//TODO реализовать наследование от класса полигон (RigidBody etc), который бы хранил в себе основные методы полигонов
+public class AST extends Triangle implements Drawable, Collisional {
     public Vector2 v;
     private final Space space;
     public float w;
@@ -30,57 +29,69 @@ public class AST extends Triangle implements Drawable {
         rotate();
         movePoints();
         x0 += v.getX() * space.getDT();
-        y0 += ((v.getY() + v.getY() - space.getG())/2.0f) * space.getDT();
+        y0 += ((v.getY() + v.getY() - space.getG()*space.getDT())/2.0f) * space.getDT();
     }
 
     private void changeSpeed() {
-        v.addY(space.getG());
+        v.addY(space.getG()*space.getDT());
     }
 
     private void movePoints() {
-        point2.x += v.getX();
-        point3.x += v.getX();
-        point1.x += v.getX();
-        point2.y += v.getY();
-        point3.y += v.getY();
-        point1.y += v.getY();
-
+        for (Point2 point : getPoints()){
+            point.x += v.getX()* space.getDT();
+            point.y += ((v.getY() + v.getY() - space.getG() * space.getDT()) * space.getDT())/ 2.0f;
+        }
     }
 
     private void rotate() {
         Point2 centre = new Point2(x0, y0);
-        point1.rotate(centre, w);
-        point2.rotate(centre, w);
-        point3.rotate(centre, w);
+        for (Point2 point : getPoints()){
+            point.rotate(centre, w * space.getDT());
+        }
 
     }
 
-
-    public Line[] getLines(boolean mode) {
+    public Point2 getPosition(boolean mode) {
         float m = mode ? 1.0f : 0.0f;
-        Point2 centre = new Point2(x0 + v.getX() * m, y0 + v.getY()*m);
-        Point2 newPoint1 = new Point2(point1.x + m * v.getX(), point1.y + m * v.getY());
-        Point2 newPoint2 = new Point2(point2.x + m * v.getX(), point2.y + m * v.getY());
-        Point2 newPoint3 = new Point2(point3.x + m * v.getX(), point3.y + m * v.getY());
-        newPoint1.rotate(centre, w*m);
-        newPoint2.rotate(centre, w*m);
-        newPoint3.rotate(centre, w*m);
-        return new Line[] {new Line(newPoint1, newPoint2),
-                new Line(newPoint3, newPoint2),
-                new Line(newPoint1, newPoint3)};
+        return new Point2(x0 + m * v.getX() * space.getDT(), y0 + m * ((v.getY() + v.getY() + space.getG() * space.getDT()) * space.getDT() / 2.0f));
+    }
+
+    public ArrayList<Line> getLines(boolean mode) {
+        float m = mode ? 1.0f : 0.0f;
+        Point2 centre = new Point2(x0 + v.getX() * m*space.getDT(), y0 + m * ((v.getY() + v.getY() + space.getG() * space.getDT()) * space.getDT() / 2.0f));
+        ArrayList<Point2> newPoints = clonePoints();
+        for (Point2 point : newPoints) {
+            point.x += m * v.getX() * space.getDT();
+            point.y += m * ((v.getY() + v.getY() + space.getG() * space.getDT()) * space.getDT()) / 2.0f;
+            point.rotate(centre, w * space.getDT());
+        }
+
+        ArrayList<Line> lines = new ArrayList<>();
+
+        for (int i = 0; i<newPoints.size(); i++){
+            if (i+1 < newPoints.size()) lines.add(new Line(newPoints.get(i), newPoints.get(i+1)));
+            else lines.add(new Line(newPoints.get(0), newPoints.get(i)));
+        }
+        return lines;
     }
 
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(getColor());
-        TPolygon polygon = new TPolygon(point1, point2, point3);
+        g.setColor(material.outlineColor);
+        TPolygon polygon = new TPolygon(getPoint(0),getPoint(1),getPoint(2));
         g.drawPolygon(polygon);
-//        g.fillPolygon(polygon);
+        g.setColor(material.fillColor);
+        g.fillPolygon(polygon);
         g.setColor(Color.WHITE);
         g.drawLine(Tools.transformFloat(x0),
                 Tools.transformFloat(y0),
-                Tools.transformFloat(x0 + v.getX()),
-                Tools.transformFloat(y0 + v.getY()));
+                Tools.transformFloat(x0 + v.getX()*space.getDT()),
+                Tools.transformFloat(y0 + v.getY()*space.getDT()));
+    }
+
+    @Override
+    public Primitive getType() {
+        return Primitive.TRIANGLE;
     }
 }

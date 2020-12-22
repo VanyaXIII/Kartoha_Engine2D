@@ -2,7 +2,7 @@ package physics.physics;
 
 import physics.drawing.Drawable;
 import physics.drawing.Primitive;
-import physics.geometry.Intersectional;
+import physics.geometry.Collisional;
 import physics.geometry.Line;
 import physics.geometry.Point2;
 import physics.geometry.Vector2;
@@ -10,7 +10,7 @@ import physics.utils.Tools;
 
 import java.awt.*;
 
-public class Wall extends Line implements Drawable, Intersectional {
+public class Wall extends Line implements Drawable, Collisional {
     public Material material;
 
     public Wall(float x1, float y1, float x2, float y2, Material material) {

@@ -1,6 +1,7 @@
 package physics.geometry;
 
 import physics.sphere.ASS;
+import physics.triangle.AST;
 
 public class AABB {
     public final Point2 min;
@@ -22,9 +23,15 @@ public class AABB {
     }
 
     public AABB(ASS sphere, boolean mode){
-        float[] cords = sphere.getCords(mode);
-        min = new Point2(cords[0] - sphere.r, cords[1] - sphere.r);
-        max = new Point2(cords[0] + sphere.r, cords[1] + sphere.r);
+        Point2 position = sphere.getPosition(mode);
+        min = new Point2(position.x - sphere.r, position.y - sphere.r);
+        max = new Point2(position.x + sphere.r, position.y + sphere.r);
+    }
+
+    public AABB(AST triangle, boolean mode){
+        Point2 position = triangle.getPosition(mode);
+        min = new Point2(position.x - triangle.r, position.y - triangle.r);
+        max = new Point2(position.x + triangle.r, position.y + triangle.r);
     }
 
     public boolean isIntersectedWith(AABB b){

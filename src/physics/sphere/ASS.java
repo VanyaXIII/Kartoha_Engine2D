@@ -7,21 +7,19 @@ import physics.physics.Energy;
 import physics.physics.Material;
 import physics.physics.Space;
 import physics.physics.Wall;
+import physics.triangle.AST;
 import physics.utils.Tools;
 
-import javax.sound.midi.Soundbank;
-import javax.swing.plaf.metal.MetalTheme;
 import java.awt.*;
-import java.sql.SQLOutput;
 //TODO сначала у одного шарик меняется скорость, а потом уже запускается расчет для другого, с учетом изменения скорости первого
 //TODO надо все разюить по методам, чтобы сначала у всех менялась скорость
 //TODO сделать просчет траектории
 //TODO доделать коллизию, чтобы учитывались прямые
 
-public class ASS extends Sphere2D implements Drawable, Intersectional {
+public class ASS extends Sphere2D implements Drawable, Collisional {
+    private float x0, y0;
     public Vector2 v;
     public float w;
-    public Energy energy;
     public static boolean collisionMode = true;
     private Vector2 orientationVector;
     private final Space space;
@@ -34,10 +32,11 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
 
     public ASS(Space space, Vector2 v, float w, float x0, float y0, float r, Material material) {
         super(x0, y0, r, material);
+        this.x0 = x0;
+        this.y0 = y0;
         this.space = space;
         this.v = v;
-        this.w = w;
-        this.energy = new Energy(this, space.getG(), space);
+        this.w = w + 0.01f;
     }
 
     public void changeCord() {
@@ -45,7 +44,6 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
         rotate();
         x0 += v.getX() * space.getDT();
         y0 += (v.getY() + v.getY() - space.getG() * space.getDT()) * space.getDT() / 2.0f;
-        energy.update();
 
     }
 
@@ -53,7 +51,6 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
         flag = true;
         processSceneCollision();
         processCollision();
-        energy.update();
         v.addY(space.getG() * space.getDT());
         processCollision();
         processSceneCollision();
@@ -77,7 +74,7 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
 
     private void processCollision() {
         for (ASS thing : space.countableSpheres) {
-            if (new Pair<ASS, ASS>(this, thing, true).isIntersected()) {
+            if (!thing.equals(this) && new Pair<ASS, ASS>(this, thing, true).isIntersected()) {
                 processSphereCollision(thing);
             }
             if (collisionMode) {
@@ -95,16 +92,11 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
                 flag = false;
             }
         }
-//        for (AST triangle : space.triangles) {
-//            synchronized (triangle) {
-//                for (Line line : triangle.getLines(true)) {
-//                    if (checkLineIntersection(line, true)) {
-//                        processWallCollision(line);
-//                        flag = false;
-//                    }
-//                }
-//            }
-//        }
+        for (AST triangle : space.triangles) {
+            synchronized (triangle) {
+                if (new Pair<ASS, AST>(this, triangle, true).isIntersected()) x0=100;
+            }
+        }
     }
 
     private void pullSpheres(SphereIntersection intersection) {
@@ -115,20 +107,9 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
         }
     }
 
-    private void dragSphereToWall(Wall wall) {
-        float x = getCords(true)[0];
-        float y = getCords(true)[1];
-        float d = wall.calcDistance(x0, y0);
-//        Point2 intersectPoint = wall.findIntPoint(new Line(x0, y0, x, y));
-//        float len = (float) Math.sqrt((intersectPoint.x - x0) * (intersectPoint.x - x0) + (intersectPoint.y - y0) * (intersectPoint.y - y0));
-//        Point2 nCords = v.movePoint(new Point2(x0, y0), len - len * r / d);
-//        x0 = nCords.x;
-//        y0 = nCords.y;
-    }
 
 
     private void processWallCollision(Wall wall) {
-        dragSphereToWall(wall);
         Vector2 axisX = new Vector2(wall);
         Vector2 axisY = axisX.createNormal();
         float fr = Tools.countAverage(material.coefOfFriction, wall.material.coefOfFriction);
@@ -143,7 +124,7 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
         boolean slips = true;
         if (-0.5f * Math.abs(v1x + w1x * r) / (v1y * (1 + k) * 1.5f) < fr) slips = false;
         if (Math.signum(v1x) == Math.signum(w1x) && Math.signum(v1y) != 0 && slips) {
-            v2x = v1x + Math.signum(v1x)*fr * v1y * (1 + k);
+            v2x = v1x + Math.signum(v1x) * fr * v1y * (1 + k);
             w2x = w1x + Math.signum(w1x) * 2 * fr * v1y * (1 + k) / r;
         } else if (slips && Math.signum(v1y) != 0) {
             float sign = Math.signum(Math.abs(v1x) - Math.abs(w1x * r));
@@ -161,8 +142,10 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
 
     //TODO зафигачить перемещение при столкновении до положения столкновения
     private void processSphereCollision(ASS thing) {
-        Vector2 axisX = new Vector2(this.getCords(true)[0] - thing.getCords(true)[0],
-                this.getCords(true)[1] - thing.getCords(true)[1]);
+        Point2 thisPos = this.getPosition(true);
+        Point2 thingPos = thing.getPosition(true);
+        Vector2 axisX = new Vector2(thisPos.x - thingPos.x,
+                thisPos.y - thingPos.y);
         if (axisX.length() != 0.0) {
             Vector2 axisY = axisX.createNormal();
             float ratio = this.m / thing.m;
@@ -183,9 +166,9 @@ public class ASS extends Sphere2D implements Drawable, Intersectional {
         }
     }
 
-    public float[] getCords(boolean mode) {
+    public Point2 getPosition(boolean mode) {
         float m = mode ? 1.0f : 0.0f;
-        return new float[]{x0 + m * v.getX() * space.getDT(), y0 + m * ((v.getY() + v.getY() - space.getG() * space.getDT()) * space.getDT() / 2.0f)};
+        return new Point2(x0 + m * v.getX() * space.getDT(), y0 + m * ((v.getY() + v.getY() + space.getG() * space.getDT()) * space.getDT() / 2.0f));
     }
 
 //    public Point2 getCords(boolean mode){

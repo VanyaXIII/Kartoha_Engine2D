@@ -15,8 +15,8 @@ public class Energy {
     }
 
     public void update() {
-        wp = thing.m * g * (space.height - thing.y0 - thing.r);
-        wk = thing.m * (thing.v.getX() * thing.v.getX() + thing.v.getY() * thing.v.getY()) / 2.0;
+//        wp = thing.m * g * (space.height - thing.y0 - thing.r);
+//        wk = thing.m * (thing.v.getX() * thing.v.getX() + thing.v.getY() * thing.v.getY()) / 2.0;
     }
 
     public double count() {

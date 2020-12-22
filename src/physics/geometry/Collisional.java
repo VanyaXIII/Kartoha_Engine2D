@@ -2,7 +2,7 @@ package physics.geometry;
 
 import physics.drawing.Primitive;
 
-public interface Intersectional {
+public interface Collisional {
 
     public Primitive getType();
 }

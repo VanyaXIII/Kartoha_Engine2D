@@ -13,9 +13,12 @@ import java.util.ArrayList;
 public abstract class Triangle implements Drawable {
     public float x0, y0;
     public final float r;
-    private Material material;
-    public Point2 point1, point2, point3;
+    public Material material;
+    private ArrayList<Point2> points;
 
+    {
+        points = new ArrayList<>();
+    }
     public Triangle(float x0, float y0, float r, Material material) {
         this.x0 = x0;
         this.y0 = y0;
@@ -26,32 +29,30 @@ public abstract class Triangle implements Drawable {
 
 
     public void setPoints() {
-        point1 = new Point2((float) (x0 - Math.sqrt(3f) / 2.0f * r), y0 + r / 2.0f);
-        point2 = new Point2(x0, y0 - r);
-        point3 = new Point2((float) (x0 + Math.sqrt(3) / 2.0f * r), y0 + r / 2.0f);
+        points.add(new Point2((float) (x0 - Math.sqrt(3f) / 2.0f * r), y0 + r / 2.0f));
+        points.add(new Point2(x0, y0 - r));
+        points.add(new Point2((float) (x0 + Math.sqrt(3) / 2.0f * r), y0 + r / 2.0f));
     }
 
-    public void returnLines(ArrayList<Line> tlines) {
-        tlines.add(new Line(point1, point2));
-        tlines.add(new Line(point1, point3));
-        tlines.add(new Line(point2, point3));
 
+    public ArrayList<Point2> getPoints() {
+        return points;
     }
 
-    public int numberOfFixed() {
-        return (point1.isFixed() ? 1 : 0) + (point2.isFixed() ? 1 : 0) + (point3.isFixed() ? 1 : 0);
+    public Point2 getPoint(int index){
+        return points.get(index);
     }
 
-    public Color getColor() {
-        return material.outlineColor;
+    public ArrayList<Point2> clonePoints(){
+        ArrayList<Point2> newPoints = new ArrayList<>();
+        for(Point2 point : points) newPoints.add(new Point2(point.x, point.y));
+        return newPoints;
     }
-    /*TODO подумать над отрисовкой и столконовением шариков
-        треугольник как массив линий, продумать измененеие всех сразу */
 
     @Override
     public void draw(Graphics g) {
         g.setColor(material.outlineColor);
-        TPolygon polygon = new TPolygon(point1, point2, point3);
+        TPolygon polygon = new TPolygon(points.get(0), points.get(1), points.get(2));
         g.fillPolygon(polygon);
     }
 

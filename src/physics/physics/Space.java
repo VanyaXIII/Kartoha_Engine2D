@@ -62,14 +62,10 @@ public class Space {
         }
         ASS.collisionMode = !ASS.collisionMode;
         float cTime = (float) ((System.nanoTime() - time1) / 1000000.0);
-//        System.out.println("Counting: " + cTime);
-        countEn();
-//        fixEnergy();
         float sleepTime = 0;
         if (DT * 1000.0 - cTime > 0) {
             sleepTime = DT * 1000.0f - cTime;
         }
-//        System.out.println("Sleeping: " + sleepTime);
         try {
             Thread.sleep(Tools.transformFloat(sleepTime));
         } catch (InterruptedException e) {
@@ -80,24 +76,6 @@ public class Space {
         fps = 1000f / ((time2 - time1) / 1000000f);
     }
 
-    private void countCorrectEn(ASS thing) {
-        correctEn += thing.energy.count();
-    }
-
-    public void countEn() {
-        energy = 1.0;
-        for (ASS thing : spheres) {
-            energy += thing.energy.count();
-        }
-    }
-
-    public void fixEnergy() {
-        double ratio = correctEn / energy;
-        for (ASS thing : spheres) {
-            thing.v.mul(Math.sqrt(ratio));
-        }
-        countEn();
-    }
 
 
     public void addWall(float x1, float y1, float x2, float y2, Material material) {
@@ -135,18 +113,16 @@ public class Space {
         walls.add(blockWalls[3]);
     }
 
-    public void addThing(Vector2 v, float w, float x0, float y0, float r) {
+    public void addSphere(Vector2 v, float w, float x0, float y0, float r) {
         ASS thing = new ASS(this, v, w, x0, y0, r, Material.Constantin);
         spheres.add(thing);
-        countCorrectEn(thing);
         drawables.add(thing);
         amOfTh++;
     }
 
-    public void addThing(Vector2 v, float w, float x0, float y0, float r, Material material) {
+    public void addSphere(Vector2 v, float w, float x0, float y0, float r, Material material) {
         ASS sphere = new ASS(this, v, w, x0, y0, r, material);
         spheres.add(sphere);
-        countCorrectEn(sphere);
         drawables.add(sphere);
         amOfTh++;
     }
