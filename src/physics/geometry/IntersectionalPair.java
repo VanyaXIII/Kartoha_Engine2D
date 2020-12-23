@@ -6,12 +6,12 @@ import physics.triangle.AST;
 
 import java.util.ArrayList;
 
-public class Pair<FirstThing extends Collisional, SecondThing extends Collisional> {
+public class IntersectionalPair<FirstThing extends Collisional, SecondThing extends Collisional> {
     private FirstThing firstThing;
     private SecondThing secondThing;
     private boolean mode;
 
-    public Pair(FirstThing firstThing, SecondThing secondThing, boolean mode) {
+    public IntersectionalPair(FirstThing firstThing, SecondThing secondThing, boolean mode) {
         this.firstThing = firstThing;
         this.secondThing = secondThing;
         this.mode = mode;

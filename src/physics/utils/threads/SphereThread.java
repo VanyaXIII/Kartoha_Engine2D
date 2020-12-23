@@ -13,7 +13,7 @@ public class SphereThread extends Thread{
     @Override
     public void run(){
         for (ASS sphere : space.spheres){
-            sphere.changeCord();
+            sphere.update();
         }
     }
 }
