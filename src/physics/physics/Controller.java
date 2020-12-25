@@ -17,10 +17,10 @@ public class Controller {
             public boolean dispatchKeyEvent(KeyEvent e) {
                 if (e.getID() == KeyEvent.KEY_PRESSED) {
                     if (e.getKeyCode() == KeyEvent.VK_D) {
-                        sphere.w += 0.4;
+                        sphere.w += 0.3;
                     }
                     if (e.getKeyCode() == KeyEvent.VK_A) {
-                        sphere.w -= 0.4;
+                        sphere.w -= 0.3;
                     }
                     if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                         sphere.v.setY(-200);
