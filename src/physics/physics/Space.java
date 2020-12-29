@@ -5,8 +5,6 @@ import physics.geometry.Vector2;
 import physics.sphere.ASS;
 import physics.triangle.AST;
 import physics.utils.Tools;
-import physics.utils.threads.SphereThread;
-import physics.utils.threads.TriangleThread;
 
 import java.util.ArrayList;
 
@@ -15,7 +13,6 @@ import java.util.ArrayList;
 public class Space {
     public ArrayList<Wall> walls;
     public ArrayList<ASS> spheres;
-    public ArrayList<ASS> countableSpheres;
     public ArrayList<Drawable> drawables;
     public ArrayList<Block> blocks;
     public ArrayList<AST> triangles;
@@ -49,18 +46,12 @@ public class Space {
 
     public void changeTime() {
         long time1 = System.nanoTime();
-        countableSpheres = (ArrayList<ASS>) spheres.clone();
-        SphereThread sthread = new SphereThread(this);
-        TriangleThread tthread = new TriangleThread(this);
-        sthread.start();
-        tthread.start();
         try {
-            sthread.join();
-            tthread.join();
+            new Collider(this).collide();
+            new Updater(this).update();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ASS.collisionMode = !ASS.collisionMode;
         float cTime = (float) ((System.nanoTime() - time1) / 1000000.0);
         float sleepTime = 0;
         if (DT * 1000.0 - cTime > 0) {

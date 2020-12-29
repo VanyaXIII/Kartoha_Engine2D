@@ -25,7 +25,7 @@ class Main {
         frame.setLocation(200, 0);
         frame.setResizable(false);
         frame.add(panel);
-        frame.setUndecorated(true);
+        frame.setUndecorated(false);
         frame.setVisible(true);
 //        panel.space.addWall(0,400,1000,1000);
 //        panel.space.addWall(1000,400,0,1000);
@@ -68,7 +68,7 @@ class Main {
             @Override
             public void mouseReleased(MouseEvent e) {
 //                panel.space.addSphere(new Vector2(+80,0), 3f, e.getX()-40, e.getY(), 10);
-//                panel.space.addSphere(new Vector2(-80,0), 3f, e.getX()+40, e.getY(), 10);
+//                panel.space.addSphere(new Vector2(80,0), 0f, e.getX(), e.getY(), 10);
                 new Controller(panel.space.spheres.get(0));
             }
 

@@ -20,7 +20,6 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
     private float x0, y0;
     public Vector2 v;
     public float w;
-    public static boolean collisionMode = true;
     private Vector2 orientationVector;
     private final Space space;
     private boolean flag = true;
@@ -36,7 +35,7 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
         this.y0 = y0;
         this.space = space;
         this.v = v;
-        this.w = w + 0.01f;
+        this.w = w;
     }
 
     public synchronized void update() {
@@ -50,9 +49,7 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
     private synchronized void changeSpeed() {
         flag = true;
         processSceneCollision();
-        processCollision();
         v.addY(space.getG() * space.getDT());
-        processCollision();
         processSceneCollision();
     }
 
@@ -72,33 +69,8 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
         orientationVector.rotate(w * space.getDT());
     }
 
-    private synchronized void processCollision() {
-        for (ASS thing : space.countableSpheres) {
-            if (!thing.equals(this) && new IntersectionalPair<ASS, ASS>(this, thing, true).isIntersected()) {
-                new CollisionalPair<ASS, ASS>(this, thing).collide();
-            }
-            if (collisionMode) {
-                SphereIntersection spheres = new IntersectionalPair<ASS, ASS>(this, thing, false).getSphereIntersection();
-                if (spheres.isIntersected) {
-                    pullSpheres(spheres);
-                }
-            }
-        }
-        space.countableSpheres.remove(this);
 
-        for (Wall wall : space.walls) {
-            if (new IntersectionalPair<ASS, Wall>(this, wall, true).isIntersected()) {
-                new CollisionalPair<ASS, Wall>(this, wall).collide();
-            }
-        }
-        for (AST triangle : space.triangles) {
-            synchronized (triangle) {
-                if (new IntersectionalPair<ASS, AST>(this, triangle, true).isIntersected()) x0=100;
-            }
-        }
-    }
-
-    private synchronized void pullSpheres(SphereIntersection intersection) {
+    public synchronized void pullSpheres(SphereIntersection intersection) {
         if (intersection.getValue() != 0) {
             Point2 nCords = intersection.centralLine.movePoint(new Point2(x0, y0), intersection.getValue());
             this.x0 = nCords.x;
@@ -110,16 +82,6 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
     public synchronized Point2 getPosition(boolean mode) {
         float m = mode ? 1.0f : 0.0f;
         return new Point2(x0 + m * v.getX() * space.getDT(), y0 + m * ((v.getY() + v.getY() + space.getG() * space.getDT()) * space.getDT() / 2.0f));
-    }
-
-//    public Point2 getCords(boolean mode){
-//        float m = mode ? 1.0f : 0.0f;
-//        return new Point2(x0 + m * v.getX() * space.getDT(), y0 + m * ((v.getY() + v.getY() - space.getG() * space.getDT()) * space.getDT() / 2.0f));
-//    }
-
-
-    public float getDT() {
-        return space.getDT();
     }
 
     @Override

@@ -24,7 +24,7 @@ public class AST extends Triangle implements Drawable, Collisional {
         this.w = w;
     }
 
-    public void changeCord() {
+    public void update() {
         changeSpeed();
         rotate();
         movePoints();
