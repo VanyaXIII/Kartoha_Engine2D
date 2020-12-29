@@ -9,20 +9,16 @@ import physics.utils.Tools;
 import java.util.ArrayList;
 
 //TODO бить пространство на части
-//TODO слушатель столкновений и всего такого, не забыть про wait()
 public class Space {
-    public ArrayList<Wall> walls;
-    public ArrayList<ASS> spheres;
-    public ArrayList<Drawable> drawables;
-    public ArrayList<Block> blocks;
-    public ArrayList<AST> triangles;
     public final double height, width;
+    public ArrayList<Drawable> drawables;
+    private final ArrayList<Wall> walls;
+    private final ArrayList<ASS> spheres;
+    private final ArrayList<Block> blocks;
+    private final ArrayList<AST> triangles;
     private final float DT;
     private final float G;
     private double time;
-    private double correctEn;
-    private double energy;
-    private int amOfTh;
     private float fps = 0;
 
     {
@@ -39,9 +35,6 @@ public class Space {
         this.time = 0;
         this.height = height;
         this.width = width;
-        correctEn = 0.0;
-        energy = 0.0;
-        amOfTh = 0;
     }
 
     public void changeTime() {
@@ -108,14 +101,12 @@ public class Space {
         ASS thing = new ASS(this, v, w, x0, y0, r, Material.Constantin);
         spheres.add(thing);
         drawables.add(thing);
-        amOfTh++;
     }
 
     public void addSphere(Vector2 v, float w, float x0, float y0, float r, Material material) {
         ASS sphere = new ASS(this, v, w, x0, y0, r, material);
         spheres.add(sphere);
         drawables.add(sphere);
-        amOfTh++;
     }
 
     public void addTriangle(Vector2 v, float w, float x0, float y0, float r, Material material) {
@@ -128,14 +119,6 @@ public class Space {
         AST triangle = new AST(this, v, w, x0, y0, r, Material.Constantin);
         triangles.add(triangle);
         drawables.add(triangle);
-    }
-
-    public void printEnergy() {
-        System.out.printf("Correct energy:\t%.5f\nReal energy:\t%.5f\n", correctEn, energy);
-    }
-
-    public void printThings() {
-        System.out.printf("Total amount of things:\t%d\n", amOfTh);
     }
 
     public double getTime() {
@@ -154,4 +137,15 @@ public class Space {
         return G;
     }
 
+    public ArrayList<ASS> getSpheres() {
+        return spheres;
+    }
+
+    public ArrayList<AST> getTriangles() {
+        return triangles;
+    }
+
+    public ArrayList<Wall> getWalls() {
+        return walls;
+    }
 }

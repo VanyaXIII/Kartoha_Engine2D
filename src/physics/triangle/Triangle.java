@@ -2,9 +2,8 @@ package physics.triangle;
 
 
 import physics.drawing.Drawable;
-import physics.geometry.Line;
 import physics.geometry.Point2;
-import physics.geometry.TPolygon;
+import physics.drawing.ArbitraryFigure;
 import physics.physics.Material;
 
 import java.awt.*;
@@ -52,8 +51,7 @@ public abstract class Triangle implements Drawable {
     @Override
     public void draw(Graphics g) {
         g.setColor(material.outlineColor);
-        TPolygon polygon = new TPolygon(points.get(0), points.get(1), points.get(2));
-        g.fillPolygon(polygon);
+        ArbitraryFigure polygon = new ArbitraryFigure(points);
     }
 
 

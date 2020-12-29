@@ -3,11 +3,8 @@ package physics.sphere;
 import physics.drawing.Drawable;
 import physics.drawing.Primitive;
 import physics.geometry.*;
-import physics.physics.CollisionalPair;
 import physics.physics.Material;
 import physics.physics.Space;
-import physics.physics.Wall;
-import physics.triangle.AST;
 import physics.utils.Tools;
 
 import java.awt.*;
@@ -20,11 +17,9 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
     private float x0, y0;
     public Vector2 v;
     public float w;
-    private Vector2 orientationVector;
+    private final Vector2 orientationVector;
     private final Space space;
-    private boolean flag = true;
 
-    // TODO подумать над полем пространства
     {
         orientationVector = new Vector2(0, r);
     }
@@ -47,7 +42,6 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
     }
 
     private synchronized void changeSpeed() {
-        flag = true;
         processSceneCollision();
         v.addY(space.getG() * space.getDT());
         processSceneCollision();

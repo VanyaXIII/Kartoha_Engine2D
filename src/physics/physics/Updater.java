@@ -10,8 +10,8 @@ public class Updater {
     private final ArrayList<AST> triangles;
 
     Updater(Space space){
-        spheres = space.spheres;
-        triangles = space.triangles;
+        spheres = space.getSpheres();
+        triangles = space.getTriangles();
     }
 
     Updater(ArrayList<ASS> spheres, ArrayList<AST> triangles){
@@ -20,18 +20,12 @@ public class Updater {
     }
 
     public void update() throws InterruptedException {
-        Thread sphereThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (ASS sphere : spheres) sphere.update();
-            }
+        Thread sphereThread = new Thread(() -> {
+            for (ASS sphere : spheres) sphere.update();
         });
 
-        Thread polygonThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (AST triangle : triangles) triangle.update();
-            }
+        Thread polygonThread = new Thread(() -> {
+            for (AST triangle : triangles) triangle.update();
         });
         sphereThread.start();
         polygonThread.start();

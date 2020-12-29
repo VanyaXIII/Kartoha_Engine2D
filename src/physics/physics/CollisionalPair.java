@@ -85,7 +85,6 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
             float fw1y = w1y, fw2y = w2y;
             if (Math.signum(v1y + w1y * sphere1.r) == Math.signum(v2y + w2y * sphere2.r) && slips) {
                 float sign = Math.signum(Math.abs(v1y + w1y * sphere1.r) - Math.abs(v2y + w2y * sphere2.r));
-                System.out.println(sign);
                 u1y = v1y - sign * Tools.sign(v1y + w1y * sphere1.r) * fr * s / sphere1.m;
                 u2y = v2y + sign * Tools.sign(v2y + w2y * sphere2.r) * fr * s / sphere2.m;
                 fw1y = w1y - sign * Tools.sign(v1y + w1y * sphere1.r) * 2 * fr * s / (sphere1.m * sphere1.r);
@@ -96,8 +95,8 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
                 fw1y = w1y - Tools.sign(v1y + w1y * sphere1.r) * 2 * fr * s / (sphere1.m * sphere1.r);
                 fw2y = w2y - Tools.sign(v2y + w2y * sphere2.r)  * 2 * fr * s / (sphere2.m * sphere2.r);
             }
-            float u1x = ((ratio - k) / (ratio + 1)) * v1x + ((k + 1) / (ratio + 1)) * v2x;
-            float u2x = ((ratio * (1 + k)) / (ratio + 1)) * v1x + ((1 - k * ratio) / (ratio + 1)) * v2x;
+            float u1x = v1x + s/ sphere1.m;
+            float u2x = v2x - s/sphere2.m;
             Vector2 fv1x = axisX.createByFloat(u1x);
             Vector2 fv2x = axisX.createByFloat(u2x);
             Vector2 fv1y = axisY.createByFloat(u1y);

@@ -17,7 +17,7 @@ class Main {
 
     public static void main(String[] args) {
         DrawingPanel panel = new DrawingPanel();
-        panel.addSpace(0.01f, 300f, 1600, 1000);
+        panel.addSpace(0.01f, 00f, 1600, 1000);
         JFrame frame = new JFrame("Brownian motion");
         frame.setSize(Tools.transformFloat((float) panel.space.width), Tools.transformFloat((float) panel.space.height));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,13 +30,13 @@ class Main {
 //        panel.space.addWall(0,400,1000,1000);
 //        panel.space.addWall(1000,400,0,1000);
 //        panel.space.addLine(0, 1000, 0, 0);
-//        panel.space.addTriangle(new Vector2(0,0), 0.05f, 500,600, 100, Material.LapisLazuli);
+        panel.space.addTriangle(new Vector2(0,0), 0.05f, 500,600, 100, Material.LapisLazuli);
 //        panel.space.addLine(900, 0, 700, 1000);
        panel.space.addWall(1400,600,600,900);
         panel.space.addWall(1200,550,200,200);
         panel.space.addBlock(-1,900,2000,200);
-//        panel.space.addTriangle(new Vector2(0,0), 3f, 200, 500, 90);
-//        panel.space.addTriangle(new Vector2(0,0), 3f, 1000, 800, 90);
+        panel.space.addTriangle(new Vector2(0,0), 3f, 200, 500, 90);
+        panel.space.addTriangle(new Vector2(0,0), 3f, 1000, 800, 90);
 //        panel.space.addBlock(1400,600-1,500,300);
 //        panel.space.addBlock(100,200,100,20);
         panel.space.addSphere(new Vector2(0,0), 0f, 400, 850, 30, Material.Steel);
@@ -67,9 +67,9 @@ class Main {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-//                panel.space.addSphere(new Vector2(+80,0), 3f, e.getX()-40, e.getY(), 10);
-//                panel.space.addSphere(new Vector2(80,0), 0f, e.getX(), e.getY(), 10);
-                new Controller(panel.space.spheres.get(0));
+                panel.space.addSphere(new Vector2(+80,0), 0f, e.getX(), e.getY(), 10);
+//                panel.space.addSphere(new Vector2(-80,0), 0f, e.getX()+40, e.getY(), 10);
+//                new Controller(panel.space.getSpheres().get(0));
             }
 
             @Override

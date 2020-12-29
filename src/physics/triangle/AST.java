@@ -1,5 +1,6 @@
 package physics.triangle;
 
+import physics.drawing.ArbitraryFigure;
 import physics.drawing.Drawable;
 import physics.drawing.Primitive;
 import physics.geometry.*;
@@ -79,10 +80,10 @@ public class AST extends Triangle implements Drawable, Collisional {
     @Override
     public void draw(Graphics g) {
         g.setColor(material.outlineColor);
-        TPolygon polygon = new TPolygon(getPoint(0),getPoint(1),getPoint(2));
-        g.drawPolygon(polygon);
+        ArbitraryFigure arbitraryFigure = new ArbitraryFigure(getPoints());
+        g.drawPolygon(arbitraryFigure.getPolygon());
         g.setColor(material.fillColor);
-        g.fillPolygon(polygon);
+        g.fillPolygon(arbitraryFigure.getPolygon());
         g.setColor(Color.WHITE);
         g.drawLine(Tools.transformFloat(x0),
                 Tools.transformFloat(y0),
