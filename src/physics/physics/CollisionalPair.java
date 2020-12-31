@@ -1,10 +1,10 @@
 package physics.physics;
 
 
-import physics.drawing.Primitive;
+import physics.geometry.Primitive;
 import physics.geometry.*;
 import physics.sphere.ASS;
-import physics.triangle.AST;
+import physics.polygons.PhysicalPolygon;
 import physics.utils.Tools;
 
 public class CollisionalPair<FirstThing extends Collisional, SecondThing extends Collisional> {
@@ -24,10 +24,10 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
             sphereToWall((ASS) secondThing, (Wall) firstThing);
         else if (firstThing.getType() == Primitive.SPHERE && secondThing.getType() == Primitive.SPHERE)
             sphereToSphere((ASS) firstThing, (ASS) secondThing);
-        else if (firstThing.getType() == Primitive.TRIANGLE && secondThing.getType() == Primitive.SPHERE)
-            sphereToPolygon((ASS) secondThing, (AST) firstThing);
-        else if (firstThing.getType() == Primitive.SPHERE && secondThing.getType() == Primitive.TRIANGLE)
-            sphereToPolygon((ASS) firstThing, (AST) secondThing);
+        else if (firstThing.getType() == Primitive.POLYGON && secondThing.getType() == Primitive.SPHERE)
+            sphereToPolygon((ASS) secondThing, (PhysicalPolygon) firstThing);
+        else if (firstThing.getType() == Primitive.SPHERE && secondThing.getType() == Primitive.POLYGON)
+            sphereToPolygon((ASS) firstThing, (PhysicalPolygon) secondThing);
     }
 
     private void sphereToWall(ASS sphere, Wall wall) {
@@ -116,7 +116,7 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
 
     }
 
-    private void sphereToPolygon(ASS sphere, AST triangle) {
+    private void sphereToPolygon(ASS sphere, PhysicalPolygon triangle) {
 
     }
 

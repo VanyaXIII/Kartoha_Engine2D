@@ -1,7 +1,7 @@
 package physics.physics;
 
 import physics.drawing.Drawable;
-import physics.drawing.Primitive;
+import physics.geometry.Primitive;
 import physics.geometry.Collisional;
 import physics.geometry.Line;
 import physics.geometry.Point2;

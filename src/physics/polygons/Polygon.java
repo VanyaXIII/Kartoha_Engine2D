@@ -1,4 +1,4 @@
-package physics.triangle;
+package physics.polygons;
 
 
 import physics.drawing.Drawable;
@@ -9,29 +9,21 @@ import physics.physics.Material;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Triangle implements Drawable {
+public abstract class Polygon implements Drawable {
     public float x0, y0;
-    public final float r;
     public Material material;
     private ArrayList<Point2> points;
 
     {
         points = new ArrayList<>();
     }
-    public Triangle(float x0, float y0, float r, Material material) {
+    public Polygon(float x0, float y0, ArrayList<Point2> points, Material material) {
         this.x0 = x0;
         this.y0 = y0;
-        this.r = r;
-        setPoints();
+        this.points = points;
         this.material = material;
     }
 
-
-    public void setPoints() {
-        points.add(new Point2((float) (x0 - Math.sqrt(3f) / 2.0f * r), y0 + r / 2.0f));
-        points.add(new Point2(x0, y0 - r));
-        points.add(new Point2((float) (x0 + Math.sqrt(3) / 2.0f * r), y0 + r / 2.0f));
-    }
 
 
     public ArrayList<Point2> getPoints() {

@@ -1,8 +1,7 @@
 package physics.geometry;
 
-import physics.drawing.Primitive;
 import physics.sphere.ASS;
-import physics.triangle.AST;
+import physics.polygons.PhysicalPolygon;
 
 import java.util.ArrayList;
 
@@ -26,10 +25,10 @@ public class IntersectionalPair<FirstThing extends Collisional, SecondThing exte
             return sphereToLine((ASS) secondThing, (Line) firstThing);
         if (firstThing.getType() == Primitive.SPHERE && secondThing.getType() == Primitive.SPHERE)
             return sphereToSphere((ASS) firstThing, (ASS) secondThing);
-        if (firstThing.getType() == Primitive.TRIANGLE && secondThing.getType() == Primitive.SPHERE)
-            return sphereToPolygon((ASS) secondThing, (AST) firstThing);
-        if (firstThing.getType() == Primitive.SPHERE && secondThing.getType() == Primitive.TRIANGLE)
-            return sphereToPolygon((ASS) firstThing, (AST) secondThing);
+        if (firstThing.getType() == Primitive.POLYGON && secondThing.getType() == Primitive.SPHERE)
+            return sphereToPolygon((ASS) secondThing, (PhysicalPolygon) firstThing);
+        if (firstThing.getType() == Primitive.SPHERE && secondThing.getType() == Primitive.POLYGON)
+            return sphereToPolygon((ASS) firstThing, (PhysicalPolygon) secondThing);
         return false;
     }
 
@@ -56,7 +55,7 @@ public class IntersectionalPair<FirstThing extends Collisional, SecondThing exte
         return false;
     }
 
-    private boolean sphereToPolygon(ASS sphere, AST triangle){
+    private boolean sphereToPolygon(ASS sphere, PhysicalPolygon triangle){
         if (!new AABB(sphere, mode).isIntersectedWith(new AABB(triangle, mode))) return false;
         ArrayList<Line> lines = triangle.getLines(mode);
         boolean intersected = false;

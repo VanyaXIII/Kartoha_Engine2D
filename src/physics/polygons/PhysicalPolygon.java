@@ -1,8 +1,8 @@
-package physics.triangle;
+package physics.polygons;
 
 import physics.drawing.ArbitraryFigure;
 import physics.drawing.Drawable;
-import physics.drawing.Primitive;
+import physics.geometry.Primitive;
 import physics.geometry.*;
 import physics.physics.Material;
 import physics.physics.Space;
@@ -11,15 +11,15 @@ import physics.utils.Tools;
 import java.awt.*;
 import java.util.ArrayList;
 //TODO реализовать наследование от класса полигон (RigidBody etc), который бы хранил в себе основные методы полигонов
-public class AST extends Triangle implements Drawable, Collisional {
+public class PhysicalPolygon extends Polygon implements Drawable, Collisional {
     public Vector2 v;
     private final Space space;
     public float w;
 
 
 
-    public AST(Space space, Vector2 v, float w, float x0, float y0, float r, Material material) {
-        super(x0, y0, r, material);
+    public PhysicalPolygon(Space space, Vector2 v, float w, float x0, float y0, ArrayList<Point2> points, Material material) {
+        super(x0, y0, points, material);
         this.space = space;
         this.v = v;
         this.w = w;
@@ -93,6 +93,6 @@ public class AST extends Triangle implements Drawable, Collisional {
 
     @Override
     public Primitive getType() {
-        return Primitive.TRIANGLE;
+        return Primitive.POLYGON;
     }
 }

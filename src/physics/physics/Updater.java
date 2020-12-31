@@ -1,20 +1,20 @@
 package physics.physics;
 
 import physics.sphere.ASS;
-import physics.triangle.AST;
+import physics.polygons.PhysicalPolygon;
 
 import java.util.ArrayList;
 
 public class Updater {
     private final ArrayList<ASS> spheres;
-    private final ArrayList<AST> triangles;
+    private final ArrayList<PhysicalPolygon> triangles;
 
     Updater(Space space){
         spheres = space.getSpheres();
-        triangles = space.getTriangles();
+        triangles = space.getPolygons();
     }
 
-    Updater(ArrayList<ASS> spheres, ArrayList<AST> triangles){
+    Updater(ArrayList<ASS> spheres, ArrayList<PhysicalPolygon> triangles){
         this.spheres = spheres;
         this.triangles = triangles;
     }
@@ -25,7 +25,7 @@ public class Updater {
         });
 
         Thread polygonThread = new Thread(() -> {
-            for (AST triangle : triangles) triangle.update();
+            for (PhysicalPolygon triangle : triangles) triangle.update();
         });
         sphereThread.start();
         polygonThread.start();

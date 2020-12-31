@@ -1,9 +1,12 @@
 package physics.physics;
 
 import physics.drawing.Drawable;
+import physics.geometry.Point2;
+import physics.geometry.PolygonCreator;
 import physics.geometry.Vector2;
+import physics.polygons.Polygon;
 import physics.sphere.ASS;
-import physics.triangle.AST;
+import physics.polygons.PhysicalPolygon;
 import physics.utils.Tools;
 
 import java.util.ArrayList;
@@ -15,7 +18,7 @@ public class Space {
     private final ArrayList<Wall> walls;
     private final ArrayList<ASS> spheres;
     private final ArrayList<Block> blocks;
-    private final ArrayList<AST> triangles;
+    private final ArrayList<PhysicalPolygon> polygons;
     private final float DT;
     private final float G;
     private double time;
@@ -24,7 +27,7 @@ public class Space {
     {
         walls = new ArrayList<>();
         spheres = new ArrayList<>();
-        triangles = new ArrayList<>();
+        polygons = new ArrayList<>();
         drawables = new ArrayList<>();
         blocks = new ArrayList<>();
     }
@@ -109,16 +112,18 @@ public class Space {
         drawables.add(sphere);
     }
 
-    public void addTriangle(Vector2 v, float w, float x0, float y0, float r, Material material) {
-        AST triangle = new AST(this, v, w, x0, y0, r, material);
-        triangles.add(triangle);
-        drawables.add(triangle);
+    public void addPolygon(Vector2 v, float w, float x0, float y0, int numOfPoints, float r, Material material) {
+        PolygonCreator creator = new PolygonCreator(new Point2(x0, y0), numOfPoints, r);
+        PhysicalPolygon polygon = new PhysicalPolygon(this, v, w, x0, y0, creator.createPolygonPoints(), material);
+        polygons.add(polygon);
+        drawables.add(polygon);
     }
 
-    public void addTriangle(Vector2 v, float w, float x0, float y0, float r) {
-        AST triangle = new AST(this, v, w, x0, y0, r, Material.Constantin);
-        triangles.add(triangle);
-        drawables.add(triangle);
+    public void addPolygon(Vector2 v, float w, float x0, float y0, int numOfPoints, float r) {
+        PolygonCreator creator = new PolygonCreator(new Point2(x0, y0), numOfPoints, r);
+        PhysicalPolygon polygon = new PhysicalPolygon(this, v, w, x0, y0, creator.createPolygonPoints(), Material.Constantin);
+        polygons.add(polygon);
+        drawables.add(polygon);
     }
 
     public double getTime() {
@@ -141,8 +146,8 @@ public class Space {
         return spheres;
     }
 
-    public ArrayList<AST> getTriangles() {
-        return triangles;
+    public ArrayList<PhysicalPolygon> getPolygons() {
+        return polygons;
     }
 
     public ArrayList<Wall> getWalls() {

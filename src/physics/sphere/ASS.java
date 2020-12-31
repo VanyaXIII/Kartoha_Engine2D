@@ -1,7 +1,7 @@
 package physics.sphere;
 
 import physics.drawing.Drawable;
-import physics.drawing.Primitive;
+import physics.geometry.Primitive;
 import physics.geometry.*;
 import physics.physics.Material;
 import physics.physics.Space;

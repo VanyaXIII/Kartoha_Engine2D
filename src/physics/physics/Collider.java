@@ -3,22 +3,22 @@ package physics.physics;
 import physics.geometry.IntersectionalPair;
 import physics.geometry.SphereIntersection;
 import physics.sphere.ASS;
-import physics.triangle.AST;
+import physics.polygons.PhysicalPolygon;
 
 import java.util.ArrayList;
 
 public class Collider {
     private final ArrayList<ASS> spheres;
     private final ArrayList<Wall> walls;
-    private final ArrayList<AST> triangles;
+    private final ArrayList<PhysicalPolygon> triangles;
 
     Collider(Space space) {
         spheres = space.getSpheres();
         walls = space.getWalls();
-        triangles = space.getTriangles();
+        triangles = space.getPolygons();
     }
 
-    Collider(ArrayList<ASS> spheres, ArrayList<Wall> walls, ArrayList<AST> triangles) {
+    Collider(ArrayList<ASS> spheres, ArrayList<Wall> walls, ArrayList<PhysicalPolygon> triangles) {
         this.spheres = spheres;
         this.walls = walls;
         this.triangles = triangles;
@@ -58,7 +58,7 @@ public class Collider {
 
         Thread sphereToPolygonThread = new Thread(() -> {
             for (ASS sphere : spheres) {
-                for (AST triangle : triangles) {
+                for (PhysicalPolygon triangle : triangles) {
                     synchronized (sphere) {
                         synchronized (triangle) {
                             if (new IntersectionalPair<>(sphere, triangle, true).isIntersected())

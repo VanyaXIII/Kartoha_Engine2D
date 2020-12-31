@@ -34,7 +34,7 @@ class Main {
 //        panel.space.addLine(900, 0, 700, 1000);
 //       panel.space.addWall(1400,600,600,900);
 //        panel.space.addWall(1200,550,200,200);
-        panel.space.addSphere(new Vector2(0,0), 0f, 800, 500, 200, Material.Steel);
+//        panel.space.addSphere(new Vector2(0,0), 0f, 800, 500, 200, Material.Steel);
         panel.space.addBlock(-1,900,2000,200);
 //        panel.space.addTriangle(new Vector2(0,0), 3f, 200, 500, 90);
 //        panel.space.addTriangle(new Vector2(0,0), 3f, 1000, 800, 90);
@@ -71,7 +71,8 @@ class Main {
 //                panel.space.addSphere(new Vector2(+80,0), 5f, e.getX()-40, e.getY(), 10);
 //                panel.space.addSphere(new Vector2(-80,0), 5f, e.getX()+40, e.getY(), 10);
 //                new Controller(panel.space.getSpheres().get(0));
-                panel.space.addSphere(new Vector2(0,150), 0f, e.getX(), e.getY(), 20);
+//                panel.space.addSphere(new Vector2(0,150), 0f, e.getX(), e.getY(), 20);
+                panel.space.addPolygon(new Vector2(0,0),0, e.getX(), e.getY(), 1000, 100);
             }
 
             @Override

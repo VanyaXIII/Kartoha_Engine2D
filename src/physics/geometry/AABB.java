@@ -1,7 +1,7 @@
 package physics.geometry;
 
 import physics.sphere.ASS;
-import physics.triangle.AST;
+import physics.polygons.PhysicalPolygon;
 
 public class AABB {
     public final Point2 min;
@@ -28,10 +28,10 @@ public class AABB {
         max = new Point2(position.x + sphere.r, position.y + sphere.r);
     }
 
-    public AABB(AST triangle, boolean mode){
-        Point2 position = triangle.getPosition(mode);
-        min = new Point2(position.x - triangle.r, position.y - triangle.r);
-        max = new Point2(position.x + triangle.r, position.y + triangle.r);
+    public AABB(PhysicalPolygon polygon, boolean mode){
+        Point2 position = polygon.getPosition(mode);
+        min = new Point2(position.x - 100, position.y - 100);
+        max = new Point2(position.x + 100, position.y + 100);
     }
 
     public boolean isIntersectedWith(AABB b){
