@@ -72,7 +72,7 @@ class Main {
 //                panel.space.addSphere(new Vector2(-80,0), 5f, e.getX()+40, e.getY(), 10);
 //                new Controller(panel.space.getSpheres().get(0));
 //                panel.space.addSphere(new Vector2(0,150), 0f, e.getX(), e.getY(), 20);
-                panel.space.addPolygon(new Vector2(0,0),0, e.getX(), e.getY(), 1000, 100);
+                panel.space.addPolygon(new Vector2(0,0),0, e.getX(), e.getY(), 4, 100);
             }
 
             @Override

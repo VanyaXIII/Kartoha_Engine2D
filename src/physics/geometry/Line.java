@@ -66,9 +66,8 @@ public class Line implements Drawable {
 
 
     public float calcDistance(float x, float y) {
-        float d = (float) (Math.abs(A * x + B * y + C)
+        return (float) (Math.abs(A * x + B * y + C)
                 / Math.sqrt(A * A + B * B));
-        return d;
     }
 
     public boolean doesIntersect(Line line) {

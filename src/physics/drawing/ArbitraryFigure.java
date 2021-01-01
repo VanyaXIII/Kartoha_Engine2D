@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class ArbitraryFigure {
 
-    private ArrayList<Point2> points;
+    private final ArrayList<Point2> points;
 
     public ArbitraryFigure(ArrayList<Point2> points){
         this.points = points;

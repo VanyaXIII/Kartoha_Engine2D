@@ -17,6 +17,7 @@ public abstract class Polygon implements Drawable {
     {
         points = new ArrayList<>();
     }
+
     public Polygon(float x0, float y0, ArrayList<Point2> points, Material material) {
         this.x0 = x0;
         this.y0 = y0;

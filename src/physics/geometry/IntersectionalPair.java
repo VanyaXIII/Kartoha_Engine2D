@@ -33,7 +33,7 @@ public class IntersectionalPair<FirstThing extends Collisional, SecondThing exte
     }
 
     private boolean sphereToLine(ASS sphere, Line line) {
-        if (!new AABB(sphere, mode).isIntersectedWith(new AABB(line))) return false;
+        if (new AABB(sphere, mode).isIntersectedWith(new AABB(line))) return false;
         Point2 spherePos = sphere.getPosition(mode);
         float d = line.calcDistance(spherePos.x, spherePos.y);
         if (d <= sphere.r) {
@@ -44,7 +44,7 @@ public class IntersectionalPair<FirstThing extends Collisional, SecondThing exte
     }
 
     private boolean sphereToSphere(ASS sphere1, ASS sphere2) {
-        if (!new AABB(sphere1, mode).isIntersectedWith(new AABB(sphere2, mode))) return false;
+        if (new AABB(sphere1, mode).isIntersectedWith(new AABB(sphere2, mode))) return false;
         Point2 sphere1Pos = sphere1.getPosition(mode);
         Point2 sphere2Pos = sphere2.getPosition(mode);
         Vector2 dvector = new Vector2(sphere1Pos.x - sphere2Pos.x,
@@ -56,7 +56,7 @@ public class IntersectionalPair<FirstThing extends Collisional, SecondThing exte
     }
 
     private boolean sphereToPolygon(ASS sphere, PhysicalPolygon triangle){
-        if (!new AABB(sphere, mode).isIntersectedWith(new AABB(triangle, mode))) return false;
+        if (new AABB(sphere, mode).isIntersectedWith(new AABB(triangle, mode))) return false;
         ArrayList<Line> lines = triangle.getLines(mode);
         boolean intersected = false;
         for(Line line : lines){
@@ -71,7 +71,7 @@ public class IntersectionalPair<FirstThing extends Collisional, SecondThing exte
     public SphereIntersection getSphereIntersection() {
         if (firstThing.getType() != Primitive.SPHERE || secondThing.getType() != Primitive.SPHERE)
             return new SphereIntersection(false);
-        if (!new AABB((ASS) firstThing, mode).isIntersectedWith(new AABB((ASS) secondThing, mode))) return new SphereIntersection(false);
+        if (new AABB((ASS) firstThing, mode).isIntersectedWith(new AABB((ASS) secondThing, mode))) return new SphereIntersection(false);
         ASS sphere1 = (ASS) firstThing;
         ASS sphere2 = (ASS) secondThing;
         Point2 sphere1Pos = sphere1.getPosition(mode);

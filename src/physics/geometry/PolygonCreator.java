@@ -1,14 +1,11 @@
 package physics.geometry;
 
-import physics.polygons.PhysicalPolygon;
-import physics.polygons.Polygon;
-
 import java.util.ArrayList;
 
 public class PolygonCreator {
-    private int numOfPoints;
-    private float maxRadius;
-    private Point2 centrePoint;
+    private final int numOfPoints;
+    private final float maxRadius;
+    private final Point2 centrePoint;
 
     public PolygonCreator(Point2 centrePoint, int numOfPoints, float maxRadius) {
         this.centrePoint = centrePoint;

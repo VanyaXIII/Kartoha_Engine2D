@@ -11,7 +11,6 @@ import physics.utils.Tools;
 
 import java.util.ArrayList;
 
-//TODO бить пространство на части
 public class Space {
     public final double height, width;
     public ArrayList<Drawable> drawables;

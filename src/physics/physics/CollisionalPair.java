@@ -8,8 +8,8 @@ import physics.polygons.PhysicalPolygon;
 import physics.utils.Tools;
 
 public class CollisionalPair<FirstThing extends Collisional, SecondThing extends Collisional> {
-    private FirstThing firstThing;
-    private SecondThing secondThing;
+    private final FirstThing firstThing;
+    private final SecondThing secondThing;
 
     public CollisionalPair(FirstThing firstThing, SecondThing secondThing) {
         this.firstThing = firstThing;
@@ -63,22 +63,21 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
         Point2 secondSpherePos = sphere2.getPosition(true);
         Vector2 axisX = new Vector2(firstSpherePos.x - secondSpherePos.x,
                 firstSpherePos.y - secondSpherePos.y);
-        if (axisX.length() != 0.0) {
+        if (axisX.length() != 0.0f) {
             Vector2 axisY = axisX.createNormal();
-            float ratio = sphere1.m / sphere2.m;
             float k = Tools.countAverage(sphere1.material.coefOfReduction, sphere2.material.coefOfReduction);
             float fr = Tools.countAverage(sphere1.material.coefOfFriction, sphere2.material.coefOfFriction);
             float v1x = sphere1.v.countProjectionOn(axisX);
             float v2x = sphere2.v.countProjectionOn(axisX);
             float v1y = sphere1.v.countProjectionOn(axisY);
             float v2y = sphere2.v.countProjectionOn(axisY);
-            float s = (sphere1.m * sphere2.m) / (sphere1.m + sphere2.m) * (1 + k) * Math.abs(v1x - v2x);
+            float s = (sphere1.m * sphere2.m) / (sphere1.m + sphere2.m) * (1f + k) * Math.abs(v1x - v2x);
             Vector2 radVector1 = axisX.createByFloat(-sphere1.r);
             float w1y = radVector1.getCrossProduct(sphere1.w).countProjectionOn(axisY) / sphere1.r;
             Vector2 radVector2 = axisX.createByFloat(+sphere2.r);
             float w2y = radVector2.getCrossProduct(sphere2.w).countProjectionOn(axisY) / sphere2.r;
             boolean slips = true;
-            if (Math.abs((v2y + w2y * sphere2.r) - (v1y + w1y * sphere1.r)) / (3 * s * Math.abs(1 / sphere1.m + 1 / sphere2.m)) < fr)
+            if (Math.abs((v2y + w2y * sphere2.r) - (v1y + w1y * sphere1.r)) / (3f * s * Math.abs(1f / sphere1.m + 1f / sphere2.m)) < fr)
                 slips = false;
             System.out.println(slips);
             float u1y = v1y, u2y = v2y;
@@ -87,13 +86,13 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
                 float sign = Math.signum(Math.abs(v1y + w1y * sphere1.r) - Math.abs(v2y + w2y * sphere2.r));
                 u1y = v1y - sign * Tools.sign(v1y + w1y * sphere1.r) * fr * s / sphere1.m;
                 u2y = v2y + sign * Tools.sign(v2y + w2y * sphere2.r) * fr * s / sphere2.m;
-                fw1y = w1y - sign * Tools.sign(v1y + w1y * sphere1.r) * 2 * fr * s / (sphere1.m * sphere1.r);
-                fw2y = w2y + sign * Tools.sign(v2y + w2y * sphere2.r) * 2 * fr * s / (sphere2.m * sphere2.r);
+                fw1y = w1y - sign * Tools.sign(v1y + w1y * sphere1.r) * 2f * fr * s / (sphere1.m * sphere1.r);
+                fw2y = w2y + sign * Tools.sign(v2y + w2y * sphere2.r) * 2f * fr * s / (sphere2.m * sphere2.r);
             } else if (slips) {
                 u1y = v1y - Tools.sign(v1y + w1y * sphere1.r) * fr * s / sphere1.m;
                 u2y = v2y - Tools.sign(v2y + w2y * sphere2.r) * fr * s / sphere2.m;
-                fw1y = w1y - Tools.sign(v1y + w1y * sphere1.r) * 2 * fr * s / (sphere1.m * sphere1.r);
-                fw2y = w2y - Tools.sign(v2y + w2y * sphere2.r) * 2 * fr * s / (sphere2.m * sphere2.r);
+                fw1y = w1y - Tools.sign(v1y + w1y * sphere1.r) * 2f * fr * s / (sphere1.m * sphere1.r);
+                fw2y = w2y - Tools.sign(v2y + w2y * sphere2.r) * 2f * fr * s / (sphere2.m * sphere2.r);
             } else {
                 float avSpeed = (sphere2.m * (v2y + w2y * sphere2.r) + sphere1.m * (v1y + w1y * sphere1.r)) / (sphere1.m + sphere2.m);
                 u1y = (avSpeed + 2 * v1y - w1y * sphere1.r) / 3f;
