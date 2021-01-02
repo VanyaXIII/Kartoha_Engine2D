@@ -42,7 +42,7 @@ public class Space {
     public void changeTime() {
         long time1 = System.nanoTime();
         try {
-            new Collider(this).collide();
+            new Collider(this,1).collide();
             new Updater(this).update();
         } catch (InterruptedException e) {
             e.printStackTrace();

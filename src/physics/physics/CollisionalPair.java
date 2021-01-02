@@ -64,6 +64,7 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
         Vector2 axisX = new Vector2(firstSpherePos.x - secondSpherePos.x,
                 firstSpherePos.y - secondSpherePos.y);
         if (axisX.length() != 0.0f) {
+            float ratio = sphere1.m / sphere2.m;
             Vector2 axisY = axisX.createNormal();
             float k = Tools.countAverage(sphere1.material.coefOfReduction, sphere2.material.coefOfReduction);
             float fr = Tools.countAverage(sphere1.material.coefOfFriction, sphere2.material.coefOfFriction);
@@ -100,8 +101,8 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
                 fw2y = (2 * u2y - 2 * v2y + w2y * sphere2.r) / sphere2.r;
 
             }
-            float u1x = v1x + s / sphere1.m;
-            float u2x = v2x - s / sphere2.m;
+            float u1x = ((ratio - k) / (ratio + 1)) * v1x + ((k + 1) / (ratio + 1)) * v2x;
+            float u2x = ((ratio * (1 + k)) / (ratio + 1)) * v1x + ((1 - k * ratio) / (ratio + 1)) * v2x;
             Vector2 fv1x = axisX.createByFloat(u1x);
             Vector2 fv2x = axisX.createByFloat(u2x);
             Vector2 fv1y = axisY.createByFloat(u1y);

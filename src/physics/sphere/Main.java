@@ -35,7 +35,7 @@ class Main {
 //       panel.space.addWall(1400,600,600,900);
 //        panel.space.addWall(1200,550,200,200);
 //        panel.space.addSphere(new Vector2(0,0), 0f, 800, 500, 200, Material.Steel);
-//        panel.space.addBlock(-1,900,2000,200);
+        panel.space.addBlock(-1,900,2000,200);
 //        panel.space.addTriangle(new Vector2(0,0), 3f, 200, 500, 90);
 //        panel.space.addTriangle(new Vector2(0,0), 3f, 1000, 800, 90);
 //        panel.space.addBlock(1400,600-1,500,300);
@@ -49,11 +49,11 @@ class Main {
 //        panel.space.addLine(0, 905, 1800, 905);
 //        panel.space.addLine(0, 906, 1800, 906);
 //        panel.space.addLine(050,249,700,599);
-        for (int i = 0; i <10 ; i++) {
-            int x = 340 + i * 30;
+        for (int i = 0; i <5 ; i++) {
+            int x = 040 + i * 25;
             int y = 100;
             for (int j = 0; j < 20; j++) {
-//                panel.space.addSphere(new Vector2(0f, 0f), 0.0f, x, y+20*j, 10f , Material.Constantin);
+//                panel.space.addSphere(new Vector2(0f, 0f), 0.0f, x, y+25*j, 10f , Material.Constantin);
             }
         }
 

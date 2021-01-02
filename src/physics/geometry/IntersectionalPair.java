@@ -1,5 +1,6 @@
 package physics.geometry;
 
+import physics.physics.Wall;
 import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 
@@ -71,7 +72,7 @@ public class IntersectionalPair<FirstThing extends Collisional, SecondThing exte
     public SphereIntersection getSphereIntersection() {
         if (firstThing.getType() != Primitive.SPHERE || secondThing.getType() != Primitive.SPHERE)
             return new SphereIntersection(false);
-        if (new AABB((ASS) firstThing, mode).isIntersectedWith(new AABB((ASS) secondThing, mode))) return new SphereIntersection(false);
+        if (!new AABB((ASS) firstThing, mode).isIntersectedWith(new AABB((ASS) secondThing, mode))) return new SphereIntersection(false);
         ASS sphere1 = (ASS) firstThing;
         ASS sphere2 = (ASS) secondThing;
         Point2 sphere1Pos = sphere1.getPosition(mode);
@@ -90,6 +91,21 @@ public class IntersectionalPair<FirstThing extends Collisional, SecondThing exte
             }
         }
         return new SphereIntersection(false);
+    }
+
+    public SphereToLineIntersection getSphereToLineIntersection(){
+        if (firstThing.getType() != Primitive.SPHERE || secondThing.getType() != Primitive.WALL)
+            return new SphereToLineIntersection(false);
+        if (!new AABB((ASS) firstThing, mode).isIntersectedWith(new AABB((Wall) secondThing))) return new SphereToLineIntersection(false);
+        if (sphereToLine((ASS) firstThing, (Line) secondThing)){
+            ASS sphere = (ASS) firstThing;
+            Line line = (Line) secondThing;
+            Point2 spherePos = sphere.getPosition(mode);
+            float d = line.calcDistance(spherePos.x, spherePos.y);
+            Point2 collisionPoint = line.findIntPoint(new Line(new Point2(spherePos.x, spherePos.y), new Vector2(line).createNormal()));
+            return new SphereToLineIntersection(true, collisionPoint, sphere.r - d);
+        }
+        return new SphereToLineIntersection(false);
     }
 
 }

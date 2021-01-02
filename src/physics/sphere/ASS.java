@@ -72,6 +72,16 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
         }
     }
 
+    public synchronized void pullSphereFromLine(SphereToLineIntersection intersection) {
+        if (intersection.getValue() != 0){
+            System.out.println(11111);
+            Vector2 movementVector = new Vector2(intersection.getCollisionalPoint(), getPosition(false));
+            Point2 nCords = movementVector.movePoint(new Point2(x0, y0), intersection.getValue());
+            this.x0 = nCords.x;
+            this.y0 = nCords.y;
+        }
+    }
+
 
     public synchronized Point2 getPosition(boolean mode) {
         float m = mode ? 1.0f : 0.0f;
