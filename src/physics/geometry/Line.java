@@ -70,10 +70,10 @@ public class Line implements Drawable {
                 / Math.sqrt(A * A + B * B));
     }
 
-    public boolean doesIntersect(Line line) {
+    public boolean doesIntersectBySegments(Line line) {
         if (this.A * line.B != this.B * line.A) {
-            double ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
-            double iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
+            float ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
+            float iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
             return (this.minX() <= ix && ix <= this.maxX() &&
                     line.minX() <= ix && ix <= line.maxX() &&
                     this.minY() <= iy && iy <= this.maxY() &&
@@ -81,6 +81,21 @@ public class Line implements Drawable {
         }
         return false;
     }
+
+    public boolean doesIntersect(Line line){
+        return this.A * line.B == this.B * line.A;
+    }
+
+    public boolean doesIntersectSegmentOf(Line line){
+        if (this.A * line.B != this.B * line.A) {
+            float ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
+            float iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
+            return (line.minX() <= ix && ix <= line.maxX() && line.minY() <= iy && iy <= line.maxY());
+        }
+        return false;
+    }
+
+
 
     public Point2 findIntPoint(Line line) {
         float ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
@@ -100,7 +115,9 @@ public class Line implements Drawable {
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.BLUE);
-        g.drawLine(Tools.transformFloat(x1), Tools.transformFloat(y1),
-                Tools.transformFloat(x2), Tools.transformFloat(y2));
+        g.drawLine(Tools.transformFloat(x1),
+                Tools.transformFloat(y1),
+                Tools.transformFloat(x2),
+                Tools.transformFloat(y2));
     }
 }

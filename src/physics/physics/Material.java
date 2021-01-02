@@ -20,7 +20,7 @@ public class Material {
     public static Material Wood = new Material(500, new Color(124, 67, 11),1f, 0f);
     public static Material Stone = new Material(2500, new Color(90, 90, 90),1f, 0f);
     public static Material Gold = new Material(19300, new Color(238, 198, 0),1f, 0f);
-    public static Material LapisLazuli = new Material(2500, new Color(0, 34, 255), 1f, 0f);
+    public static Material LapisLazuli = new Material(2500, new Color(0, 34, 255), 1f, 0.6f);
     public static Material Osmium = new Material(22500, new Color(148, 157, 191),1f, 0f);
     public static Material Constantin = new Material(1000, Color.GREEN, 0.9f, 0.6f);
 }

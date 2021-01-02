@@ -76,5 +76,7 @@ public class Collider {
         sphereToPolygonThread.join();
         sphereToWallThread.join();
 
+
+
     }
 }

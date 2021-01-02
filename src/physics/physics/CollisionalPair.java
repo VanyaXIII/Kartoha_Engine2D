@@ -59,8 +59,8 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
     }
 
     private void sphereToSphere(ASS sphere1, ASS sphere2) {
-        Point2 firstSpherePos = sphere1.getPosition(true);
-        Point2 secondSpherePos = sphere2.getPosition(true);
+        Point2 firstSpherePos = sphere1.getPosition(false);
+        Point2 secondSpherePos = sphere2.getPosition(false);
         Vector2 axisX = new Vector2(firstSpherePos.x - secondSpherePos.x,
                 firstSpherePos.y - secondSpherePos.y);
         if (axisX.length() != 0.0f) {
@@ -79,7 +79,6 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
             boolean slips = true;
             if (Math.abs((v2y + w2y * sphere2.r) - (v1y + w1y * sphere1.r)) / (3f * s * Math.abs(1f / sphere1.m + 1f / sphere2.m)) < fr)
                 slips = false;
-            System.out.println(slips);
             float u1y = v1y, u2y = v2y;
             float fw1y = w1y, fw2y = w2y;
             if (Math.signum(v1y + w1y * sphere1.r) == Math.signum(v2y + w2y * sphere2.r) && slips) {

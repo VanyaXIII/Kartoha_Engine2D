@@ -17,8 +17,8 @@ class Main {
 
     public static void main(String[] args) {
         DrawingPanel panel = new DrawingPanel();
-        panel.addSpace(0.01f, 00f, 1600, 1000);
-        JFrame frame = new JFrame("Brownian motion");
+        panel.addSpace(0.01f, 300f, 1600, 1000);
+        JFrame frame = new JFrame("Engine");
         frame.setSize(Tools.transformFloat((float) panel.space.width), Tools.transformFloat((float) panel.space.height));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBackground(Color.BLACK) ;
@@ -35,7 +35,7 @@ class Main {
 //       panel.space.addWall(1400,600,600,900);
 //        panel.space.addWall(1200,550,200,200);
 //        panel.space.addSphere(new Vector2(0,0), 0f, 800, 500, 200, Material.Steel);
-        panel.space.addBlock(-1,900,2000,200);
+//        panel.space.addBlock(-1,900,2000,200);
 //        panel.space.addTriangle(new Vector2(0,0), 3f, 200, 500, 90);
 //        panel.space.addTriangle(new Vector2(0,0), 3f, 1000, 800, 90);
 //        panel.space.addBlock(1400,600-1,500,300);
@@ -52,8 +52,8 @@ class Main {
         for (int i = 0; i <10 ; i++) {
             int x = 340 + i * 30;
             int y = 100;
-            for (int j = 0; j < 10; j++) {
-//                panel.space.addThing(new Vector2(0f, 0f), 0.0f, x+20, y+25*j, 10f , Material.Constantin);
+            for (int j = 0; j < 20; j++) {
+//                panel.space.addSphere(new Vector2(0f, 0f), 0.0f, x, y+20*j, 10f , Material.Constantin);
             }
         }
 
@@ -68,11 +68,8 @@ class Main {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-//                panel.space.addSphere(new Vector2(+80,0), 5f, e.getX()-40, e.getY(), 10);
-//                panel.space.addSphere(new Vector2(-80,0), 5f, e.getX()+40, e.getY(), 10);
-//                new Controller(panel.space.getSpheres().get(0));
-//                panel.space.addSphere(new Vector2(0,150), 0f, e.getX(), e.getY(), 20);
-                panel.space.addPolygon(new Vector2(0,0),0, e.getX(), e.getY(), 4, 100);
+                if (e.getButton() == 1) panel.space.addPolygon(new Vector2(0,0),0, e.getX(), e.getY(), 8, 100, Material.LapisLazuli);
+                else if (e.getButton() == 3) panel.space.addSphere(new Vector2(0,0), 0, e.getX(), e.getY(), 50, Material.LapisLazuli);
             }
 
             @Override
