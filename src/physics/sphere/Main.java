@@ -68,8 +68,9 @@ class Main {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (e.getButton() == 1) panel.space.addPolygon(new Vector2(0,0),0, e.getX(), e.getY(), 8, 100, Material.LapisLazuli);
-                else if (e.getButton() == 3) panel.space.addSphere(new Vector2(0,0), 0, e.getX(), e.getY(), 50, Material.LapisLazuli);
+                if (e.getButton() == 1) panel.space.addPolygon(new Vector2(0,0),0f, e.getX(), e.getY(), 4, 100, Material.LapisLazuli);
+                else if (e.getButton() == 3) panel.space.addSphere(new Vector2(0,0), 0, e.getX(), e.getY(), 300, Material.Steel);
+                else panel.space.addSphere(new Vector2(0,0), 0, e.getX(), e.getY(), 50, Material.LapisLazuli);
             }
 
             @Override

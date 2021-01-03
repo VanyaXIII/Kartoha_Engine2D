@@ -56,7 +56,6 @@ public class Collider {
                                 SphereToLineIntersection sphereAndLinePair  = new IntersectionalPair<>(sphere, wall, false).getSphereToLineIntersection();
                                 if (sphereAndLinePair.isIntersected){
                                     sphere.pullSphereFromLine(sphereAndLinePair);
-                                    System.out.println(11111);
                                 }
                             }
                         }

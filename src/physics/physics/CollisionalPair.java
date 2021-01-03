@@ -99,7 +99,6 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
                 fw1y = (2 * u1y - 2 * v1y + w1y * sphere1.r) / sphere1.r;
                 u2y = (avSpeed + 2 * v2y - w2y * sphere2.r) / 3f;
                 fw2y = (2 * u2y - 2 * v2y + w2y * sphere2.r) / sphere2.r;
-
             }
             float u1x = ((ratio - k) / (ratio + 1)) * v1x + ((k + 1) / (ratio + 1)) * v2x;
             float u2x = ((ratio * (1 + k)) / (ratio + 1)) * v1x + ((1 - k * ratio) / (ratio + 1)) * v2x;

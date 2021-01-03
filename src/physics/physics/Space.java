@@ -113,14 +113,16 @@ public class Space {
 
     public void addPolygon(Vector2 v, float w, float x0, float y0, int numOfPoints, float r, Material material) {
         PolygonCreator creator = new PolygonCreator(new Point2(x0, y0), numOfPoints, r);
-        PhysicalPolygon polygon = new PhysicalPolygon(this, v, w, x0, y0, creator.createPolygonPoints(), material);
+        Point2 centreOfMass = creator.getCentreOfMass();
+        PhysicalPolygon polygon = new PhysicalPolygon(this, v, w, centreOfMass.x, centreOfMass.y, creator.getPoints(), material);
         polygons.add(polygon);
         drawables.add(polygon);
     }
 
     public void addPolygon(Vector2 v, float w, float x0, float y0, int numOfPoints, float r) {
         PolygonCreator creator = new PolygonCreator(new Point2(x0, y0), numOfPoints, r);
-        PhysicalPolygon polygon = new PhysicalPolygon(this, v, w, x0, y0, creator.createPolygonPoints(), Material.Constantin);
+        Point2 centreOfMass = creator.getCentreOfMass();
+        PhysicalPolygon polygon = new PhysicalPolygon(this, v, w, centreOfMass.x, centreOfMass.y, creator.getPoints(), Material.Constantin);
         polygons.add(polygon);
         drawables.add(polygon);
     }

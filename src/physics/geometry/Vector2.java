@@ -23,10 +23,18 @@ public class Vector2 {
         this.y = line.y2 - line.y1;
     }
 
+    public Vector2 (Point2 point){
+        this.x = point.x;
+        this.y = point.y;
+    }
 
     public void mul(float m) {
         x *= m;
         y *= m;
+    }
+    public void add(Vector2 vector){
+        x += vector.x;
+        y += vector.y;
     }
 
     public Vector2 getMultipliedVector(float mul) {
