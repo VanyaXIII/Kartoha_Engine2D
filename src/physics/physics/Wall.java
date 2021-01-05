@@ -35,8 +35,4 @@ public class Wall extends Line implements Drawable, Collisional {
                 Tools.transformFloat(x2), Tools.transformFloat(y2));
     }
 
-    @Override
-    public Primitive getType() {
-        return Primitive.WALL;
-    }
 }

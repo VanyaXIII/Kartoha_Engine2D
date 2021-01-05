@@ -3,6 +3,7 @@ package physics.physics;
 import physics.geometry.IntersectionalPair;
 import physics.geometry.SphereIntersection;
 import physics.geometry.SphereToLineIntersection;
+import physics.geometry.Vector2;
 import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 

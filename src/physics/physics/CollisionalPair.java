@@ -1,33 +1,32 @@
 package physics.physics;
 
 
-import physics.geometry.Primitive;
 import physics.geometry.*;
 import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.Tools;
 
-public class CollisionalPair<FirstThing extends Collisional, SecondThing extends Collisional> {
-    private final FirstThing firstThing;
-    private final SecondThing secondThing;
+public class CollisionalPair<FirstThingType extends Collisional, SecondThingType extends Collisional> {
+    private final FirstThingType firstThingType;
+    private final SecondThingType secondThingType;
 
-    public CollisionalPair(FirstThing firstThing, SecondThing secondThing) {
-        this.firstThing = firstThing;
-        this.secondThing = secondThing;
+    public CollisionalPair(FirstThingType firstThingType, SecondThingType secondThingType) {
+        this.firstThingType = firstThingType;
+        this.secondThingType = secondThingType;
     }
 
 
     public void collide() {
-        if (firstThing.getType() == Primitive.SPHERE && secondThing.getType() == Primitive.WALL)
-            sphereToWall((ASS) firstThing, (Wall) secondThing);
-        else if (firstThing.getType() == Primitive.WALL && secondThing.getType() == Primitive.SPHERE)
-            sphereToWall((ASS) secondThing, (Wall) firstThing);
-        else if (firstThing.getType() == Primitive.SPHERE && secondThing.getType() == Primitive.SPHERE)
-            sphereToSphere((ASS) firstThing, (ASS) secondThing);
-        else if (firstThing.getType() == Primitive.POLYGON && secondThing.getType() == Primitive.SPHERE)
-            sphereToPolygon((ASS) secondThing, (PhysicalPolygon) firstThing);
-        else if (firstThing.getType() == Primitive.SPHERE && secondThing.getType() == Primitive.POLYGON)
-            sphereToPolygon((ASS) firstThing, (PhysicalPolygon) secondThing);
+        if (firstThingType instanceof ASS && secondThingType instanceof Wall)
+            sphereToWall((ASS) firstThingType, (Wall) secondThingType);
+        else if (firstThingType instanceof Wall && secondThingType instanceof ASS)
+            sphereToWall((ASS) secondThingType, (Wall) firstThingType);
+        else if (firstThingType instanceof ASS && secondThingType instanceof ASS)
+            sphereToSphere((ASS) firstThingType, (ASS) secondThingType);
+        else if (firstThingType instanceof PhysicalPolygon && secondThingType instanceof ASS)
+            sphereToPolygon((ASS) secondThingType, (PhysicalPolygon) firstThingType);
+        else if (firstThingType instanceof ASS && secondThingType instanceof PhysicalPolygon)
+            sphereToPolygon((ASS) firstThingType, (PhysicalPolygon) secondThingType);
     }
 
     private void sphereToWall(ASS sphere, Wall wall) {
@@ -80,8 +79,8 @@ public class CollisionalPair<FirstThing extends Collisional, SecondThing extends
             boolean slips = true;
             if (Math.abs((v2y + w2y * sphere2.r) - (v1y + w1y * sphere1.r)) / (3f * s * Math.abs(1f / sphere1.m + 1f / sphere2.m)) < fr)
                 slips = false;
-            float u1y = v1y, u2y = v2y;
-            float fw1y = w1y, fw2y = w2y;
+            float u1y, u2y;
+            float fw1y, fw2y;
             if (Math.signum(v1y + w1y * sphere1.r) == Math.signum(v2y + w2y * sphere2.r) && slips) {
                 float sign = Math.signum(Math.abs(v1y + w1y * sphere1.r) - Math.abs(v2y + w2y * sphere2.r));
                 u1y = v1y - sign * Tools.sign(v1y + w1y * sphere1.r) * fr * s / sphere1.m;

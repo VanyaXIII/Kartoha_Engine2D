@@ -87,10 +87,6 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
         return new Point2(x0 + m * v.getX() * space.getDT(), y0 + m * ((v.getY() + v.getY() + space.getG() * space.getDT()) * space.getDT() / 2.0f));
     }
 
-    @Override
-    public Primitive getType() {
-        return Primitive.SPHERE;
-    }
 
     @Override
     public void draw(Graphics g) {

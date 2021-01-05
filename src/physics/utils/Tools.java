@@ -1,5 +1,8 @@
 package physics.utils;
 
+import physics.geometry.Point2;
+import physics.geometry.Vector2;
+
 public class Tools {
     public static int transformFloat(float d) {
         return (int) Math.round(d);
@@ -12,4 +15,5 @@ public class Tools {
     public static float sign(float a){
         return a>=0f ? 1f :-1f;
     }
+
 }

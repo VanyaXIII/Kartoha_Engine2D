@@ -91,8 +91,4 @@ public class PhysicalPolygon extends Polygon implements Drawable, Collisional {
                 Tools.transformFloat(y0 + v.getY()*space.getDT()));
     }
 
-    @Override
-    public Primitive getType() {
-        return Primitive.POLYGON;
-    }
 }

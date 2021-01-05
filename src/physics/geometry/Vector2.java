@@ -28,6 +28,13 @@ public class Vector2 {
         this.y = point.y;
     }
 
+    public static float getLeftTurn(Point2 a, Point2 b, Point2 c){
+        float result = 0f;
+        if (getCrossProduct(new Vector2(a,b), new Vector2(a,c)) > 0) result = 1f;
+        else if (getCrossProduct(new Vector2(a,b), new Vector2(a,c)) < 0) result = -1f;
+        return result;
+    }
+
     public void mul(float m) {
         x *= m;
         y *= m;
@@ -147,6 +154,10 @@ public class Vector2 {
 
     public float countProjectionOn(Vector2 vector) {
         return this.dot(vector) / vector.length();
+    }
+
+    public static float getCrossProduct(Vector2 vector1, Vector2 vector2){
+        return vector1.getX() * vector2.getY() - vector1.getY() * vector2.getX();
     }
 
     @Override

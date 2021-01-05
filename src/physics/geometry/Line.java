@@ -1,9 +1,11 @@
 package physics.geometry;
 
 import physics.drawing.Drawable;
+import physics.utils.FloatComparator;
 import physics.utils.Tools;
 
 import java.awt.*;
+import java.lang.reflect.Field;
 
 public class Line implements Drawable {
     public float x1, x2, y1, y2;
@@ -71,15 +73,10 @@ public class Line implements Drawable {
     }
 
     public boolean doesIntersectBySegments(Line line) {
-        if (this.A * line.B != this.B * line.A) {
-            float ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
-            float iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
-            return (this.minX() <= ix && ix <= this.maxX() &&
-                    line.minX() <= ix && ix <= line.maxX() &&
-                    this.minY() <= iy && iy <= this.maxY() &&
-                    line.minY() <= iy && iy <= line.maxY());
-        }
-        return false;
+        return Vector2.getLeftTurn(new Point2(x1, y1), new Point2(x2, y2), new Point2(line.x1, line.y1))
+                != Vector2.getLeftTurn(new Point2(x1, y1), new Point2(x2, y2), new Point2(line.x2, line.y2))
+                && Vector2.getLeftTurn(new Point2(line.x1, line.y1), new Point2(line.x2, line.y2), new Point2(x1, y1))
+                != Vector2.getLeftTurn(new Point2(line.x1, line.y1), new Point2(line.x2, line.y2), new Point2(x2, y2));
     }
 
     public boolean doesIntersect(Line line){
@@ -103,7 +100,7 @@ public class Line implements Drawable {
         return new Point2(ix, iy);
     }
 
-    public boolean isPointOn(Point2 point) {
+    public boolean isPointInBoundingBox(Point2 point) {
         return point.x <= maxX() && point.x >= minX() && point.y >= minY() && point.y <= maxY();
     }
 
