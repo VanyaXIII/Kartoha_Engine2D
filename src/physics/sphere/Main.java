@@ -40,7 +40,7 @@ class Main {
 //        panel.space.addTriangle(new Vector2(0,0), 3f, 1000, 800, 90);
 //        panel.space.addBlock(1400,600-1,500,300);
 //        panel.space.addBlock(100,200,100,20);
-        panel.space.addSphere(new Vector2(0,0), 0f, 400, 850, 30, Material.Steel);
+//        panel.space.addSphere(new Vector2(0,0), 0f, 400, 850, 30, Material.Steel);
 //        panel.space.addThing(new Vector2(0,0), 0, 150, 160, 20, Material.Steel);
 //        panel.space.addWall(0, 901, 1800, 901);
 //        panel.space.addLine(0, 902, 1800, 902);
@@ -70,7 +70,7 @@ class Main {
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == 1) panel.space.addPolygon(new Vector2(0,0),0f, e.getX(), e.getY(), 4, 100, Material.LapisLazuli);
                 else if (e.getButton() == 3) panel.space.addSphere(new Vector2(0,0), 0, e.getX(), e.getY(), 300, Material.Steel);
-                else panel.space.addSphere(new Vector2(0,0), 0, e.getX(), e.getY(), 15, Material.LapisLazuli);
+                else panel.space.addSphere(new Vector2(0,80), 0, e.getX(), e.getY(), 15, Material.LapisLazuli);
 //                new Controller(panel.space.getSpheres().get(0));
             }
 
@@ -84,9 +84,7 @@ class Main {
 
             }
         });
-        while (true) {
-            frame.repaint();
-        }
+        while (true) frame.repaint();
     }
 }
 

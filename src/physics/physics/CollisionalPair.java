@@ -6,27 +6,33 @@ import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.Tools;
 
-public class CollisionalPair<FirstThingType extends Collisional, SecondThingType extends Collisional> {
-    private final FirstThingType firstThingType;
-    private final SecondThingType secondThingType;
+import java.util.ArrayList;
 
-    public CollisionalPair(FirstThingType firstThingType, SecondThingType secondThingType) {
-        this.firstThingType = firstThingType;
-        this.secondThingType = secondThingType;
+public class CollisionalPair<FirstThingType extends Collisional, SecondThingType extends Collisional> {
+    private final FirstThingType firstThing;
+    private final SecondThingType secondThing;
+
+    public CollisionalPair(FirstThingType firstThing, SecondThingType secondThing) {
+        this.firstThing = firstThing;
+        this.secondThing = secondThing;
     }
 
 
     public void collide() {
-        if (firstThingType instanceof ASS && secondThingType instanceof Wall)
-            sphereToWall((ASS) firstThingType, (Wall) secondThingType);
-        else if (firstThingType instanceof Wall && secondThingType instanceof ASS)
-            sphereToWall((ASS) secondThingType, (Wall) firstThingType);
-        else if (firstThingType instanceof ASS && secondThingType instanceof ASS)
-            sphereToSphere((ASS) firstThingType, (ASS) secondThingType);
-        else if (firstThingType instanceof PhysicalPolygon && secondThingType instanceof ASS)
-            sphereToPolygon((ASS) secondThingType, (PhysicalPolygon) firstThingType);
-        else if (firstThingType instanceof ASS && secondThingType instanceof PhysicalPolygon)
-            sphereToPolygon((ASS) firstThingType, (PhysicalPolygon) secondThingType);
+        if (firstThing instanceof ASS && secondThing instanceof Wall)
+            sphereToWall((ASS) firstThing, (Wall) secondThing);
+        else if (firstThing instanceof Wall && secondThing instanceof ASS)
+            sphereToWall((ASS) secondThing, (Wall) firstThing);
+        else if (firstThing instanceof ASS && secondThing instanceof ASS)
+            sphereToSphere((ASS) firstThing, (ASS) secondThing);
+        else if (firstThing instanceof PhysicalPolygon && secondThing instanceof ASS)
+            sphereToPolygon((ASS) secondThing, (PhysicalPolygon) firstThing);
+        else if (firstThing instanceof ASS && secondThing instanceof PhysicalPolygon)
+            sphereToPolygon((ASS) firstThing, (PhysicalPolygon) secondThing);
+        else if (firstThing instanceof PhysicalPolygon && secondThing instanceof Wall)
+            polygonToWall((PhysicalPolygon) firstThing, (Wall) secondThing);
+        else if (secondThing instanceof PhysicalPolygon && firstThing instanceof Wall)
+            polygonToWall((PhysicalPolygon) secondThing, (Wall) firstThing);
     }
 
     private void sphereToWall(ASS sphere, Wall wall) {
@@ -51,7 +57,7 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             v2x = (-0.5f * w1x * sphere.r + v1x) / 1.5f;
             w2x = -v2x / sphere.r;
         }
-        sphere.w = Tools.sign(w1x) == Tools.sign(w2x) ? Tools.sign(sphere.w) * Math.abs(w2x) : -Tools.sign(sphere.w) * Math.abs(w2x);
+        sphere.w = Vector2.getConstByCrossProduct(axisX.createByFloat(w2x * sphere.r), radVector);
         Vector2 fv1x = axisX.createByFloat(v2x);
         Vector2 fv1y = axisY.createByFloat(-v1y * k);
         sphere.v = new Vector2(fv1x, fv1y);
@@ -105,8 +111,8 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             Vector2 fv2x = axisX.createByFloat(u2x);
             Vector2 fv1y = axisY.createByFloat(u1y);
             Vector2 fv2y = axisY.createByFloat(u2y);
-            sphere1.w = Tools.sign(w1y) == Tools.sign(fw1y) ? Tools.sign(sphere1.w) * Math.abs(fw1y) : -Tools.sign(sphere1.w) * Math.abs(fw1y);
-            sphere2.w = Tools.sign(w2y) == Tools.sign(fw2y) ? Tools.sign(sphere2.w) * Math.abs(fw2y) : -Tools.sign(sphere2.w) * Math.abs(fw2y);
+            sphere1.w = Vector2.getConstByCrossProduct(axisY.createByFloat(fw1y * sphere1.r), radVector1);
+            sphere2.w = Vector2.getConstByCrossProduct(axisY.createByFloat(fw2y * sphere2.r), radVector2);
             sphere1.v = new Vector2(fv1x, fv1y);
             sphere2.v = new Vector2(fv2x, fv2y);
         }
@@ -115,6 +121,36 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
 
     private void sphereToPolygon(ASS sphere, PhysicalPolygon triangle) {
 
+    }
+
+    private void polygonToWall(PhysicalPolygon polygon, Wall wall) {
+        float k = Tools.countAverage(polygon.material.coefOfReduction, wall.material.coefOfReduction);
+        float fr = Tools.countAverage(polygon.material.coefOfFriction, wall.material.coefOfFriction);
+        Point2 centre = polygon.getPositionOfCentre(true);
+        ArrayList<Point2> collisionPoints = new ArrayList<>();
+        ArrayList<Point2> points = polygon.getPoints(true);
+        for (Point2 point : points) {
+            if (new Line(point, centre).doesIntersectBySegmentsWith(wall)) {
+                collisionPoints.add(point);
+            }
+        }
+        Vector2 axisX = new Vector2(wall);
+        Vector2 axisY = axisX.createNormal();
+        for (Point2 c : collisionPoints) {
+            if (polygon.v.countProjectionOn(axisY) + new Vector2(centre, c).getCrossProduct(polygon.w).countProjectionOn(axisY) > 0)
+                axisY.makeOp();
+            Vector2 radVector = new Vector2(centre, c);
+            float rx = Math.abs(radVector.countProjectionOn(axisX));
+            float v1y = polygon.v.countProjectionOn(axisY);
+            float v1x = polygon.v.countProjectionOn(axisX);
+            float w1y = axisX.createByFloat(radVector.countProjectionOn(axisX)).getCrossProduct(polygon.w).countProjectionOn(axisY) / rx;
+            float w2y = (polygon.J * w1y + rx * polygon.m * (-k * (v1y + w1y * rx) - v1y)) / (polygon.J + rx * rx * polygon.m);
+            float s = polygon.J * (w2y - w1y) / rx;
+            float v2y = v1y + s / polygon.m;
+
+            polygon.v = new Vector2(axisX.createByFloat(v1x), axisY.createByFloat(v2y));
+            polygon.w = Vector2.getConstByCrossProduct(axisY.createByFloat(w2y * rx), axisX.createByFloat(radVector.countProjectionOn(axisX)));
+        }
     }
 
 

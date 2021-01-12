@@ -10,7 +10,6 @@ public abstract class Sphere2D implements Drawable {
     public float m;
     public float r;
     public Material material;
-    boolean md = false;
 
     Sphere2D(float x0, float y0, float r, Material material) {
         this.x0 = x0;

@@ -89,10 +89,25 @@ public class Collider {
                     }
                 }
             });
+            Thread polygonThread = new Thread(() -> {
+                for (PhysicalPolygon polygon : polygons){
+                    for (Wall wall : walls){
+                        synchronized (polygon){
+                            synchronized (wall){
+                                if (new IntersectionalPair<>(polygon, wall, true).isIntersected()){
+                                    new CollisionalPair<>(polygon, wall).collide();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
             sphereThread.start();
+            polygonThread.start();
 //            sphereToPolygonThread.start();
 //            sphereToWallThread.start();
             sphereThread.join();
+            polygonThread.join();
 //            sphereToPolygonThread.join();
 //            sphereToWallThread.join();
         }

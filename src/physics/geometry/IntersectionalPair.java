@@ -7,29 +7,32 @@ import physics.polygons.PhysicalPolygon;
 import java.util.ArrayList;
 
 public class IntersectionalPair<FirstThingType extends Collisional, SecondThingType extends Collisional> {
-    private final FirstThingType firstThingType;
-    private final SecondThingType secondThingType;
+    private final FirstThingType firstThing;
+    private final SecondThingType secondThing;
     private final boolean mode;
 
-    public IntersectionalPair(FirstThingType firstThingType, SecondThingType secondThingType, boolean mode) {
-        this.firstThingType = firstThingType;
-        this.secondThingType = secondThingType;
+    public IntersectionalPair(FirstThingType firstThing, SecondThingType secondThing, boolean mode) {
+        this.firstThing = firstThing;
+        this.secondThing = secondThing;
         this.mode = mode;
     }
 
 
-
     public boolean isIntersected() {
-        if (firstThingType instanceof ASS && secondThingType instanceof Wall)
-            return sphereToLine((ASS) firstThingType, (Line) secondThingType);
-        if (firstThingType instanceof Wall && secondThingType instanceof ASS)
-            return sphereToLine((ASS) secondThingType, (Line) firstThingType);
-        if (firstThingType instanceof ASS && secondThingType instanceof ASS)
-            return sphereToSphere((ASS) firstThingType, (ASS) secondThingType);
-        if (firstThingType instanceof PhysicalPolygon && secondThingType instanceof ASS)
-            return sphereToPolygon((ASS) secondThingType, (PhysicalPolygon) firstThingType);
-        if (firstThingType instanceof ASS && secondThingType instanceof PhysicalPolygon)
-            return sphereToPolygon((ASS) firstThingType, (PhysicalPolygon) secondThingType);
+        if (firstThing instanceof ASS && secondThing instanceof Wall)
+            return sphereToLine((ASS) firstThing, (Line) secondThing);
+        else if (firstThing instanceof Wall && secondThing instanceof ASS)
+            return sphereToLine((ASS) secondThing, (Line) firstThing);
+        else if (firstThing instanceof ASS && secondThing instanceof ASS)
+            return sphereToSphere((ASS) firstThing, (ASS) secondThing);
+        else if (firstThing instanceof PhysicalPolygon && secondThing instanceof ASS)
+            return sphereToPolygon((ASS) secondThing, (PhysicalPolygon) firstThing);
+        else if (firstThing instanceof ASS && secondThing instanceof PhysicalPolygon)
+            return sphereToPolygon((ASS) firstThing, (PhysicalPolygon) secondThing);
+        else if (firstThing instanceof PhysicalPolygon && secondThing instanceof Wall)
+            return polygonToWall((PhysicalPolygon) firstThing, (Line) secondThing);
+        else if (firstThing instanceof Wall && secondThing instanceof PhysicalPolygon)
+            return polygonToWall((PhysicalPolygon) secondThing, (Line) firstThing);
         return false;
     }
 
@@ -38,7 +41,7 @@ public class IntersectionalPair<FirstThingType extends Collisional, SecondThingT
         Point2 spherePos = sphere.getPosition(mode);
         float d = line.calcDistance(spherePos.x, spherePos.y);
         if (d <= sphere.r) {
-            Point2 collisionPoint = line.findIntPoint(new Line(new Point2(spherePos.x, spherePos.y), new Vector2(line).createNormal()));
+            Point2 collisionPoint = line.findIntPointWith(new Line(new Point2(spherePos.x, spherePos.y), new Vector2(line).createNormal()));
             return line.isPointInBoundingBox(collisionPoint);
         } else
             return false;
@@ -56,12 +59,12 @@ public class IntersectionalPair<FirstThingType extends Collisional, SecondThingT
         return false;
     }
 
-    private boolean sphereToPolygon(ASS sphere, PhysicalPolygon triangle){
+    private boolean sphereToPolygon(ASS sphere, PhysicalPolygon triangle) {
         if (!new AABB(sphere, mode).isIntersectedWith(new AABB(triangle, mode))) return false;
         ArrayList<Line> lines = triangle.getLines(mode);
         boolean intersected = false;
-        for(Line line : lines){
-            if (sphereToLine(sphere, line)){
+        for (Line line : lines) {
+            if (sphereToLine(sphere, line)) {
                 intersected = true;
                 break;
             }
@@ -69,12 +72,22 @@ public class IntersectionalPair<FirstThingType extends Collisional, SecondThingT
         return intersected;
     }
 
+    private boolean polygonToWall(PhysicalPolygon polygon, Line line) {
+        if (!new AABB(polygon, mode).isIntersectedWith(new AABB(line))) return false;
+        byte counter = 0;
+        for (Line polygonLine : polygon.getLines(mode)) {
+            if (line.doesIntersectBySegmentsWith(polygonLine)) counter++;
+        }
+        return counter == 2;
+    }
+
     public SphereIntersection getSphereIntersection() {
-        if (!(firstThingType instanceof ASS || secondThingType instanceof ASS))
+        if (!(firstThing instanceof ASS || secondThing instanceof ASS))
             return new SphereIntersection(false);
-        if (!new AABB((ASS) firstThingType, mode).isIntersectedWith(new AABB((ASS) secondThingType, mode))) return new SphereIntersection(false);
-        ASS sphere1 = (ASS) firstThingType;
-        ASS sphere2 = (ASS) secondThingType;
+        if (!new AABB((ASS) firstThing, mode).isIntersectedWith(new AABB((ASS) secondThing, mode)))
+            return new SphereIntersection(false);
+        ASS sphere1 = (ASS) firstThing;
+        ASS sphere2 = (ASS) secondThing;
         Point2 sphere1Pos = sphere1.getPosition(mode);
         Point2 sphere2Pos = sphere2.getPosition(mode);
         Vector2 dvector = new Vector2(sphere1Pos.x - sphere2Pos.x,
@@ -93,16 +106,17 @@ public class IntersectionalPair<FirstThingType extends Collisional, SecondThingT
         return new SphereIntersection(false);
     }
 
-    public SphereToLineIntersection getSphereToLineIntersection(){
-        if (!(firstThingType instanceof ASS || secondThingType instanceof Wall))
+    public SphereToLineIntersection getSphereToLineIntersection() {
+        if (!(firstThing instanceof ASS || secondThing instanceof Wall))
             return new SphereToLineIntersection(false);
-        if (!new AABB((ASS) firstThingType, mode).isIntersectedWith(new AABB((Wall) secondThingType))) return new SphereToLineIntersection(false);
-        if (sphereToLine((ASS) firstThingType, (Line) secondThingType)){
-            ASS sphere = (ASS) firstThingType;
-            Line line = (Line) secondThingType;
+        if (!new AABB((ASS) firstThing, mode).isIntersectedWith(new AABB((Wall) secondThing)))
+            return new SphereToLineIntersection(false);
+        if (sphereToLine((ASS) firstThing, (Line) secondThing)) {
+            ASS sphere = (ASS) firstThing;
+            Line line = (Line) secondThing;
             Point2 spherePos = sphere.getPosition(mode);
             float d = line.calcDistance(spherePos.x, spherePos.y);
-            Point2 collisionPoint = line.findIntPoint(new Line(new Point2(spherePos.x, spherePos.y), new Vector2(line).createNormal()));
+            Point2 collisionPoint = line.findIntPointWith(new Line(new Point2(spherePos.x, spherePos.y), new Vector2(line).createNormal()));
             return new SphereToLineIntersection(true, collisionPoint, sphere.r - d);
         }
         return new SphereToLineIntersection(false);

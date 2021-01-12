@@ -1,5 +1,7 @@
 package physics.geometry;
 
+import physics.utils.FloatComparator;
+
 public class Vector2 {
     private float x, y;
 
@@ -68,8 +70,14 @@ public class Vector2 {
         this.x = -this.x;
     }
 
-    public Vector2 getCrossProduct(float c) {
+    public Vector2 getCrossProduct(float c){
         return new Vector2(-c * y, c * x);
+    }
+
+    public static float getConstByCrossProduct(Vector2 resultVector, Vector2 mulVector){
+        if (FloatComparator.equals(resultVector.length(), 0f)) return 0f;
+        if (mulVector.getX() == 0f) return -resultVector.getX()/ mulVector.getY();
+        return resultVector.getY()/ mulVector.getX();
     }
 
     public void makeOpY() {

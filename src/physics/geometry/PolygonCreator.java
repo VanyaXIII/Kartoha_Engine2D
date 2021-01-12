@@ -2,7 +2,8 @@ package physics.geometry;
 
 import java.util.ArrayList;
 
-public class PolygonCreator { ;
+public class PolygonCreator {
+    ;
     private ArrayList<Point2> points;
     private ArrayList<Triangle> triangles;
 
@@ -21,7 +22,7 @@ public class PolygonCreator { ;
         triangulate();
     }
 
-    private void setPoints(Point2 centrePoint, float r, int numOfPoints){
+    private void setPoints(Point2 centrePoint, float r, int numOfPoints) {
         Vector2 radVector = new Vector2((float) Math.random(), (float) Math.random());
         radVector.setLength(r);
         float[] angles = new float[numOfPoints];
@@ -44,24 +45,41 @@ public class PolygonCreator { ;
         return points;
     }
 
-    public void triangulate(){
-        for (int i = 2; i < points.size(); i++){
-            triangles.add(new Triangle(points.get(0), points.get(i-1), points.get(i)));
+    public void triangulate() {
+        for (int i = 2; i < points.size(); i++) {
+            triangles.add(new Triangle(points.get(0), points.get(i - 1), points.get(i)));
         }
     }
 
-    public Point2 getCentreOfMass(){
-        Vector2 rC = new Vector2(0,0);
+
+    public Point2 getCentreOfMass() {
+        Vector2 rC = new Vector2(0, 0);
         float s = 0f;
-        for (Triangle triangle : triangles){
+        for (Triangle triangle : triangles) {
             Vector2 rCOfTriangle = new Vector2(triangle.getCentroid());
             rCOfTriangle.mul(triangle.getSquare());
             s += triangle.getSquare();
             rC.add(rCOfTriangle);
 
         }
-        rC.mul(1f/s);
+        rC.mul(1f / s);
         return new Point2(rC.getX(), rC.getY());
     }
 
+    public float getSquare() {
+        float square = 0f;
+        for (Triangle triangle : triangles) {
+            square += triangle.getSquare();
+        }
+        return square;
+    }
+
+    public float getJDivDensity() {
+        Point2 c = getCentreOfMass();
+        float J = 0f;
+        for (Triangle triangle : triangles) {
+            J += triangle.getJDivDensity() + triangle.getSquare() * new Vector2(c, triangle.getCentroid()).getSquare();
+        }
+        return J;
+    }
 }

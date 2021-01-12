@@ -3,6 +3,8 @@ package physics.geometry;
 import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 
+import java.util.ArrayList;
+
 public class AABB {
     public final Point2 min;
     public final Point2 max;
@@ -29,10 +31,20 @@ public class AABB {
     }
 
     public AABB(PhysicalPolygon polygon, boolean mode){
-        Point2 position = polygon.getPosition(mode);
-        min = new Point2(position.x - 100, position.y - 100);
-        max = new Point2(position.x + 100, position.y + 100);
+        Point2 position = polygon.getPositionOfCentre(mode);
+        ArrayList<Point2> points = polygon.getPoints(mode);
+        float maxRadius = 0f;
+
+        for (Point2 point : points){
+            float square = new Vector2(point, position).getSquare();
+            if (maxRadius < square) maxRadius = square;
+        }
+
+        min = new Point2(position.x - (float) Math.sqrt(maxRadius), position.y - (float) Math.sqrt(maxRadius));
+        max = new Point2(position.x + (float) Math.sqrt(maxRadius), position.y + (float) Math.sqrt(maxRadius));
+
     }
+
 
     public boolean isIntersectedWith(AABB b){
         if (this.max.x < b.min.x || this.min.x > b.max.x) return false;

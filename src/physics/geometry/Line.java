@@ -72,7 +72,7 @@ public class Line implements Drawable {
                 / Math.sqrt(A * A + B * B));
     }
 
-    public boolean doesIntersectBySegments(Line line) {
+    public boolean doesIntersectBySegmentsWith(Line line) {
         return Vector2.getLeftTurn(new Point2(x1, y1), new Point2(x2, y2), new Point2(line.x1, line.y1))
                 != Vector2.getLeftTurn(new Point2(x1, y1), new Point2(x2, y2), new Point2(line.x2, line.y2))
                 && Vector2.getLeftTurn(new Point2(line.x1, line.y1), new Point2(line.x2, line.y2), new Point2(x1, y1))
@@ -94,7 +94,7 @@ public class Line implements Drawable {
 
 
 
-    public Point2 findIntPoint(Line line) {
+    public Point2 findIntPointWith(Line line) {
         float ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
         float iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
         return new Point2(ix, iy);

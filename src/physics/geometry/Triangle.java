@@ -1,9 +1,7 @@
 package physics.geometry;
 
-import java.util.ArrayList;
-
 public class Triangle {
-    private Point2[] points;
+    private final Point2[] points;
 
     {
         points = new Point2[3];
@@ -29,6 +27,13 @@ public class Triangle {
         rC.add(new Vector2(points[2]));
         rC.mul(1f / 3f);
         return new Point2(rC.getX(), rC.getY());
+    }
+
+    public float getJDivDensity(){
+        return (getSquare()/36f) *
+                (new Vector2(points[0], points[1]).getSquare() +
+                new Vector2(points[1], points[2]).getSquare() +
+                new Vector2(points[2], points[0]).getSquare());
     }
 
 }
