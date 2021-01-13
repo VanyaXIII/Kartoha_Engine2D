@@ -42,22 +42,9 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
     }
 
     private synchronized void changeSpeed() {
-        processSceneCollision();
         v.addY(space.getG() * space.getDT());
-        processSceneCollision();
     }
 
-    private void processSceneCollision() {
-        if (((y0 - (r) + v.getY() * space.getDT() > 0.0) && (x0 + r + v.getX() * space.getDT()) > space.width) || (x0 + v.getX() * space.getDT() - r < 0.0)) {
-            v.makeOpX();
-        }
-        if ((x0 - r + v.getX() * space.getDT() > 0.0) && (y0 - r + v.getY() * space.getDT() < 0.0)) {
-            v.makeOpY();
-        }
-        if ((x0 + v.getX() * space.getDT() + r > 0.0) && (y0 + v.getY() * space.getDT() + r > space.height)) {
-            v.makeOpY();
-        }
-    }
 
     private synchronized void rotate() {
         orientationVector.rotate(w * space.getDT());

@@ -12,7 +12,6 @@ import physics.utils.Tools;
 import java.util.ArrayList;
 
 public class Space {
-    public final double height, width;
     public ArrayList<Drawable> drawables;
     private final ArrayList<Wall> walls;
     private final ArrayList<ASS> spheres;
@@ -31,15 +30,13 @@ public class Space {
         blocks = new ArrayList<>();
     }
 
-    public Space(float dt, float g, int width, int height) {
+    public Space(float dt, float g) {
         this.DT = dt;
         this.G = g;
         this.time = 0;
-        this.height = height;
-        this.width = width;
     }
 
-    public void changeTime() {
+    public synchronized void changeTime() {
         long time1 = System.nanoTime();
         try {
             new Collider(this,1).collide();
@@ -143,15 +140,22 @@ public class Space {
         return G;
     }
 
-    public ArrayList<ASS> getSpheres() {
+    public synchronized ArrayList<ASS> getSpheres() {
         return spheres;
     }
 
-    public ArrayList<PhysicalPolygon> getPolygons() {
+    public synchronized ArrayList<PhysicalPolygon> getPolygons() {
         return polygons;
     }
 
     public ArrayList<Wall> getWalls() {
         return walls;
+    }
+
+    public synchronized void deleteDynamicObjects(){
+        for (PhysicalPolygon polygon : polygons) drawables.remove(polygon);
+        for (ASS sphere : spheres) drawables.remove(sphere);
+        polygons.clear();
+        spheres.clear();
     }
 }
