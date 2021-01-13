@@ -130,11 +130,17 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
         Point2 centre = polygon.getPositionOfCentre(true);
         ArrayList<Point2> collisionPoints = new ArrayList<>();
         ArrayList<Point2> points = polygon.getPoints(true);
+//        ArrayList<Line> lines = polygon.getLines(true);
         for (Point2 point : points) {
             if (new Line(point, centre).doesIntersectBySegmentsWith(wall)) {
                 collisionPoints.add(point);
             }
         }
+//        for (Line line : lines){
+//            if (line.doesIntersectBySegmentsWith(wall)){
+//                collisionPoints.add(line.findIntPointWith(wall));
+//            }
+//        }
         Vector2 axisX = new Vector2(wall);
         Vector2 axisY = axisX.createNormal();
         for (Point2 c : collisionPoints) {
@@ -149,11 +155,12 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             float w2y = (polygon.J * w1y + rx * polygon.m * (-k * (v1y + w1y * rx) - v1y)) / (polygon.J + rx * rx * polygon.m);
             float s = polygon.J * (w2y - w1y) / rx;
             float v2y = v1y + s / polygon.m;
+            polygon.w = Vector2.getConstByCrossProduct(axisY.createByFloat(w2y * rx), axisX.createByFloat(radVector.countProjectionOn(axisX)));
             float v2x = v1x;
             float w1x = axisY.createByFloat(radVector.countProjectionOn(axisY)).getCrossProduct(polygon.w).countProjectionOn(axisX) / ry;
             float w2x = w1x;
             boolean slips = true;
-            if (Math.abs(-polygon.J * w1x * ry - polygon.J * v1x) * polygon.m / ((polygon.J + polygon.m * ry * ry) * s) < fr)
+            if (Math.abs(polygon.J * w1x * ry + polygon.J * v1x) * polygon.m / ((polygon.J + polygon.m * ry * ry) * s) < fr)
                 slips = false;
             if (slips && !FloatComparator.equals(w1x * ry + v1x, 0f)) {
                 v2x = v1x - Tools.sign(w1x * ry + v1x) * fr * s / polygon.m;
@@ -163,12 +170,12 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
                 w2x = (polygon.J * w1x - polygon.m * v1x * ry) / (polygon.J + polygon.m * ry * ry);
                 v2x = -w2x*ry;
             }
-            float dw1 = Vector2.getConstByCrossProduct(axisY.createByFloat(w2y * rx), axisX.createByFloat(radVector.countProjectionOn(axisX))) -
-                    Vector2.getConstByCrossProduct(axisY.createByFloat(w1y * rx), axisX.createByFloat(radVector.countProjectionOn(axisX)));
-            float dw2 = Vector2.getConstByCrossProduct(axisX.createByFloat(w2x * ry), axisY.createByFloat(radVector.countProjectionOn(axisY))) -
-                    Vector2.getConstByCrossProduct(axisX.createByFloat(w1x * ry), axisY.createByFloat(radVector.countProjectionOn(axisY)));
+//            float dw1 = Vector2.getConstByCrossProduct(axisY.createByFloat(w2y * rx), axisX.createByFloat(radVector.countProjectionOn(axisX))) -
+//                    Vector2.getConstByCrossProduct(axisY.createByFloat(w1y * rx), axisX.createByFloat(radVector.countProjectionOn(axisX)));
+//            float dw2 = Vector2.getConstByCrossProduct(axisX.createByFloat(w2x * ry), axisY.createByFloat(radVector.countProjectionOn(axisY))) -
+//                    Vector2.getConstByCrossProduct(axisX.createByFloat(w1x * ry), axisY.createByFloat(radVector.countProjectionOn(axisY)));
             polygon.v = new Vector2(axisX.createByFloat(v2x), axisY.createByFloat(v2y));
-            polygon.w += dw1 + dw2;
+            polygon.w = Vector2.getConstByCrossProduct(axisX.createByFloat(w2x * ry), axisY.createByFloat(radVector.countProjectionOn(axisY)));
         }
     }
 

@@ -78,7 +78,7 @@ public class IntersectionalPair<FirstThingType extends Collisional, SecondThingT
         for (Line polygonLine : polygon.getLines(mode)) {
             if (line.doesIntersectBySegmentsWith(polygonLine)) counter++;
         }
-        return counter == 2;
+        return counter > 0;
     }
 
     public SphereIntersection getSphereIntersection() {
