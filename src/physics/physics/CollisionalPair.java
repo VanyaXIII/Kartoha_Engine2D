@@ -4,6 +4,7 @@ package physics.physics;
 import physics.geometry.*;
 import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
+import physics.utils.FloatComparator;
 import physics.utils.Tools;
 
 import java.util.ArrayList;
@@ -45,15 +46,15 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
         float w1x = radVector.getCrossProduct(sphere.w).countProjectionOn(axisX) / sphere.r;
         float v1x = sphere.v.countProjectionOn(axisX);
         float v1y = sphere.v.countProjectionOn(axisY);
-        float v2x;
-        float w2x;
+        float v2x = v1x;
+        float w2x = w1x;
         boolean slips = true;
         float sDivM = fr * (1 + k) * Math.abs(v1y);
         if ((Math.abs(0.5f * v1x + 0.5f * w1x * sphere.r) / (Math.abs(v1y) * (1 + k) * 1.5f)) < fr) slips = false;
-        if (slips) {
+        if (slips && !FloatComparator.equals(w1x * sphere.r + v1x, 0f)) {
             v2x = v1x - Tools.sign(w1x * sphere.r + v1x) * sDivM;
             w2x = w1x - 2 * Tools.sign(w1x * sphere.r + v1x) * sDivM / sphere.r;
-        } else {
+        } else if (!FloatComparator.equals(w1x * sphere.r + v1x, 0f)){
             v2x = (-0.5f * w1x * sphere.r + v1x) / 1.5f;
             w2x = -v2x / sphere.r;
         }
@@ -141,15 +142,33 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
                 axisY.makeOp();
             Vector2 radVector = new Vector2(centre, c);
             float rx = Math.abs(radVector.countProjectionOn(axisX));
+            float ry = Math.abs(radVector.countProjectionOn(axisY));
             float v1y = polygon.v.countProjectionOn(axisY);
             float v1x = polygon.v.countProjectionOn(axisX);
             float w1y = axisX.createByFloat(radVector.countProjectionOn(axisX)).getCrossProduct(polygon.w).countProjectionOn(axisY) / rx;
             float w2y = (polygon.J * w1y + rx * polygon.m * (-k * (v1y + w1y * rx) - v1y)) / (polygon.J + rx * rx * polygon.m);
             float s = polygon.J * (w2y - w1y) / rx;
             float v2y = v1y + s / polygon.m;
-
-            polygon.v = new Vector2(axisX.createByFloat(v1x), axisY.createByFloat(v2y));
-            polygon.w = Vector2.getConstByCrossProduct(axisY.createByFloat(w2y * rx), axisX.createByFloat(radVector.countProjectionOn(axisX)));
+            float v2x = v1x;
+            float w1x = axisY.createByFloat(radVector.countProjectionOn(axisY)).getCrossProduct(polygon.w).countProjectionOn(axisX) / ry;
+            float w2x = w1x;
+            boolean slips = true;
+            if (Math.abs(-polygon.J * w1x * ry - polygon.J * v1x) * polygon.m / ((polygon.J + polygon.m * ry * ry) * s) < fr)
+                slips = false;
+            if (slips && !FloatComparator.equals(w1x * ry + v1x, 0f)) {
+                v2x = v1x - Tools.sign(w1x * ry + v1x) * fr * s / polygon.m;
+                w2x = w1x - Tools.sign(w1x * ry + v1x) * fr * s * ry / polygon.J;
+            }
+            else if (!FloatComparator.equals(w1x * ry + v1x, 0f)){
+                w2x = (polygon.J * w1x - polygon.m * v1x * ry) / (polygon.J + polygon.m * ry * ry);
+                v2x = -w2x*ry;
+            }
+            float dw1 = Vector2.getConstByCrossProduct(axisY.createByFloat(w2y * rx), axisX.createByFloat(radVector.countProjectionOn(axisX))) -
+                    Vector2.getConstByCrossProduct(axisY.createByFloat(w1y * rx), axisX.createByFloat(radVector.countProjectionOn(axisX)));
+            float dw2 = Vector2.getConstByCrossProduct(axisX.createByFloat(w2x * ry), axisY.createByFloat(radVector.countProjectionOn(axisY))) -
+                    Vector2.getConstByCrossProduct(axisX.createByFloat(w1x * ry), axisY.createByFloat(radVector.countProjectionOn(axisY)));
+            polygon.v = new Vector2(axisX.createByFloat(v2x), axisY.createByFloat(v2y));
+            polygon.w += dw1 + dw2;
         }
     }
 
