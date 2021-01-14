@@ -39,7 +39,7 @@ public class Frame extends JFrame {
 
             }
             finalG.setColor(Color.WHITE);
-            finalG.drawString(String.valueOf(scene.getSpace().getFps()), 20, 20);
+            finalG.drawString(String.valueOf(scene.getSpace().getFps()), 20, 44);
         }
         );
         thread.start();

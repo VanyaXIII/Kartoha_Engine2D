@@ -4,6 +4,7 @@ package physics.polygons;
 import physics.drawing.Drawable;
 import physics.geometry.Point2;
 import physics.drawing.ArbitraryFigure;
+import physics.geometry.Vector2;
 import physics.physics.Material;
 
 import java.awt.*;
@@ -39,6 +40,13 @@ public abstract class Polygon implements Drawable {
         ArrayList<Point2> newPoints = new ArrayList<>();
         for(Point2 point : points) newPoints.add(new Point2(point.x, point.y));
         return newPoints;
+    }
+
+    public void move(Vector2 moveVector, float movement){
+        Point2 nCoords = moveVector.movePoint(new Point2(x0, y0), movement);
+        x0 = nCoords.x;
+        y0 = nCoords.y;
+        points.forEach(point -> moveVector.movePoint(point, movement));
     }
 
     @Override

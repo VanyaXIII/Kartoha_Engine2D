@@ -2,7 +2,6 @@ package physics.polygons;
 
 import physics.drawing.ArbitraryFigure;
 import physics.drawing.Drawable;
-import physics.geometry.Primitive;
 import physics.geometry.*;
 import physics.physics.Material;
 import physics.physics.Space;
@@ -30,19 +29,19 @@ public class PhysicalPolygon extends Polygon implements Drawable, Collisional {
         this.J = polygonCreator.getJDivDensity() * material.p;
     }
 
-    public void update() {
-        changeSpeed();
+    public synchronized void update() {
+        updateSpeed();
         rotate();
-        movePoints();
+        updatePoints();
         x0 += v.getX() * space.getDT();
         y0 += ((v.getY() + v.getY() - space.getG()*space.getDT())/2.0f) * space.getDT();
     }
 
-    private void changeSpeed() {
+    private void updateSpeed() {
         v.addY(space.getG()*space.getDT());
     }
 
-    private void movePoints() {
+    private void updatePoints() {
         for (Point2 point : getPoints()){
             point.x += v.getX()* space.getDT();
             point.y += ((v.getY() + v.getY() - space.getG() * space.getDT()) * space.getDT())/ 2.0f;

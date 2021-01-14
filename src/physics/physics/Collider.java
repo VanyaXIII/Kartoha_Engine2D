@@ -47,51 +47,23 @@ public class Collider {
                         }
                     }
                 }
-                for (ASS sphere : spheres) {
-                    for (Wall wall : walls) {
+                spheres.forEach(sphere -> {
+                    walls.forEach(wall -> {
                         synchronized (sphere) {
                             synchronized (wall) {
                                 if (new IntersectionalPair<>(sphere, wall, true).isIntersected()) {
                                     new CollisionalPair<>(sphere, wall).collide();
                                 }
                                 SphereToLineIntersection sphereAndLinePair  = new IntersectionalPair<>(sphere, wall, false).getSphereToLineIntersection();
-                                if (sphereAndLinePair.isIntersected){
-                                    sphere.pullSphereFromLine(sphereAndLinePair);
-                                }
+                                if (sphereAndLinePair.isIntersected) sphere.pullSphereFromLine(sphereAndLinePair);
                             }
                         }
-                    }
-                }
-            });
-            Thread sphereToWallThread = new Thread(() -> {
-                for (ASS sphere : spheres) {
-                    for (Wall wall : walls) {
-                        synchronized (sphere) {
-                            synchronized (wall) {
-                                if (new IntersectionalPair<>(sphere, wall, true).isIntersected()) {
-                                    new CollisionalPair<>(sphere, wall).collide();
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            Thread sphereToPolygonThread = new Thread(() -> {
-                for (ASS sphere : spheres) {
-                    for (PhysicalPolygon triangle : polygons) {
-                        synchronized (sphere) {
-                            synchronized (triangle) {
-                                if (new IntersectionalPair<>(sphere, triangle, true).isIntersected())
-                                    sphere.v.setX(-100f);
-                            }
-                        }
-                    }
-                }
+                    });
+                });
             });
             Thread polygonThread = new Thread(() -> {
-                for (PhysicalPolygon polygon : polygons){
-                    for (Wall wall : walls){
+                polygons.forEach(polygon -> {
+                    walls.forEach( wall -> {
                         synchronized (polygon){
                             synchronized (wall){
                                 if (new IntersectionalPair<>(polygon, wall, true).isIntersected()){
@@ -99,17 +71,13 @@ public class Collider {
                                 }
                             }
                         }
-                    }
-                }
+                    });
+                });
             });
             sphereThread.start();
             polygonThread.start();
-//            sphereToPolygonThread.start();
-//            sphereToWallThread.start();
             sphereThread.join();
             polygonThread.join();
-//            sphereToPolygonThread.join();
-//            sphereToWallThread.join();
         }
     }
 }

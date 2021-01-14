@@ -7,26 +7,22 @@ import java.util.ArrayList;
 
 public class Updater {
     private final ArrayList<ASS> spheres;
-    private final ArrayList<PhysicalPolygon> triangles;
+    private final ArrayList<PhysicalPolygon> polygons;
 
     Updater(Space space){
         spheres = space.getSpheres();
-        triangles = space.getPolygons();
+        polygons = space.getPolygons();
     }
 
-    Updater(ArrayList<ASS> spheres, ArrayList<PhysicalPolygon> triangles){
+    Updater(ArrayList<ASS> spheres, ArrayList<PhysicalPolygon> polygons){
         this.spheres = spheres;
-        this.triangles = triangles;
+        this.polygons = polygons;
     }
 
     public void update() throws InterruptedException {
-        Thread sphereThread = new Thread(() -> {
-            for (ASS sphere : spheres) sphere.update();
-        });
+        Thread sphereThread = new Thread(() -> spheres.forEach(ASS::update));
 
-        Thread polygonThread = new Thread(() -> {
-            for (PhysicalPolygon triangle : triangles) triangle.update();
-        });
+        Thread polygonThread = new Thread(() -> polygons.forEach(PhysicalPolygon::update));
         sphereThread.start();
         polygonThread.start();
         sphereThread.join();

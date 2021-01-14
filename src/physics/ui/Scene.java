@@ -1,6 +1,5 @@
 package physics.ui;
 
-import physics.geometry.Point2;
 import physics.geometry.Vector2;
 import physics.physics.Material;
 import physics.physics.Space;
@@ -8,7 +7,6 @@ import physics.physics.Space;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 
 public class Scene {
     private final Space space;
@@ -32,7 +30,7 @@ public class Scene {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == 1)
-                    space.addPolygon(new Vector2(0, 0), 0f, e.getX(), e.getY(), 9, 100, Material.LapisLazuli);
+                    space.addPolygon(new Vector2(0, 0), 0f, e.getX(), e.getY(), 15, 100, Material.LapisLazuli);
                 else if (e.getButton() == 3)
                     space.addSphere(new Vector2(0, 0), 0, e.getX(), e.getY(), 300, Material.Steel);
                 else space.deleteDynamicObjects();

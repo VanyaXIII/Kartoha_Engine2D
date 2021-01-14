@@ -1,17 +1,12 @@
 package physics.sphere;
 
 import physics.drawing.Drawable;
-import physics.geometry.Primitive;
 import physics.geometry.*;
 import physics.physics.Material;
 import physics.physics.Space;
 import physics.utils.Tools;
 
 import java.awt.*;
-//TODO сначала у одного шарик меняется скорость, а потом уже запускается расчет для другого, с учетом изменения скорости первого
-//TODO надо все разюить по методам, чтобы сначала у всех менялась скорость
-//TODO сделать просчет траектории
-//TODO доделать коллизию, чтобы учитывались прямые
 
 public class ASS extends Sphere2D implements Drawable, Collisional {
     private float x0, y0;
