@@ -46,7 +46,7 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
     }
 
 
-    public synchronized void pullSpheres(SphereIntersection intersection) {
+    public synchronized void pullFromSphere(SpheresIntersection intersection) {
         if (intersection.getValue() != 0) {
             Point2 nCords = intersection.centralLine.movePoint(new Point2(x0, y0), intersection.getValue());
             this.x0 = nCords.x;
@@ -54,9 +54,9 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
         }
     }
 
-    public synchronized void pullSphereFromLine(SphereToLineIntersection intersection) {
+    public synchronized void pullFromLine(SphereToLineIntersection intersection) {
         if (intersection.getValue() != 0){
-            Vector2 movementVector = new Vector2(intersection.getCollisionalPoint(), getPosition(false));
+            Vector2 movementVector = new Vector2(intersection.getCollisionPoint(), getPosition(false));
             Point2 nCords = movementVector.movePoint(new Point2(x0, y0), intersection.getValue());
             this.x0 = nCords.x;
             this.y0 = nCords.y;

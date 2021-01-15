@@ -5,6 +5,7 @@ import physics.drawing.Drawable;
 import physics.geometry.*;
 import physics.physics.Material;
 import physics.physics.Space;
+import physics.utils.FloatComparator;
 import physics.utils.Tools;
 
 import java.awt.*;
@@ -86,6 +87,13 @@ public class PhysicalPolygon extends Polygon implements Drawable, Collisional {
         return newPoints;
     }
 
+    public synchronized void pullFromLine(PolygonToLineIntersection intersection) {
+        if (intersection.getValue() != 0){
+            Vector2 movementVector = new Vector2(intersection.getPointOfPolygon(), intersection.getCollisionPoint());
+            if (movementVector.length() != 0f)
+                move(movementVector, intersection.getValue());
+        }
+    }
 
     @Override
     public void draw(Graphics g) {

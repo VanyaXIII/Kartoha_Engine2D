@@ -42,11 +42,15 @@ public abstract class Polygon implements Drawable {
         return newPoints;
     }
 
-    public void move(Vector2 moveVector, float movement){
-        Point2 nCoords = moveVector.movePoint(new Point2(x0, y0), movement);
+    public void move(Vector2 movementVector, float movement){
+        Point2 nCoords = movementVector.movePoint(new Point2(x0, y0), movement);
         x0 = nCoords.x;
         y0 = nCoords.y;
-        points.forEach(point -> moveVector.movePoint(point, movement));
+        points.forEach(point -> {
+            Point2 nPoint = movementVector.movePoint(point, movement);
+            point.x = nPoint.x;
+            point.y = nPoint.y;
+        });
     }
 
     @Override

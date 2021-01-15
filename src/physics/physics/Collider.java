@@ -1,7 +1,8 @@
 package physics.physics;
 
 import physics.geometry.IntersectionalPair;
-import physics.geometry.SphereIntersection;
+import physics.geometry.PolygonToLineIntersection;
+import physics.geometry.SpheresIntersection;
 import physics.geometry.SphereToLineIntersection;
 import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
@@ -38,9 +39,9 @@ public class Collider {
                                 if (new IntersectionalPair<>(spheres.get(i), spheres.get(j), true).isIntersected()) {
                                     new CollisionalPair<>(spheres.get(i), spheres.get(j)).collide();
                                 }
-                                SphereIntersection spherePair = new IntersectionalPair<>(spheres.get(i), spheres.get(j), false).getSphereIntersection();
+                                SpheresIntersection spherePair = new IntersectionalPair<>(spheres.get(i), spheres.get(j), false).getSpheresIntersection();
                                 if (spherePair.isIntersected) {
-                                    spheres.get(i).pullSpheres(spherePair);
+                                    spheres.get(i).pullFromSphere(spherePair);
                                 }
                             }
                         }
@@ -54,7 +55,7 @@ public class Collider {
                                     new CollisionalPair<>(sphere, wall).collide();
                                 }
                                 SphereToLineIntersection sphereAndLinePair  = new IntersectionalPair<>(sphere, wall, false).getSphereToLineIntersection();
-                                if (sphereAndLinePair.isIntersected) sphere.pullSphereFromLine(sphereAndLinePair);
+                                if (sphereAndLinePair.isIntersected) sphere.pullFromLine(sphereAndLinePair);
                             }
                         }
                     });
@@ -67,6 +68,11 @@ public class Collider {
                             synchronized (wall){
                                 if (new IntersectionalPair<>(polygon, wall, true).isIntersected()){
                                     new CollisionalPair<>(polygon, wall).collide();
+                                }
+                                PolygonToLineIntersection polygonAndWallPair =
+                                        new IntersectionalPair<>(polygon, wall, false).getPolygonToLineIntersection();
+                                if (polygonAndWallPair.isIntersected){
+                                    polygon.pullFromLine(polygonAndWallPair);
                                 }
                             }
                         }

@@ -72,6 +72,10 @@ public class Line implements Drawable {
                 / Math.sqrt(A * A + B * B));
     }
 
+    public float calcDistance(Point2 point){
+        return calcDistance(point.x, point.y);
+    }
+
     public boolean doesIntersectBySegmentsWith(Line line) {
         return Vector2.getLeftTurn(new Point2(x1, y1), new Point2(x2, y2), new Point2(line.x1, line.y1))
                 != Vector2.getLeftTurn(new Point2(x1, y1), new Point2(x2, y2), new Point2(line.x2, line.y2))

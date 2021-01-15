@@ -33,15 +33,17 @@ public class AABB {
     public AABB(PhysicalPolygon polygon, boolean mode){
         Point2 position = polygon.getPositionOfCentre(mode);
         ArrayList<Point2> points = polygon.getPoints(mode);
-        float maxRadius = 0f;
+        float maxX = 0f;
+        float maxY = 0f;
 
         for (Point2 point : points){
-            float square = new Vector2(point, position).getSquare();
-            if (maxRadius < square) maxRadius = square;
+            Vector2 vectorToPoint = new Vector2(point, position);
+            if (maxX < Math.abs(vectorToPoint.getX())) maxX = Math.abs(vectorToPoint.getX());
+            if (maxY < Math.abs(vectorToPoint.getY())) maxY = Math.abs(vectorToPoint.getY());
         }
 
-        min = new Point2(position.x - (float) Math.sqrt(maxRadius), position.y - (float) Math.sqrt(maxRadius));
-        max = new Point2(position.x + (float) Math.sqrt(maxRadius), position.y + (float) Math.sqrt(maxRadius));
+        min = new Point2(position.x - maxX, position.y - maxY);
+        max = new Point2(position.x + maxX, position.y + maxY);
 
     }
 
