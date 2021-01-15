@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class Space {
     public ArrayList<Drawable> drawables;
+    private float fps = 0;
     private final ArrayList<Wall> walls;
     private final ArrayList<ASS> spheres;
     private final ArrayList<Block> blocks;
@@ -20,7 +21,6 @@ public class Space {
     private final float DT;
     private final float G;
     private double time;
-    private float fps = 0;
 
     {
         walls = new ArrayList<>();
