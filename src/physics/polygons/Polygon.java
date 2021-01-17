@@ -19,11 +19,10 @@ public abstract class Polygon implements Drawable {
         points = new ArrayList<>();
     }
 
-    public Polygon(float x0, float y0, ArrayList<Point2> points, Material material) {
+    public Polygon(float x0, float y0, ArrayList<Point2> points) {
         this.x0 = x0;
         this.y0 = y0;
         this.points = points;
-        this.material = material;
     }
 
 

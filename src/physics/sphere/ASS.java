@@ -10,22 +10,28 @@ import java.awt.*;
 
 public class ASS extends Sphere2D implements Drawable, Collisional {
     private float x0, y0;
-    public Vector2 v;
-    public float w;
+    private final float r;
+    private Vector2 v;
+    private float w;
     private final Vector2 orientationVector;
     private final Space space;
+    private final Material material;
+    private final float m;
 
     {
-        orientationVector = new Vector2(0, r);
+        orientationVector = new Vector2(0, getR());
     }
 
     public ASS(Space space, Vector2 v, float w, float x0, float y0, float r, Material material) {
-        super(x0, y0, r, material);
+        super(x0, y0, r);
         this.x0 = x0;
+        this.r = r;
         this.y0 = y0;
         this.space = space;
         this.v = v;
         this.w = w;
+        this.material = material;
+        this.m = ((float)Math.PI * r * r / 2) * material.p;
     }
 
     public synchronized void update() {
@@ -73,7 +79,7 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
     @Override
     public void draw(Graphics g) {
         g.setColor(material.outlineColor);
-        int[] cords = new int[]{Tools.transformFloat(x0 - r), Tools.transformFloat(y0 - r), Tools.transformFloat(r * 2)};
+        int[] cords = new int[]{Tools.transformFloat(x0 - r), Tools.transformFloat(y0 - getR()), Tools.transformFloat(r * 2)};
         g.drawOval(cords[0], cords[1], cords[2], cords[2]);
         g.drawLine(Tools.transformFloat(x0),
                 Tools.transformFloat(y0),
@@ -91,6 +97,35 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
         g.fillOval(cords[0], cords[1], cords[2], cords[2]);
     }
 
+    public Vector2 getV() {
+        return v;
+    }
+
+    public float getW() {
+        return w;
+    }
+
+    public void setW(float w) {
+        this.w = w;
+    }
+
+    public void setV(Vector2 v) {
+        this.v = v;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public float getM() {
+        assert m == 0: "Mass is null";
+        return m;
+    }
+
+    public float getR() {
+        assert r == 0: "Radius is null";
+        return r;
+    }
 }
 
 

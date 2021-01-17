@@ -40,7 +40,7 @@ public class IntersectionalPair<FirstThingType extends Collisional, SecondThingT
         if (!new AABB(sphere, mode).isIntersectedWith(new AABB(line))) return false;
         Point2 spherePos = sphere.getPosition(mode);
         float d = line.calcDistance(spherePos.x, spherePos.y);
-        if (d <= sphere.r) {
+        if (d <= sphere.getR()) {
             Point2 collisionPoint = line.findIntPointWith(new Line(new Point2(spherePos.x, spherePos.y), new Vector2(line).createNormal()));
             return line.isPointInBoundingBox(collisionPoint);
         } else
@@ -53,7 +53,7 @@ public class IntersectionalPair<FirstThingType extends Collisional, SecondThingT
         Point2 sphere2Pos = sphere2.getPosition(mode);
         Vector2 dvector = new Vector2(sphere1Pos.x - sphere2Pos.x,
                 sphere1Pos.y - sphere2Pos.y);
-        if (dvector.getSquare() <= (sphere1.r + sphere2.r) * (sphere1.r + sphere2.r)) {
+        if (dvector.getSquare() <= (sphere1.getR() + sphere2.getR()) * (sphere1.getR() + sphere2.getR())) {
             return !sphere2.equals(sphere1);
         }
         return false;
@@ -93,12 +93,12 @@ public class IntersectionalPair<FirstThingType extends Collisional, SecondThingT
         Vector2 dvector = new Vector2(sphere1Pos.x - sphere2Pos.x,
                 sphere1Pos.y - sphere2Pos.y);
         float distance = dvector.length();
-        if (distance < sphere1.r + sphere2.r) {
+        if (distance < sphere1.getR() + sphere2.getR()) {
             if (sphere2.equals(sphere1)) {
                 return new SpheresIntersection(false);
             } else {
                 if (distance != 0)
-                    return new SpheresIntersection(true, dvector, sphere2.r + sphere1.r - distance);
+                    return new SpheresIntersection(true, dvector, sphere2.getR() + sphere1.getR() - distance);
                 else
                     return new SpheresIntersection(true, dvector, 0);
             }
@@ -117,7 +117,7 @@ public class IntersectionalPair<FirstThingType extends Collisional, SecondThingT
             Point2 spherePos = sphere.getPosition(mode);
             float d = line.calcDistance(spherePos.x, spherePos.y);
             Point2 collisionPoint = line.findIntPointWith(new Line(new Point2(spherePos.x, spherePos.y), new Vector2(line).createNormal()));
-            return new SphereToLineIntersection(true, collisionPoint, sphere.r - d);
+            return new SphereToLineIntersection(true, collisionPoint, sphere.getR() - d);
         }
         return new SphereToLineIntersection(false);
     }

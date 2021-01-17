@@ -12,19 +12,21 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class PhysicalPolygon extends Polygon implements Drawable, Collisional {
-    public Vector2 v;
+    private Vector2 v;
     private final Space space;
-    public float w;
-    public final float m;
-    public final float J;
+    private float w;
+    private final float m;
+    private final float J;
+    private final Material material;
 
 
 
     public PhysicalPolygon(Space space, Vector2 v, float w, float x0, float y0, ArrayList<Point2> points, Material material) {
-        super(x0, y0, points, material);
+        super(x0, y0, points);
         this.space = space;
         this.v = v;
         this.w = w;
+        this.material = material;
         PolygonCreator polygonCreator = new PolygonCreator(points);
         this.m = polygonCreator.getSquare() * material.p;
         this.J = polygonCreator.getJDivDensity() * material.p;
@@ -109,4 +111,33 @@ public class PhysicalPolygon extends Polygon implements Drawable, Collisional {
                 Tools.transformFloat(y0 + v.getY()*space.getDT()));
     }
 
+    public float getJ() {
+        assert J == 0 : "J is null";
+        return J;
+    }
+
+    public float getW() {
+        return w;
+    }
+
+    public float getM() {
+        assert m == 0 : "Mass is null";
+        return m;
+    }
+
+    public Vector2 getV() {
+        return v;
+    }
+
+    public void setV(Vector2 v) {
+        this.v = v;
+    }
+
+    public void setW(float w) {
+        this.w = w;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
 }

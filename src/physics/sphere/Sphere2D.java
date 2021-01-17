@@ -7,21 +7,14 @@ import java.awt.*;
 
 public abstract class Sphere2D implements Drawable {
     public float x0, y0;
-    public float m;
-    public float r;
-    public Material material;
+    private float r;
 
-    Sphere2D(float x0, float y0, float r, Material material) {
+    Sphere2D(float x0, float y0, float r) {
         this.x0 = x0;
         this.y0 = y0;
         this.r = r;
-        this.material = material;
-        this.m = ((float)Math.PI * r * r / 2) * material.p;
     }
 
-    public Color getColor() {
-        return material.outlineColor;
-    }
 
 
     @Override
