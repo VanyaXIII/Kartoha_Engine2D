@@ -13,44 +13,53 @@ public class AABB {
         if (point2.x > point1.x) {
             this.min = point1;
             this.max = point2;
-        }else {
+        } else {
             this.min = point2;
             this.max = point1;
         }
     }
 
-    public AABB(Line line){
+    public AABB(Line line) {
         min = new Point2(line.minX(), line.minY());
         max = new Point2(line.maxX(), line.maxY());
     }
 
-    public AABB(ASS sphere, boolean mode){
+    public AABB(ASS sphere, boolean mode) {
         Point2 position = sphere.getPosition(mode);
-        min = new Point2(position.x - sphere.r, position.y - sphere.r);
-        max = new Point2(position.x + sphere.r, position.y + sphere.r);
+        min = new Point2(position.x - sphere.getR(), position.y - sphere.getR());
+        max = new Point2(position.x + sphere.getR(), position.y + sphere.getR());
     }
 
-    public AABB(PhysicalPolygon polygon, boolean mode){
+    public AABB(PhysicalPolygon polygon, boolean mode) {
         Point2 position = polygon.getPositionOfCentre(mode);
         ArrayList<Point2> points = polygon.getPoints(mode);
-        float maxX = 0f;
-        float maxY = 0f;
+        float posXDeviation = 0f;
+        float posYDeviation = 0f;
+        float negXDeviation = points.get(0).x;
+        float negYDeviation = points.get(0).y;
 
-        for (Point2 point : points){
+        for (Point2 point : points) {
             Vector2 vectorToPoint = new Vector2(point, position);
-            if (maxX < Math.abs(vectorToPoint.getX())) maxX = Math.abs(vectorToPoint.getX());
-            if (maxY < Math.abs(vectorToPoint.getY())) maxY = Math.abs(vectorToPoint.getY());
+            if (posXDeviation < vectorToPoint.getX()) posXDeviation = vectorToPoint.getX();
+            if (posYDeviation < vectorToPoint.getY()) posYDeviation = vectorToPoint.getY();
+            if (negXDeviation > vectorToPoint.getX()) negXDeviation = vectorToPoint.getX();
+            if (negYDeviation > vectorToPoint.getY()) negYDeviation = vectorToPoint.getY();
         }
 
-        min = new Point2(position.x - maxX, position.y - maxY);
-        max = new Point2(position.x + maxX, position.y + maxY);
+        min = new Point2(position.x + negXDeviation, position.y + negXDeviation);
+        max = new Point2(position.x + posXDeviation, position.y + posYDeviation);
 
     }
 
 
-    public boolean isIntersectedWith(AABB b){
+    public boolean isIntersectedWith(AABB b) {
         if (this.max.x < b.min.x || this.min.x > b.max.x) return false;
         if (this.max.y < b.min.y || this.min.y > b.max.y) return false;
         return true;
+    }
+
+    public boolean doesContainPoint(Point2 point) {
+        return point.x >= min.x && point.x <= max.x
+                && point.y >= min.y && point.y <= max.y;
     }
 }

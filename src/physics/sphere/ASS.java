@@ -18,9 +18,6 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
     private final Material material;
     private final float m;
 
-    {
-        orientationVector = new Vector2(0, getR());
-    }
 
     public ASS(Space space, Vector2 v, float w, float x0, float y0, float r, Material material) {
         super(x0, y0, r);
@@ -32,6 +29,7 @@ public class ASS extends Sphere2D implements Drawable, Collisional {
         this.w = w;
         this.material = material;
         this.m = ((float)Math.PI * r * r / 2) * material.p;
+        orientationVector = new Vector2(0, r);
     }
 
     public synchronized void update() {

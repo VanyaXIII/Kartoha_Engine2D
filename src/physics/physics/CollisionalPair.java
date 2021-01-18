@@ -107,7 +107,7 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             } else {
                 float avSpeed = (m2 * (v2y + w2y * r2) + m1 * (v1y + w1y * r1)) / (m1 + m2);
                 u1y = (avSpeed + 2 * v1y - w1y * r1) / 3f;
-                fw1y = (2 * u1y - 2 * v1y + w1y * r1) / r2;
+                fw1y = (2 * u1y - 2 * v1y + w1y * r1) / r1;
                 u2y = (avSpeed + 2 * v2y - w2y * r2) / 3f;
                 fw2y = (2 * u2y - 2 * v2y + w2y * r2) / r2;
             }
