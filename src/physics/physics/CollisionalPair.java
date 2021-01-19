@@ -6,12 +6,14 @@ import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.FloatComparator;
 import physics.utils.Tools;
+import physics.utils.TripleMap;
 
 import java.util.ArrayList;
 
 public class CollisionalPair<FirstThingType extends Collisional, SecondThingType extends Collisional> {
     private final FirstThingType firstThing;
     private final SecondThingType secondThing;
+    private final static TripleMap<Class, Class, Collider> methodsMap;
 
     public CollisionalPair(FirstThingType firstThing, SecondThingType secondThing) {
         this.firstThing = firstThing;
@@ -19,24 +21,31 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
     }
 
 
-    public void collide() {
-        if (firstThing instanceof ASS && secondThing instanceof Wall)
-            sphereToWall((ASS) firstThing, (Wall) secondThing);
-        else if (firstThing instanceof Wall && secondThing instanceof ASS)
-            sphereToWall((ASS) secondThing, (Wall) firstThing);
-        else if (firstThing instanceof ASS && secondThing instanceof ASS)
-            sphereToSphere((ASS) firstThing, (ASS) secondThing);
-        else if (firstThing instanceof PhysicalPolygon && secondThing instanceof ASS)
-            sphereToPolygon((ASS) secondThing, (PhysicalPolygon) firstThing);
-        else if (firstThing instanceof ASS && secondThing instanceof PhysicalPolygon)
-            sphereToPolygon((ASS) firstThing, (PhysicalPolygon) secondThing);
-        else if (firstThing instanceof PhysicalPolygon && secondThing instanceof Wall)
-            polygonToWall((PhysicalPolygon) firstThing, (Wall) secondThing);
-        else if (secondThing instanceof PhysicalPolygon && firstThing instanceof Wall)
-            polygonToWall((PhysicalPolygon) secondThing, (Wall) firstThing);
+    static {
+        methodsMap = new TripleMap<>();
+        methodsMap.addFirstKey(ASS.class);
+        methodsMap.addFirstKey(Wall.class);
+        methodsMap.addFirstKey(PhysicalPolygon.class);
+        methodsMap.putByFirstKey(ASS.class, Wall.class, CollisionalPair::sphereToWall);
+        methodsMap.putByFirstKey(ASS.class, ASS.class, CollisionalPair::sphereToSphere);
+        methodsMap.putByFirstKey(Wall.class, ASS.class, CollisionalPair::sphereToWall);
+        methodsMap.putByFirstKey(Wall.class, PhysicalPolygon.class, CollisionalPair::polygonToWall);
+        methodsMap.putByFirstKey(PhysicalPolygon.class, Wall.class, CollisionalPair::polygonToWall);
+
     }
 
-    private void sphereToWall(ASS sphere, Wall wall) {
+
+    public void collide() {
+        methodsMap.getElement(firstThing.getClass(), secondThing.getClass()).collide(firstThing, secondThing);
+    }
+
+    private static void sphereToWall(Collisional thing1, Collisional thing2) {
+        ASS sphere = null;
+        Wall wall = null;
+        if (thing1 instanceof ASS) sphere = (ASS) thing1;
+        else wall = (Wall) thing1;
+        if (thing2 instanceof ASS) sphere = (ASS) thing2;
+        else wall = (Wall) thing2;
         Vector2 axisX = new Vector2(wall);
         Vector2 axisY = axisX.createNormal();
         float fr = Tools.countAverage(sphere.getMaterial().coefOfFriction, wall.material.coefOfFriction);
@@ -65,7 +74,9 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
         sphere.setV(new Vector2(fv1x, fv1y));
     }
 
-    private void sphereToSphere(ASS sphere1, ASS sphere2) {
+    private static void sphereToSphere(Collisional thing1, Collisional thing2) {
+        ASS sphere1 = (ASS) thing1;
+        ASS sphere2 = (ASS) thing2;
         Point2 firstSpherePos = sphere1.getPosition(false);
         Point2 secondSpherePos = sphere2.getPosition(false);
         Vector2 axisX = new Vector2(firstSpherePos.x - secondSpherePos.x,
@@ -125,11 +136,17 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
 
     }
 
-    private void sphereToPolygon(ASS sphere, PhysicalPolygon triangle) {
+    private static void sphereToPolygon(ASS sphere, PhysicalPolygon triangle) {
 
     }
 
-    private void polygonToWall(PhysicalPolygon polygon, Wall wall) {
+    private static void polygonToWall(Collisional thing1, Collisional thing2) {
+        PhysicalPolygon polygon = null;
+        Wall wall = null;
+        if (thing1 instanceof PhysicalPolygon) polygon = (PhysicalPolygon) thing1;
+        else wall = (Wall) thing1;
+        if (thing2 instanceof PhysicalPolygon) polygon = (PhysicalPolygon) thing2;
+        else wall = (Wall) thing2;
         float k = Tools.countAverage(polygon.getMaterial().coefOfReduction, wall.material.coefOfReduction);
         float fr = Tools.countAverage(polygon.getMaterial().coefOfFriction, wall.material.coefOfFriction);
         Point2 centre = polygon.getPositionOfCentre(true);

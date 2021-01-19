@@ -15,7 +15,7 @@ public class PhysicsHandler {
     private final ArrayList<Wall> walls;
     private final int depth;
 
-    PhysicsHandler(Space space, int depth){
+    PhysicsHandler(Space space, int depth) {
         spheres = space.getSpheres();
         polygons = space.getPolygons();
         walls = space.getWalls();
@@ -29,10 +29,10 @@ public class PhysicsHandler {
                     for (int j = i + 1; j < spheres.size(); j++) {
                         synchronized (spheres.get(i)) {
                             synchronized (spheres.get(j)) {
-                                if (new IntersectionalPair<>(spheres.get(i), spheres.get(j), true).isIntersected()) {
+                                if (new IntersectionalPair<>(spheres.get(i), spheres.get(j)).isIntersected()) {
                                     new CollisionalPair<>(spheres.get(i), spheres.get(j)).collide();
                                 }
-                                SpheresIntersection spherePair = new IntersectionalPair<>(spheres.get(i), spheres.get(j), false).getSpheresIntersection();
+                                SpheresIntersection spherePair = new IntersectionalPair<>(spheres.get(i), spheres.get(j)).getSpheresIntersection();
                                 if (spherePair.isIntersected) {
                                     spheres.get(i).pullFromSphere(spherePair);
                                 }
@@ -44,10 +44,10 @@ public class PhysicsHandler {
                     walls.forEach(wall -> {
                         synchronized (sphere) {
                             synchronized (wall) {
-                                if (new IntersectionalPair<>(sphere, wall, true).isIntersected()) {
+                                if (new IntersectionalPair<>(sphere, wall).isIntersected()) {
                                     new CollisionalPair<>(sphere, wall).collide();
                                 }
-                                SphereToLineIntersection sphereAndLinePair  = new IntersectionalPair<>(sphere, wall, false).getSphereToLineIntersection();
+                                SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, wall).getSphereToLineIntersection();
                                 if (sphereAndLinePair.isIntersected) sphere.pullFromLine(sphereAndLinePair);
                             }
                         }
@@ -56,15 +56,15 @@ public class PhysicsHandler {
             });
             Thread polygonThread = new Thread(() -> {
                 polygons.forEach(polygon -> {
-                    walls.forEach( wall -> {
-                        synchronized (polygon){
-                            synchronized (wall){
-                                if (new IntersectionalPair<>(polygon, wall, true).isIntersected()){
+                    walls.forEach(wall -> {
+                        synchronized (polygon) {
+                            synchronized (wall) {
+                                if (new IntersectionalPair<>(polygon, wall).isIntersected()) {
                                     new CollisionalPair<>(polygon, wall).collide();
                                 }
                                 PolygonToLineIntersection polygonAndWallPair =
-                                        new IntersectionalPair<>(polygon, wall, false).getPolygonToLineIntersection();
-                                if (polygonAndWallPair.isIntersected){
+                                        new IntersectionalPair<>(polygon, wall).getPolygonToLineIntersection();
+                                if (polygonAndWallPair.isIntersected) {
                                     polygon.pullFromLine(polygonAndWallPair);
                                 }
                             }
@@ -76,14 +76,15 @@ public class PhysicsHandler {
             polygonThread.start();
             sphereThread.join();
             polygonThread.join();
-        Thread sphereThread = new Thread(() -> spheres.forEach(ASS::update));
+            sphereThread = new Thread(() -> spheres.forEach(ASS::update));
 
-        Thread polygonThread = new Thread(() -> polygons.forEach(PhysicalPolygon::update));
-        sphereThread.start();
-        polygonThread.start();
-        sphereThread.join();
-        polygonThread.join();
+            polygonThread = new Thread(() -> polygons.forEach(PhysicalPolygon::update));
+            sphereThread.start();
+            polygonThread.start();
+            sphereThread.join();
+            polygonThread.join();
+        }
+
+
     }
-
-
 }

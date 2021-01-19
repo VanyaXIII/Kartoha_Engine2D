@@ -21,6 +21,7 @@ public class Space {
     private final float DT;
     private final float G;
     private double time;
+    private final PhysicsHandler physicsHandler;
 
     {
         walls = new ArrayList<>();
@@ -28,6 +29,7 @@ public class Space {
         polygons = new ArrayList<>();
         drawables = new ArrayList<>();
         blocks = new ArrayList<>();
+        physicsHandler = new PhysicsHandler(this, 1);
     }
 
     public Space(float dt, float g) {
@@ -39,8 +41,7 @@ public class Space {
     public synchronized void changeTime() {
         long time1 = System.nanoTime();
         try {
-            new Collider(this,1).collide();
-            new Updater(this).update();
+            physicsHandler.update();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
