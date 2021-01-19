@@ -6,12 +6,29 @@ import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.FloatComparator;
 import physics.utils.Tools;
+import physics.utils.TripleMap;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class CollisionalPair<FirstThingType extends Collisional, SecondThingType extends Collisional> {
     private final FirstThingType firstThing;
     private final SecondThingType secondThing;
+    private static TripleMap<Class, Class, Method> methodsMap;
+
+    static {
+        methodsMap = new TripleMap<>();
+        methodsMap.addFirstKey(ASS.class);
+        methodsMap.addFirstKey(Wall.class);
+        methodsMap.addFirstKey(PhysicalPolygon.class);
+        try {
+            methodsMap.putByFirstKey(ASS.class, Wall.class, CollisionalPair.class.getDeclaredMethod("sphereToWall", ASS.class, Wall.class));
+            methodsMap.putByFirstKey(ASS.class, ASS.class, CollisionalPair.class.getDeclaredMethod("sphereToSphere", ASS.class, ASS.class));
+            methodsMap.putByFirstKey(ASS.class, Wall.class, CollisionalPair.class.getDeclaredMethod("sphereToWall", ASS.class, Wall.class));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
 
     public CollisionalPair(FirstThingType firstThing, SecondThingType secondThing) {
         this.firstThing = firstThing;
