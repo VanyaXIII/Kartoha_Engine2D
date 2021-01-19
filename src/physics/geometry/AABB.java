@@ -62,6 +62,4 @@ public class AABB {
         return point.x >= min.x && point.x <= max.x
                 && point.y >= min.y && point.y <= max.y;
     }
-
-
 }

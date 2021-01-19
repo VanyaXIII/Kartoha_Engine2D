@@ -4,6 +4,7 @@ import physics.drawing.Drawable;
 import physics.geometry.Point2;
 import physics.geometry.PolygonCreator;
 import physics.geometry.Vector2;
+import physics.polygons.Polygon;
 import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.Tools;
@@ -38,7 +39,8 @@ public class Space {
     public synchronized void changeTime() {
         long time1 = System.nanoTime();
         try {
-            new PhysicsHandler(this,1).update();
+            new Collider(this,1).collide();
+            new Updater(this).update();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
