@@ -6,8 +6,8 @@ import physics.polygons.PhysicalPolygon;
 import java.util.ArrayList;
 
 public class AABB {
-    public final Point2 min;
-    public final Point2 max;
+    private final Point2 min;
+    private final Point2 max;
 
     public AABB(Point2 point1, Point2 point2) {
         if (point2.x > point1.x) {
@@ -21,7 +21,7 @@ public class AABB {
 
     public AABB(Line line) {
         min = new Point2(line.minX(), line.minY());
-        max = new Point2(line.maxX(), line.maxY());
+        max = new Point2(line.maxX(), line.maxY()+20);
     }
 
     public AABB(ASS sphere, boolean mode) {
@@ -35,20 +35,19 @@ public class AABB {
         ArrayList<Point2> points = polygon.getPoints(mode);
         float posXDeviation = 0f;
         float posYDeviation = 0f;
-        float negXDeviation = points.get(0).x;
-        float negYDeviation = points.get(0).y;
+        float negXDeviation = 0f;
+        float negYDeviation = 0f;
 
         for (Point2 point : points) {
-            Vector2 vectorToPoint = new Vector2(point, position);
+            Vector2 vectorToPoint = new Vector2(position, point);
             if (posXDeviation < vectorToPoint.getX()) posXDeviation = vectorToPoint.getX();
             if (posYDeviation < vectorToPoint.getY()) posYDeviation = vectorToPoint.getY();
             if (negXDeviation > vectorToPoint.getX()) negXDeviation = vectorToPoint.getX();
             if (negYDeviation > vectorToPoint.getY()) negYDeviation = vectorToPoint.getY();
         }
 
-        min = new Point2(position.x + negXDeviation, position.y + negXDeviation);
+        min = new Point2(position.x + negXDeviation, position.y + negYDeviation);
         max = new Point2(position.x + posXDeviation, position.y + posYDeviation);
-
     }
 
 
@@ -61,5 +60,13 @@ public class AABB {
     public boolean doesContainPoint(Point2 point) {
         return point.x >= min.x && point.x <= max.x
                 && point.y >= min.y && point.y <= max.y;
+    }
+
+    public Point2 getMin() {
+        return min;
+    }
+
+    public Point2 getMax() {
+        return max;
     }
 }
