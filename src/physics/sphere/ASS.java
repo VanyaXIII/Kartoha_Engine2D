@@ -8,7 +8,7 @@ import physics.utils.Tools;
 
 import java.awt.*;
 
-public class ASS extends Sphere2D implements Drawable, Collisional {
+public class ASS extends Sphere2D implements Drawable, Collisional, Intersectional {
     private float x0, y0;
     private final float r;
     private Vector2 v;

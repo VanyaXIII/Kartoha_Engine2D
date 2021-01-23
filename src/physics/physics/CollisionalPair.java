@@ -28,9 +28,11 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
         methodsMap.addFirstKey(PhysicalPolygon.class);
         methodsMap.putByFirstKey(ASS.class, Wall.class, CollisionalPair::sphereToWall);
         methodsMap.putByFirstKey(ASS.class, ASS.class, CollisionalPair::sphereToSphere);
+        methodsMap.putByFirstKey(ASS.class, PhysicalPolygon.class, CollisionalPair::sphereToPolygon);
         methodsMap.putByFirstKey(Wall.class, ASS.class, CollisionalPair::sphereToWall);
         methodsMap.putByFirstKey(Wall.class, PhysicalPolygon.class, CollisionalPair::polygonToWall);
         methodsMap.putByFirstKey(PhysicalPolygon.class, Wall.class, CollisionalPair::polygonToWall);
+        methodsMap.putByFirstKey(PhysicalPolygon.class, ASS.class, CollisionalPair::sphereToPolygon);
 
     }
 
@@ -102,20 +104,20 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             boolean slips = true;
             if (Math.abs((v2y + w2y * r2) - (v1y + w1y * r1)) / (3f * s * Math.abs(1f / m1 + 1f / m2)) < fr)
                 slips = false;
-            float u1y, u2y;
-            float fw1y, fw2y;
-            if (Math.signum(v1y + w1y * r1) == Math.signum(v2y + w2y * r2) && slips) {
+            float u1y = v1y, u2y = v2y;
+            float fw1y = w1y, fw2y = w2y;
+            if (Math.signum(v1y + w1y * r1) == Math.signum(v2y + w2y * r2) && slips && !FloatComparator.equals(v2y + w2y * r2, v1y + w1y * r1)) {
                 float sign = Math.signum(Math.abs(v1y + w1y * r1) - Math.abs(v2y + w2y * r2));
                 u1y = v1y - sign * Tools.sign(v1y + w1y * r1) * fr * s / m1;
                 u2y = v2y + sign * Tools.sign(v2y + w2y * r2) * fr * s / m2;
                 fw1y = w1y - sign * Tools.sign(v1y + w1y * r1) * 2f * fr * s / (m1 * r1);
                 fw2y = w2y + sign * Tools.sign(v2y + w2y * r2) * 2f * fr * s / (m2 * r2);
-            } else if (slips) {
+            } else if (slips && !FloatComparator.equals(v2y + w2y * r2, v1y + w1y * r1)) {
                 u1y = v1y - Tools.sign(v1y + w1y * r1) * fr * s / m1;
                 u2y = v2y - Tools.sign(v2y + w2y * r2) * fr * s / m2;
                 fw1y = w1y - Tools.sign(v1y + w1y * r1) * 2f * fr * s / (m1 * r1);
                 fw2y = w2y - Tools.sign(v2y + w2y * r2) * 2f * fr * s / m2 / r2;
-            } else {
+            } else if (!FloatComparator.equals(v2y + w2y * r2, v1y + w1y * r1)){
                 float avSpeed = (m2 * (v2y + w2y * r2) + m1 * (v1y + w1y * r1)) / (m1 + m2);
                 u1y = (avSpeed + 2 * v1y - w1y * r1) / 3f;
                 fw1y = (2 * u1y - 2 * v1y + w1y * r1) / r1;
@@ -136,17 +138,33 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
 
     }
 
-    private static void sphereToPolygon(ASS sphere, PhysicalPolygon triangle) {
+    private static void sphereToPolygon(Collisional thing1, Collisional thing2) {
+        PhysicalPolygon polygon = null;
+        ASS sphere = null;
 
+        if (thing1 instanceof PhysicalPolygon) polygon = (PhysicalPolygon) thing1;
+        else sphere = (ASS) thing1;
+        if (thing2 instanceof PhysicalPolygon) polygon = (PhysicalPolygon) thing2;
+        else sphere = (ASS) thing2;
+        Point2 collisionPoint = null;
+        for (Line line : polygon.getLines(true)){
+            SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, new Wall(line, Material.Constantin)).getSphereToLineIntersection();
+            if (new IntersectionalPair<>(sphere, new Wall(line, Material.Constantin)).getSphereToLineIntersection().isIntersected){
+                collisionPoint = sphereAndLinePair.getCollisionPoint();
+                break;
+            }
+        }
     }
 
     private static void polygonToWall(Collisional thing1, Collisional thing2) {
         PhysicalPolygon polygon = null;
         Wall wall = null;
+
         if (thing1 instanceof PhysicalPolygon) polygon = (PhysicalPolygon) thing1;
         else wall = (Wall) thing1;
         if (thing2 instanceof PhysicalPolygon) polygon = (PhysicalPolygon) thing2;
         else wall = (Wall) thing2;
+
         float k = Tools.countAverage(polygon.getMaterial().coefOfReduction, wall.material.coefOfReduction);
         float fr = Tools.countAverage(polygon.getMaterial().coefOfFriction, wall.material.coefOfFriction);
         Point2 centre = polygon.getPositionOfCentre(true);
@@ -190,6 +208,10 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             if (slips && !FloatComparator.equals(w1x * ry + v1x, 0f)) {
                 v2x = v1x - Tools.sign(w1x * ry + v1x) * fr * s / m;
                 w2x = w1x - Tools.sign(w1x * ry + v1x) * fr * s * ry / J;
+            }
+            else if (!FloatComparator.equals(w1x * ry + v1x, 0f)){
+                w2x = (J * w1x - m * v1x * ry) / (J + m * ry * ry);
+                v2x = -w2x * ry;
             }
             polygon.setV(new Vector2(axisX.createByFloat(v2x), axisY.createByFloat(v2y)));
             polygon.setW(polygon.getW() +

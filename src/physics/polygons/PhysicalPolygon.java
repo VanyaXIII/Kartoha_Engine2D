@@ -5,13 +5,13 @@ import physics.drawing.Drawable;
 import physics.geometry.*;
 import physics.physics.Material;
 import physics.physics.Space;
-import physics.utils.FloatComparator;
 import physics.utils.Tools;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class PhysicalPolygon extends Polygon implements Drawable, Collisional {
+public class PhysicalPolygon extends Polygon implements Drawable, Collisional, Intersectional {
+
     private Vector2 v;
     private final Space space;
     private float w;
@@ -80,12 +80,14 @@ public class PhysicalPolygon extends Polygon implements Drawable, Collisional {
     public ArrayList<Point2> getPoints(boolean mode){
         float m = mode ? 1.0f : 0.0f;
         Point2 centre = new Point2(x0 + v.getX() * m*space.getDT(), y0 + m * ((v.getY() + v.getY() + space.getG() * space.getDT()) * space.getDT() / 2.0f));
+
         ArrayList<Point2> newPoints = clonePoints();
         for (Point2 point : newPoints) {
             point.x += m * v.getX() * space.getDT();
             point.y += m * ((v.getY() + v.getY() + space.getG() * space.getDT()) * space.getDT()) / 2.0f;
             point.rotate(centre, w * space.getDT() * m);
         }
+        
         return newPoints;
     }
 

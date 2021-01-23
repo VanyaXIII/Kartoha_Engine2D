@@ -21,7 +21,7 @@ public class AABB {
 
     public AABB(Line line) {
         min = new Point2(line.minX(), line.minY());
-        max = new Point2(line.maxX(), line.maxY()+20);
+        max = new Point2(line.maxX(), line.maxY());
     }
 
     public AABB(ASS sphere, boolean mode) {

@@ -1,9 +1,6 @@
 package physics.physics;
 
-import physics.geometry.IntersectionalPair;
-import physics.geometry.PolygonToLineIntersection;
-import physics.geometry.SphereToLineIntersection;
-import physics.geometry.SpheresIntersection;
+import physics.geometry.*;
 import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 
@@ -66,6 +63,17 @@ public class PhysicsHandler {
                                         new IntersectionalPair<>(polygon, wall).getPolygonToLineIntersection();
                                 if (polygonAndWallPair.isIntersected) {
                                     polygon.pullFromLine(polygonAndWallPair);
+                                }
+                            }
+                        }
+                    });
+
+                    spheres.forEach(sphere ->  {
+                        synchronized (polygon){
+                            synchronized (sphere){
+                                if (new IntersectionalPair<>(polygon, sphere).isIntersected()){
+                                    sphere.setV(new Vector2(0, 0));
+                                    polygon.setW(0);
                                 }
                             }
                         }

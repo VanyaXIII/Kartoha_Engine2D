@@ -7,7 +7,7 @@ import physics.utils.Tools;
 import java.awt.*;
 import java.lang.reflect.Field;
 
-public class Line implements Drawable {
+public class Line implements Drawable, Intersectional {
     public float x1, x2, y1, y2;
     private float k, b;
     private float A, B, C;
@@ -17,6 +17,7 @@ public class Line implements Drawable {
         this.x2 = x2;
         this.y1 = y1;
         this.y2 = y2;
+
         calcEq();
         calcNormalEq();
     }
@@ -26,6 +27,7 @@ public class Line implements Drawable {
         this.x2 = point2.x;
         this.y1 = point1.y;
         this.y2 = point2.y;
+
         calcEq();
         calcNormalEq();
     }
@@ -35,6 +37,7 @@ public class Line implements Drawable {
         this.x2 = point.x + vector.getX();
         this.y1 = point.y;
         this.y2 = point.y + vector.getY();
+
         calcEq();
         calcNormalEq();
     }
@@ -93,6 +96,7 @@ public class Line implements Drawable {
             float iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
             return (line.minX() <= ix && ix <= line.maxX() && line.minY() <= iy && iy <= line.maxY());
         }
+
         return false;
     }
 
@@ -101,6 +105,7 @@ public class Line implements Drawable {
     public Point2 findIntPointWith(Line line) {
         float ix = -(this.C * line.B - line.C * this.B) / (this.A * line.B - this.B * line.A);
         float iy = -(this.A * line.C - line.A * this.C) / (this.A * line.B - this.B * line.A);
+
         return new Point2(ix, iy);
     }
 

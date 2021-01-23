@@ -1,15 +1,13 @@
 package physics.physics;
 
 import physics.drawing.Drawable;
-import physics.geometry.Collisional;
-import physics.geometry.Line;
-import physics.geometry.Point2;
-import physics.geometry.Vector2;
+import physics.geometry.*;
+import physics.geometry.Intersectional;
 import physics.utils.Tools;
 
 import java.awt.*;
 
-public class Wall extends Line implements Drawable, Collisional {
+public class Wall extends Line implements Drawable, Collisional, Intersectional {
     public Material material;
 
     public Wall(float x1, float y1, float x2, float y2, Material material) {
@@ -24,6 +22,11 @@ public class Wall extends Line implements Drawable, Collisional {
 
     public Wall(Point2 point, Vector2 vector, Material material) {
         super(point, vector);
+        this.material = material;
+    }
+
+    public Wall(Line line, Material material){
+        super(line.x1, line.y1, line.x2, line.y2);
         this.material = material;
     }
 
