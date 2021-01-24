@@ -1,11 +1,10 @@
 package physics.geometry;
 
 import physics.drawing.Drawable;
-import physics.utils.FloatComparator;
+import physics.limiters.Intersectional;
 import physics.utils.Tools;
 
 import java.awt.*;
-import java.lang.reflect.Field;
 
 public class Line implements Drawable, Intersectional {
     public float x1, x2, y1, y2;

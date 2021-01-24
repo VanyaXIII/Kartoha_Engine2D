@@ -3,6 +3,8 @@ package physics.polygons;
 import physics.drawing.ArbitraryFigure;
 import physics.drawing.Drawable;
 import physics.geometry.*;
+import physics.limiters.Collisional;
+import physics.limiters.Intersectional;
 import physics.physics.Material;
 import physics.physics.Space;
 import physics.utils.Tools;
@@ -65,7 +67,6 @@ public class PhysicalPolygon extends Polygon implements Drawable, Collisional, I
     }
 
     public ArrayList<Line> getLines(boolean mode) {
-        float m = mode ? 1.0f : 0.0f;
         ArrayList<Point2> newPoints = getPoints(mode);
 
         ArrayList<Line> lines = new ArrayList<>();
@@ -87,7 +88,7 @@ public class PhysicalPolygon extends Polygon implements Drawable, Collisional, I
             point.y += m * ((v.getY() + v.getY() + space.getG() * space.getDT()) * space.getDT()) / 2.0f;
             point.rotate(centre, w * space.getDT() * m);
         }
-        
+
         return newPoints;
     }
 

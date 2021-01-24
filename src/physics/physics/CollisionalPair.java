@@ -2,6 +2,7 @@ package physics.physics;
 
 
 import physics.geometry.*;
+import physics.limiters.Collisional;
 import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.FloatComparator;
@@ -42,12 +43,16 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
     }
 
     private static void sphereToWall(Collisional thing1, Collisional thing2) {
-        ASS sphere = null;
-        Wall wall = null;
-        if (thing1 instanceof ASS) sphere = (ASS) thing1;
-        else wall = (Wall) thing1;
-        if (thing2 instanceof ASS) sphere = (ASS) thing2;
-        else wall = (Wall) thing2;
+        ASS sphere;
+        Wall wall;
+        if (thing1 instanceof ASS) {
+            sphere = (ASS) thing1;
+            wall = (Wall) thing2;
+        }
+        else {
+            wall = (Wall) thing1;
+            sphere = (ASS) thing2;
+        }
         Vector2 axisX = new Vector2(wall);
         Vector2 axisY = axisX.createNormal();
         float fr = Tools.countAverage(sphere.getMaterial().coefOfFriction, wall.material.coefOfFriction);
@@ -139,13 +144,17 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
     }
 
     private static void sphereToPolygon(Collisional thing1, Collisional thing2) {
-        PhysicalPolygon polygon = null;
-        ASS sphere = null;
+        PhysicalPolygon polygon;
+        ASS sphere;
 
-        if (thing1 instanceof PhysicalPolygon) polygon = (PhysicalPolygon) thing1;
-        else sphere = (ASS) thing1;
-        if (thing2 instanceof PhysicalPolygon) polygon = (PhysicalPolygon) thing2;
-        else sphere = (ASS) thing2;
+        if (thing1 instanceof PhysicalPolygon){
+            polygon = (PhysicalPolygon) thing1;
+            sphere = (ASS) thing2;
+        }
+        else{
+            polygon = (PhysicalPolygon) thing2;
+            sphere = (ASS) thing1;
+        }
         Point2 collisionPoint = null;
         for (Line line : polygon.getLines(true)){
             SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, new Wall(line, Material.Constantin)).getSphereToLineIntersection();
@@ -157,13 +166,17 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
     }
 
     private static void polygonToWall(Collisional thing1, Collisional thing2) {
-        PhysicalPolygon polygon = null;
-        Wall wall = null;
+        PhysicalPolygon polygon;
+        Wall wall;
 
-        if (thing1 instanceof PhysicalPolygon) polygon = (PhysicalPolygon) thing1;
-        else wall = (Wall) thing1;
-        if (thing2 instanceof PhysicalPolygon) polygon = (PhysicalPolygon) thing2;
-        else wall = (Wall) thing2;
+        if (thing1 instanceof PhysicalPolygon) {
+            polygon = (PhysicalPolygon) thing1;
+            wall = (Wall) thing2;
+        }
+        else{
+            polygon = (PhysicalPolygon) thing2;
+            wall = (Wall) thing1;
+        }
 
         float k = Tools.countAverage(polygon.getMaterial().coefOfReduction, wall.material.coefOfReduction);
         float fr = Tools.countAverage(polygon.getMaterial().coefOfFriction, wall.material.coefOfFriction);
@@ -176,7 +189,7 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
                 break;
             }
         }
-        assert c == null: "Collision point is null";
+
         if (c != null) {
             Vector2 axisX = new Vector2(wall);
             Vector2 axisY = axisX.createNormal();

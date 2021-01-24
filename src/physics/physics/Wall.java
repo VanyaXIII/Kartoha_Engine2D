@@ -2,7 +2,8 @@ package physics.physics;
 
 import physics.drawing.Drawable;
 import physics.geometry.*;
-import physics.geometry.Intersectional;
+import physics.limiters.Collisional;
+import physics.limiters.Intersectional;
 import physics.utils.Tools;
 
 import java.awt.*;

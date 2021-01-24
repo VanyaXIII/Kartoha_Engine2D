@@ -1,3 +1,3 @@
-package physics.geometry;
+package physics.limiters;
 
 public interface Collisional {}

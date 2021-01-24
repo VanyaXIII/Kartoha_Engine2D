@@ -2,6 +2,8 @@ package physics.sphere;
 
 import physics.drawing.Drawable;
 import physics.geometry.*;
+import physics.limiters.Collisional;
+import physics.limiters.Intersectional;
 import physics.physics.Material;
 import physics.physics.Space;
 import physics.utils.Tools;
