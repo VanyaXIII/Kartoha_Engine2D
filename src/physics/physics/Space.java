@@ -12,6 +12,7 @@ import physics.utils.Tools;
 import java.util.ArrayList;
 
 public class Space {
+
     public ArrayList<Drawable> drawables;
     private float fps = 0;
     private final ArrayList<Wall> walls;
@@ -39,22 +40,28 @@ public class Space {
     }
 
     public synchronized void changeTime() {
+
         long time1 = System.nanoTime();
+
         try {
             physicsHandler.update();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         float cTime = (float) ((System.nanoTime() - time1) / 1000000.0);
         float sleepTime = 0;
+
         if (DT * 1000.0 - cTime > 0) {
             sleepTime = DT * 1000.0f - cTime;
         }
+
         try {
             Thread.sleep(Tools.transformFloat(sleepTime));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         time += DT;
         long time2 = System.nanoTime();
         fps = 1000f / ((time2 - time1) / 1000000f);

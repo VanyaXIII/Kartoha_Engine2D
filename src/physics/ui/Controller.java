@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 
 public class Controller {
+
     private final MouseListener mouseListener;
     private final KeyListener keyListener;
 

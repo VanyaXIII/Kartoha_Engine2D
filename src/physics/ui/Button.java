@@ -5,6 +5,7 @@ import physics.geometry.Point2;
 import java.awt.*;
 
 public class Button {
+
     private final Clickable clickHandler;
     private final Color color;
     private final Point2 lowerLeftCorner;

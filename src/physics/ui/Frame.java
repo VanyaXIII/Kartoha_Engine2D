@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 
 public class Frame extends JFrame {
+
     private final Scene scene;
 
     public Frame(Scene scene, Color bgColor, int width, int height) {

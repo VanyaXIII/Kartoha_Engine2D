@@ -12,6 +12,7 @@ import physics.utils.TripleMap;
 import java.util.ArrayList;
 
 public class CollisionalPair<FirstThingType extends Collisional, SecondThingType extends Collisional> {
+
     private final FirstThingType firstThing;
     private final SecondThingType secondThing;
     private final static TripleMap<Class, Class, Collider> methodsMap;

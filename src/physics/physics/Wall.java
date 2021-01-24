@@ -9,6 +9,7 @@ import physics.utils.Tools;
 import java.awt.*;
 
 public class Wall extends Line implements Drawable, Collisional, Intersectional {
+
     public Material material;
 
     public Wall(float x1, float y1, float x2, float y2, Material material) {

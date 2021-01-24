@@ -3,6 +3,7 @@ package physics.geometry;
 import physics.utils.FloatComparator;
 
 public class Vector2 {
+
     private float x, y;
 
     public Vector2(float x, float y) {

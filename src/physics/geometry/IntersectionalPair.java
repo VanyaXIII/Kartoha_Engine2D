@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class IntersectionalPair<FirstThingType extends Intersectional, SecondThingType extends Intersectional> {
+
     private final FirstThingType firstThing;
     private final SecondThingType secondThing;
     private final static boolean dynamicCollisionMode = true;

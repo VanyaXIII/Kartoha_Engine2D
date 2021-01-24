@@ -3,6 +3,7 @@ package physics.physics;
 import java.awt.*;
 
 public class Material {
+
     public final float p;
     public final Color outlineColor, fillColor;
     public final float coefOfReduction;

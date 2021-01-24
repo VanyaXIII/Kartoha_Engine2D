@@ -3,9 +3,9 @@ package physics.geometry;
 import java.util.ArrayList;
 
 public class PolygonCreator {
-    ;
+
     private ArrayList<Point2> points;
-    private ArrayList<Triangle> triangles;
+    private final ArrayList<Triangle> triangles;
 
     {
         points = new ArrayList<>();

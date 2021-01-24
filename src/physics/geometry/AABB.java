@@ -6,6 +6,7 @@ import physics.polygons.PhysicalPolygon;
 import java.util.ArrayList;
 
 public class AABB {
+
     private final Point2 min;
     private final Point2 max;
 

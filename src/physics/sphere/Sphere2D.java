@@ -6,6 +6,7 @@ import physics.physics.Material;
 import java.awt.*;
 
 public abstract class Sphere2D implements Drawable {
+
     public float x0, y0;
     private float r;
 

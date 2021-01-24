@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TripleMap <FirstKeyType, SecondKeyType, ElementType>{
+
     private final Map<FirstKeyType, Map<SecondKeyType, ElementType>> map;
 
     {

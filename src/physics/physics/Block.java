@@ -6,6 +6,7 @@ import physics.utils.Tools;
 import java.awt.*;
 
 public class Block implements Drawable {
+
     private final float x;
     private final float y;
     private final float w, h;

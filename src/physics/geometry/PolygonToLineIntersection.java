@@ -1,6 +1,7 @@
 package physics.geometry;
 
 public class PolygonToLineIntersection {
+
     public final boolean isIntersected;
     private Point2 collisionPoint;
     private Point2 pointOfPolygon;

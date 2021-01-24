@@ -1,6 +1,7 @@
 package physics.geometry;
 
 public class Triangle {
+
     private final Point2[] points;
 
     {
@@ -18,7 +19,6 @@ public class Triangle {
         float side2 = new Vector2(points[1], points[2]).length();
         float side3 = new Vector2(points[2], points[0]).length();
         float p = (side1 + side3 + side2) / 2.0f;
-
         return (float) Math.sqrt(p * (p - side1) * (p - side2) * (p - side3));
     }
 

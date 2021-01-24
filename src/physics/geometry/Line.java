@@ -7,6 +7,7 @@ import physics.utils.Tools;
 import java.awt.*;
 
 public class Line implements Drawable, Intersectional {
+
     public float x1, x2, y1, y2;
     private float k, b;
     private float A, B, C;

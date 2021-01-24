@@ -7,6 +7,7 @@ import physics.polygons.PhysicalPolygon;
 import java.util.ArrayList;
 
 public class PhysicsHandler {
+
     private final ArrayList<ASS> spheres;
     private final ArrayList<PhysicalPolygon> polygons;
     private final ArrayList<Wall> walls;
@@ -21,7 +22,9 @@ public class PhysicsHandler {
 
     public void update() throws InterruptedException {
         for (int t = 0; t < depth; t++) {
+
             Thread sphereThread = new Thread(() -> {
+
                 for (int i = 0; i < spheres.size() - 1; i++) {
                     for (int j = i + 1; j < spheres.size(); j++) {
                         synchronized (spheres.get(i)) {
@@ -37,6 +40,7 @@ public class PhysicsHandler {
                         }
                     }
                 }
+
                 spheres.forEach(sphere -> {
                     walls.forEach(wall -> {
                         synchronized (sphere) {
@@ -50,8 +54,11 @@ public class PhysicsHandler {
                         }
                     });
                 });
+
             });
+
             Thread polygonThread = new Thread(() -> {
+
                 polygons.forEach(polygon -> {
                     walls.forEach(wall -> {
                         synchronized (polygon) {
@@ -80,13 +87,15 @@ public class PhysicsHandler {
                     });
                 });
             });
+
             sphereThread.start();
             polygonThread.start();
             sphereThread.join();
             polygonThread.join();
-            sphereThread = new Thread(() -> spheres.forEach(ASS::update));
 
+            sphereThread = new Thread(() -> spheres.forEach(ASS::update));
             polygonThread = new Thread(() -> polygons.forEach(PhysicalPolygon::update));
+
             sphereThread.start();
             polygonThread.start();
             sphereThread.join();

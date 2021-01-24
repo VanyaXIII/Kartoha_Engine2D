@@ -1,6 +1,7 @@
 package physics.geometry;
 
 public class SpheresIntersection {
+
     public final boolean isIntersected;
     public Vector2 centralLine;
     private float value;
