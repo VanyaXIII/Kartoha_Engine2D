@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class Wall extends Line implements Drawable, Collisional, Intersectional {
 
-    public Material material;
+    private Material material;
 
     public Wall(float x1, float y1, float x2, float y2, Material material) {
         super(x1, y1, x2, y2);
@@ -30,6 +30,14 @@ public class Wall extends Line implements Drawable, Collisional, Intersectional 
     public Wall(Line line, Material material){
         super(line.x1, line.y1, line.x2, line.y2);
         this.material = material;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public Line toLine(){
+        return new Line(x1, y1, x2, y2);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package physics.sphere;
 
 import physics.drawing.Drawable;
-import physics.physics.Material;
 
 import java.awt.*;
 

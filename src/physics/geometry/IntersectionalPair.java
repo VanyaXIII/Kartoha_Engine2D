@@ -2,13 +2,10 @@ package physics.geometry;
 
 import physics.limiters.Intersectional;
 import physics.physics.Intersecter;
-import physics.physics.Material;
-import physics.physics.Wall;
 import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.TripleMap;
 
-import javax.annotation.processing.SupportedAnnotationTypes;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -29,17 +26,17 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
         methodsMap = new TripleMap<>();
 
         methodsMap.addFirstKey(ASS.class);
-        methodsMap.addFirstKey(Wall.class);
+        methodsMap.addFirstKey(Line.class);
         methodsMap.addFirstKey(PhysicalPolygon.class);
 
-        methodsMap.putByFirstKey(ASS.class, Wall.class, IntersectionalPair::sphereToLine);
+        methodsMap.putByFirstKey(ASS.class, Line.class, IntersectionalPair::sphereToLine);
         methodsMap.putByFirstKey(ASS.class, ASS.class, IntersectionalPair::sphereToSphere);
         methodsMap.putByFirstKey(ASS.class, PhysicalPolygon.class, IntersectionalPair::sphereToPolygon);
 
-        methodsMap.putByFirstKey(Wall.class, ASS.class, IntersectionalPair::sphereToLine);
-        methodsMap.putByFirstKey(Wall.class, PhysicalPolygon.class, IntersectionalPair::polygonToWall);
+        methodsMap.putByFirstKey(Line.class, ASS.class, IntersectionalPair::sphereToLine);
+        methodsMap.putByFirstKey(Line.class, PhysicalPolygon.class, IntersectionalPair::polygonToWall);
 
-        methodsMap.putByFirstKey(PhysicalPolygon.class, Wall.class, IntersectionalPair::polygonToWall);
+        methodsMap.putByFirstKey(PhysicalPolygon.class, Line.class, IntersectionalPair::polygonToWall);
         methodsMap.putByFirstKey(PhysicalPolygon.class, ASS.class, IntersectionalPair::sphereToPolygon);
     }
 
@@ -113,7 +110,7 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
 
         ArrayList<Line> lines = polygon.getLines(dynamicCollisionMode);
         for (Line line : lines) {
-            if (sphereToLine(sphere, new Wall(line, Material.Constantin))) {
+            if (sphereToLine(sphere, line)) {
                 return true;
             }
         }
@@ -175,10 +172,10 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     public SphereToLineIntersection getSphereToLineIntersection() {
-        if (!(firstThing instanceof ASS && secondThing instanceof Wall))
+        if (!(firstThing instanceof ASS && secondThing instanceof Line))
             return new SphereToLineIntersection(false);
 
-        if (!new AABB((ASS) firstThing, staticCollisionMode).isIntersectedWith(new AABB((Wall) secondThing)))
+        if (!new AABB((ASS) firstThing, staticCollisionMode).isIntersectedWith(new AABB((Line) secondThing)))
             return new SphereToLineIntersection(false);
 
         ASS sphere = (ASS) firstThing;
@@ -192,11 +189,11 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
                 return new SphereToLineIntersection(true, collisionPoint, sphere.getR() - d);
             }
 
-            if (new Vector2(spherePos, new Point2(line.x1, line.y1)).length() <= sphere.getR())
+            else if (new Vector2(spherePos, new Point2(line.x1, line.y1)).length() <= sphere.getR())
                 return new SphereToLineIntersection(true, new Point2(line.x1, line.y1), sphere.getR() -
                         new Vector2(spherePos, new Point2(line.x1, line.y1)).length());
 
-            if (new Vector2(spherePos, new Point2(line.x2, line.y2)).length() <= sphere.getR())
+            else if (new Vector2(spherePos, new Point2(line.x2, line.y2)).length() <= sphere.getR())
                 return new SphereToLineIntersection(true, new Point2(line.x2, line.y2), sphere.getR() -
                         new Vector2(spherePos, new Point2(line.x2, line.y2)).length());
         }
@@ -206,10 +203,10 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     public PolygonToLineIntersection getPolygonToLineIntersection() {
-        if (!(firstThing instanceof PhysicalPolygon && secondThing instanceof Wall))
+        if (!(firstThing instanceof PhysicalPolygon && secondThing instanceof Line))
             return new PolygonToLineIntersection(false);
 
-        if (!new AABB((PhysicalPolygon) firstThing, staticCollisionMode).isIntersectedWith(new AABB((Wall) secondThing)))
+        if (!new AABB((PhysicalPolygon) firstThing, staticCollisionMode).isIntersectedWith(new AABB((Line) secondThing)))
             return new PolygonToLineIntersection(false);
 
         PhysicalPolygon polygon = (PhysicalPolygon) firstThing;
@@ -233,6 +230,13 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
 
         return new PolygonToLineIntersection(false);
 
+    }
+
+    public static boolean getStaticCollisionMode(){
+        return staticCollisionMode;
+    }
+    public static boolean getDynamicCollisionMode(){
+        return dynamicCollisionMode;
     }
 
 }

@@ -45,10 +45,10 @@ public class PhysicsHandler {
                     walls.forEach(wall -> {
                         synchronized (sphere) {
                             synchronized (wall) {
-                                if (new IntersectionalPair<>(sphere, wall).isIntersected()) {
+                                if (new IntersectionalPair<>(sphere, wall.toLine()).isIntersected()) {
                                     new CollisionalPair<>(sphere, wall).collide();
                                 }
-                                SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, wall).getSphereToLineIntersection();
+                                SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, wall.toLine()).getSphereToLineIntersection();
                                 if (sphereAndLinePair.isIntersected) sphere.pullFromLine(sphereAndLinePair);
                             }
                         }
@@ -63,11 +63,11 @@ public class PhysicsHandler {
                     walls.forEach(wall -> {
                         synchronized (polygon) {
                             synchronized (wall) {
-                                if (new IntersectionalPair<>(polygon, wall).isIntersected()) {
+                                if (new IntersectionalPair<>(polygon, wall.toLine()).isIntersected()) {
                                     new CollisionalPair<>(polygon, wall).collide();
                                 }
                                 PolygonToLineIntersection polygonAndWallPair =
-                                        new IntersectionalPair<>(polygon, wall).getPolygonToLineIntersection();
+                                        new IntersectionalPair<>(polygon, wall.toLine()).getPolygonToLineIntersection();
                                 if (polygonAndWallPair.isIntersected) {
                                     polygon.pullFromLine(polygonAndWallPair);
                                 }
@@ -79,8 +79,11 @@ public class PhysicsHandler {
                         synchronized (polygon){
                             synchronized (sphere){
                                 if (new IntersectionalPair<>(polygon, sphere).isIntersected()){
-                                    sphere.setV(new Vector2(0, 0));
-                                    polygon.setW(0);
+                                    new CollisionalPair<>(polygon, sphere).collide();
+                                }
+                                for (Line line : polygon.getLines(IntersectionalPair.getStaticCollisionMode())){
+                                    SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, line).getSphereToLineIntersection();
+                                    if (sphereAndLinePair.isIntersected) sphere.pullFromLine(sphereAndLinePair);
                                 }
                             }
                         }
