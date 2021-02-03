@@ -32,9 +32,9 @@ public class Scene {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == 1)
-                    space.addPolygon(new Vector2(0, 0), 0f, e.getX(), e.getY(), 5, 200, Material.Gold);
+                    space.addPolygon(new Vector2(0, 0), 2f, e.getX(), e.getY(), 6, 100, Material.Constantin);
                 else if (e.getButton() == 3)
-                    space.addSphere(new Vector2(00, 0), 0, e.getX(), e.getY(), 40, Material.Gold);
+                    space.addSphere(new Vector2(100, 0), 0, e.getX(), e.getY(), 40, Material.Stone);
                 else space.deleteDynamicObjects();
             }
 

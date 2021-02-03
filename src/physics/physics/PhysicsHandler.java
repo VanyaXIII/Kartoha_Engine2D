@@ -5,6 +5,7 @@ import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 public class PhysicsHandler {
 
@@ -20,7 +21,7 @@ public class PhysicsHandler {
         this.depth = depth;
     }
 
-    public void update() throws InterruptedException {
+    public void update() throws InterruptedException, ConcurrentModificationException {
         for (int t = 0; t < depth; t++) {
 
             Thread sphereThread = new Thread(() -> {
