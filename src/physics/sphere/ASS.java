@@ -16,6 +16,7 @@ public class ASS extends Sphere2D implements Drawable, Collisional, Intersection
     private final float r;
     private Vector2 v;
     private float w;
+    private final float J;
     private final Vector2 orientationVector;
     private final Space space;
     private final Material material;
@@ -32,6 +33,7 @@ public class ASS extends Sphere2D implements Drawable, Collisional, Intersection
         this.w = w;
         this.material = material;
         this.m = ((float)Math.PI * r * r / 2) * material.p;
+        J = 0.5f * m * r * r;
         orientationVector = new Vector2(0, r);
     }
 
@@ -121,6 +123,10 @@ public class ASS extends Sphere2D implements Drawable, Collisional, Intersection
     public float getM() {
         assert m == 0: "Mass is null";
         return m;
+    }
+
+    public float getJ() {
+        return J;
     }
 
     public float getR() {

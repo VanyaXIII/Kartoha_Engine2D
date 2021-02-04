@@ -156,7 +156,9 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
                 fw1y = (2 * u1y - 2 * v1y + w1y * r1) / r1;
                 u2y = (avSpeed + 2 * v2y - w2y * r2) / 3f;
                 fw2y = (2 * u2y - 2 * v2y + w2y * r2) / r2;
+
             }
+
 
             float u1x = ((ratio - k) / (ratio + 1)) * v1x + ((k + 1) / (ratio + 1)) * v2x;
             float u2x = ((ratio * (1 + k)) / (ratio + 1)) * v1x + ((1 - k * ratio) / (ratio + 1)) * v2x;
@@ -206,6 +208,7 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             final float m1 = sphere.getM();
             final float m2 = polygon.getM();
             final float J2 = polygon.getJ();
+            final float J1 = sphere.getJ();
             final float ratio = m1 / m2;
 
             final float v1x = sphere.getV().countProjectionOn(axisX);
@@ -222,18 +225,19 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             final float r = sphere.getR();
 
             final float w2x = axisY.createByFloat(polygonRadVector.countProjectionOn(axisY)).getCrossProduct(polygon.getW()).countProjectionOn(axisX) / ry;
-            final float u1x = ((ratio - k) * v1x + (v2x + w2x * ry) * (1 + k) + m1*ry*ry*v1x/J2 + w2x*ry) / (1 + ratio + m1*ry*ry/J2);
+            final float u1x = ((ratio - k) * v1x + (v2x + w2x * ry) * (1 + k) + m1 * ry * ry * v1x / J2 + w2x * ry) / (1 + ratio + m1 * ry * ry / J2);
             final float s = m1 * (u1x - v1x);
             final float u2x = (-s / m2) + v2x;
-            final float fw2x = ((- s * ry) / J2) + w2x;
+            final float fw2x = ((-s * ry) / J2) + w2x;
 
+
+
+            final float w1y = sphereRadVector.getCrossProduct(sphere.getW()).countProjectionOn(axisX) / sphere.getR();
+            final float w2y = axisX.createByFloat(polygonRadVector.countProjectionOn(axisX)).getCrossProduct(polygon.getW()).countProjectionOn(axisY) / rx;
 
             polygon.setW(polygon.getW() +
                     Vector2.getConstByCrossProduct(axisX.createByFloat(fw2x * ry), axisY.createByFloat(polygonRadVector.countProjectionOn(axisY))) -
                     Vector2.getConstByCrossProduct(axisX.createByFloat(w2x * ry), axisY.createByFloat(polygonRadVector.countProjectionOn(axisY))));
-
-            final float w1y = sphereRadVector.getCrossProduct(sphere.getW()).countProjectionOn(axisX) / sphere.getR();
-            final float w2y = axisX.createByFloat(polygonRadVector.countProjectionOn(axisX)).getCrossProduct(polygon.getW()).countProjectionOn(axisY) / rx;
 
             float u1y = v1y;
             float u2y = v2y;
@@ -241,18 +245,18 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             float fw2y = w2y;
 
 
-
+            float diff = v1y + w1y * r - v2y - w2y * rx;
             if (Math.signum(v1y + w1y * r) == Math.signum(v2y + w2y * rx) && !FloatComparator.equals(v2y + w2y * rx, v1y + w1y * r)) {
 
                 float sign = Math.signum(Math.abs(v1y + w1y * r) - Math.abs(v2y + w2y * rx));
-                System.out.println(v1y + w1y * r);
-                System.out.println(v2y + w2y * rx);
+//                System.out.println(v1y + w1y * r);
+//                System.out.println(v2y + w2y * rx);
                 u1y = v1y - sign * Tools.sign(v1y + w1y * r) * fr * Math.abs(s) / m1;
                 u2y = v2y + sign * Tools.sign(v2y + w2y * rx) * fr * Math.abs(s) / m2;
                 fw1y = w1y - sign * Tools.sign(v1y + w1y * r) * 2f * fr * Math.abs(s) / (m1 * r);
                 fw2y = w2y + sign * Tools.sign(v2y + w2y * rx) * fr * Math.abs(s) / J2;
-                System.out.println(u1y + fw1y * r);
-                System.out.println(u2y + fw2y * rx);
+//                System.out.println(u1y + fw1y * r);
+//                System.out.println(u2y + fw2y * rx);
 
             } else if (!FloatComparator.equals(v2y + w2y * rx, v1y + w1y * r)) {
 
@@ -260,7 +264,23 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
                 u2y = v2y - Tools.sign(v2y + w2y * rx) * fr * Math.abs(s) / m2;
                 fw1y = w1y - Tools.sign(v1y + w1y * r) * 2f * fr * Math.abs(s) / (m1 * r);
                 fw2y = w2y - Tools.sign(v2y + w2y * rx) * fr * Math.abs(s) / J2;
-                System.out.println(2);
+//                System.out.println(2);
+
+            }
+
+            if (Math.signum(diff) != Math.signum(u1y + fw1y * r  - u2y -  fw2y * rx)) {
+
+                System.out.println(v1y + w1y * r);
+                System.out.println(v2y + w2y * rx);
+
+                fw1y   = (-v1y + (J1 / (m1 * r)) * (ratio + 1) * w1y + v2y + w2y*rx + (J1 * rx * rx / (J2 * r)) * w1y)
+                        / ((J1 / (m1 * r)) * (ratio + 1) + r + J1 * rx * rx / (J2 * r));
+                u1y = v1y + J1 * fw1y / (m1 * r) - J1 * w1y / (m1 * r);
+                u2y = v2y + ratio * (v1y - u1y);
+                fw2y = w2y + (-fw1y + w1y) * J1 * rx / (J2 * r);
+
+                System.out.println(u1y + fw1y * r);
+                System.out.println(u2y + fw2y * rx);
 
             }
 
