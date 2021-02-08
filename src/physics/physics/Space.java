@@ -4,12 +4,12 @@ import physics.drawing.Drawable;
 import physics.geometry.Point2;
 import physics.geometry.PolygonCreator;
 import physics.geometry.Vector2;
-import physics.polygons.Polygon;
 import physics.sphere.ASS;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.Tools;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Space {
 
@@ -65,6 +65,10 @@ public class Space {
         time += DT;
         long time2 = System.nanoTime();
         fps = 1000f / ((time2 - time1) / 1000000f);
+
+        Collections.shuffle(spheres);
+        Collections.shuffle(polygons);
+
     }
 
 

@@ -235,9 +235,6 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             final float w1y = sphereRadVector.getCrossProduct(sphere.getW()).countProjectionOn(axisX) / sphere.getR();
             final float w2y = axisX.createByFloat(polygonRadVector.countProjectionOn(axisX)).getCrossProduct(polygon.getW()).countProjectionOn(axisY) / rx;
 
-            polygon.setW(polygon.getW() +
-                    Vector2.getConstByCrossProduct(axisX.createByFloat(fw2x * ry), axisY.createByFloat(polygonRadVector.countProjectionOn(axisY))) -
-                    Vector2.getConstByCrossProduct(axisX.createByFloat(w2x * ry), axisY.createByFloat(polygonRadVector.countProjectionOn(axisY))));
 
             float u1y = v1y;
             float u2y = v2y;
