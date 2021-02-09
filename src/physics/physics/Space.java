@@ -20,7 +20,7 @@ public class Space {
     private final ArrayList<Block> blocks;
     private final ArrayList<PhysicalPolygon> polygons;
     private final float DT;
-    private final float G;
+    private float G;
     private double time;
     private final PhysicsHandler physicsHandler;
 
@@ -31,12 +31,12 @@ public class Space {
         drawables = new ArrayList<>();
         blocks = new ArrayList<>();
         physicsHandler = new PhysicsHandler(this, 1);
+        time = 0;
     }
 
     public Space(float dt, float g) {
         this.DT = dt;
         this.G = g;
-        this.time = 0;
     }
 
     public synchronized void changeTime() {
@@ -45,8 +45,7 @@ public class Space {
 
         try {
             physicsHandler.update();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
 
         float cTime = (float) ((System.nanoTime() - time1) / 1000000.0);
@@ -116,8 +115,10 @@ public class Space {
 
     public void addSphere(Vector2 v, float w, float x0, float y0, float r, Material material) {
         ASS sphere = new ASS(this, v, w, x0, y0, r, material);
-        spheres.add(sphere);
-        drawables.add(sphere);
+        synchronized (spheres) {
+            spheres.add(sphere);
+            drawables.add(sphere);
+        }
     }
 
     public void addPolygon(Vector2 v, float w, float x0, float y0, int numOfPoints, float r, Material material) {
@@ -150,6 +151,10 @@ public class Space {
 
     public float getG() {
         return G;
+    }
+
+    public void setG(float g) {
+        G = g;
     }
 
     public synchronized ArrayList<ASS> getSpheres() {

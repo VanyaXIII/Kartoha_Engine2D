@@ -17,4 +17,8 @@ public class Tools {
         return a>=0f ? 1f :-1f;
     }
 
+    public static boolean isNaN(float a){
+        return a - a != 0.0f;
+    }
+
 }

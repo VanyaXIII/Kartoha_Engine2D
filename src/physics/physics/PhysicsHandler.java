@@ -33,6 +33,7 @@ public class PhysicsHandler {
                                 if (new IntersectionalPair<>(spheres.get(i), spheres.get(j)).isIntersected()) {
                                     new CollisionalPair<>(spheres.get(i), spheres.get(j)).collide();
                                 }
+
                                 SpheresIntersection spherePair = new IntersectionalPair<>(spheres.get(i), spheres.get(j)).getSpheresIntersection();
                                 if (spherePair.isIntersected) {
                                     spheres.get(i).pullFromSphere(spherePair);
@@ -41,26 +42,44 @@ public class PhysicsHandler {
                         }
                     }
                 }
-
-                spheres.forEach(sphere -> {
-                    walls.forEach(wall -> {
-                        synchronized (sphere) {
-                            synchronized (wall) {
-                                if (new IntersectionalPair<>(sphere, wall.toLine()).isIntersected()) {
-                                    new CollisionalPair<>(sphere, wall).collide();
+                synchronized (spheres) {
+                    spheres.forEach(sphere -> {
+                        walls.forEach(wall -> {
+                            synchronized (sphere) {
+                                synchronized (wall) {
+                                    if (new IntersectionalPair<>(sphere, wall.toLine()).isIntersected()) {
+                                        new CollisionalPair<>(sphere, wall).collide();
+                                    }
+                                    SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, wall.toLine()).getSphereToLineIntersection();
+                                    if (sphereAndLinePair.isIntersected) sphere.pullFromLine(sphereAndLinePair);
                                 }
-                                SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, wall.toLine()).getSphereToLineIntersection();
-                                if (sphereAndLinePair.isIntersected) sphere.pullFromLine(sphereAndLinePair);
                             }
-                        }
+                        });
                     });
-                });
+                }
 
             });
 
             Thread polygonThread = new Thread(() -> {
 
+                for (int i = 0; i < polygons.size(); i++) {
+                    for (int j = 0; j < polygons.size(); j++) {
+                        if (i != j && new IntersectionalPair<>(polygons.get(i), polygons.get(j)).isIntersected()){
+                            new CollisionalPair<>(polygons.get(i), polygons.get(j)).collide();
+                        }
+
+                        for (Line line : polygons.get(j).getLines(false)) {
+                            PolygonToLineIntersection polygonAndWallPair =
+                                    new IntersectionalPair<>(polygons.get(i), line).getPolygonToLineIntersection();
+                            if (polygonAndWallPair.isIntersected) {
+                                polygons.get(i).pullFromLine(polygonAndWallPair);
+                            }
+                        }
+                    }
+                }
+
                 polygons.forEach(polygon -> {
+
                     walls.forEach(wall -> {
                         synchronized (polygon) {
                             synchronized (wall) {
@@ -97,8 +116,18 @@ public class PhysicsHandler {
             sphereThread.join();
             polygonThread.join();
 
-            sphereThread = new Thread(() -> spheres.forEach(ASS::update));
-            polygonThread = new Thread(() -> polygons.forEach(PhysicalPolygon::update));
+            sphereThread = new Thread(() -> {
+                    synchronized (spheres) {
+                        spheres.forEach(ASS::update);
+                    }
+            });
+
+            polygonThread = new Thread(() -> {
+                synchronized (polygons) {
+                    polygons.forEach(PhysicalPolygon::update);
+                }
+            }
+            );
 
             sphereThread.start();
             polygonThread.start();

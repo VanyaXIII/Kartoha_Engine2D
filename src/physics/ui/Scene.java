@@ -5,10 +5,7 @@ import physics.physics.Material;
 import physics.physics.Space;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 public class Scene {
 
@@ -32,7 +29,7 @@ public class Scene {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == 1)
-                    space.addPolygon(new Vector2(0, 0), 2f, e.getX(), e.getY(), 6, 180, Material.Steel);
+                    space.addPolygon(new Vector2(0, 0), 0f, e.getX(), e.getY(), 6, 180, Material.Steel);
                 else if (e.getButton() == 3)
                     space.addSphere(new Vector2(00, 0), 0, e.getX(), e.getY(), 40, Material.Constantin);
                 else space.deleteDynamicObjects();
@@ -54,17 +51,30 @@ public class Scene {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE )
+                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
                     space.deleteDynamicObjects();
+                if (e.getKeyCode() == KeyEvent.VK_G)
+                    space.setG(300);
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
 
             }
+        }, new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+//                space.addSphere(new Vector2(00, 0), 0, e.getX(), e.getY(), 40, Material.Constantin);
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+            }
         });
                 frame.addMouseListener(controller.getMouseListener());
                 frame.addKeyListener(controller.getKeyListener());
+                frame.addMouseMotionListener(controller.getMouseMotionListener());
         }
 
 

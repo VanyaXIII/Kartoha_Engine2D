@@ -76,8 +76,14 @@ public class Vector2 {
     }
 
     public static float getConstByCrossProduct(Vector2 resultVector, Vector2 mulVector){
+
         if (FloatComparator.equals(resultVector.length(), 0f)) return 0f;
-        if (mulVector.getX() == 0f) return -resultVector.getX()/ mulVector.getY();
+
+        if (mulVector.getX() == 0f){
+            assert mulVector.getY() == 0.0f : "Division by zero";
+            return -resultVector.getX()/ mulVector.getY();
+        }
+
         return resultVector.getY()/ mulVector.getX();
     }
 

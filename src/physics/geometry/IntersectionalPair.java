@@ -38,6 +38,7 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
 
         methodsMap.putByFirstKey(PhysicalPolygon.class, Line.class, IntersectionalPair::polygonToWall);
         methodsMap.putByFirstKey(PhysicalPolygon.class, ASS.class, IntersectionalPair::sphereToPolygon);
+        methodsMap.putByFirstKey(PhysicalPolygon.class, PhysicalPolygon.class, IntersectionalPair::polygonToPolygon);
     }
 
     public boolean isIntersected() {
@@ -140,6 +141,20 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
         }
 
         return counter > 0;
+    }
+
+    private static boolean polygonToPolygon(Intersectional thing1, Intersectional thing2){
+        PhysicalPolygon polygon1 = (PhysicalPolygon) thing1;
+        PhysicalPolygon polygon2 = (PhysicalPolygon) thing2;
+
+        if (!new AABB(polygon1, dynamicCollisionMode).isIntersectedWith(new AABB(polygon2, dynamicCollisionMode))) return false;
+
+        for (Line line1 : polygon1.getLines(dynamicCollisionMode)){
+            for (Line line2 : polygon2.getLines(dynamicCollisionMode))
+                if (line1.doesIntersectBySegmentsWith(line2)) return true;
+        }
+
+        return false;
     }
 
     public SpheresIntersection getSpheresIntersection() {
