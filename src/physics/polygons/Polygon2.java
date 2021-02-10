@@ -10,7 +10,7 @@ import physics.physics.Material;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Polygon implements Drawable {
+public abstract class Polygon2 implements Drawable {
     public float x0, y0;
     public Material material;
     private ArrayList<Point2> points;
@@ -19,7 +19,7 @@ public abstract class Polygon implements Drawable {
         points = new ArrayList<>();
     }
 
-    public Polygon(float x0, float y0, ArrayList<Point2> points) {
+    public Polygon2(float x0, float y0, ArrayList<Point2> points) {
         this.x0 = x0;
         this.y0 = y0;
         this.points = points;

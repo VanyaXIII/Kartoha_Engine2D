@@ -10,7 +10,7 @@ import physics.utils.Tools;
 
 import java.awt.*;
 
-public class ASS extends Sphere2D implements Drawable, Collisional, Intersectional {
+public class PhysicalSphere extends Sphere2 implements Drawable, Collisional, Intersectional {
 
     private float x0, y0;
     private final float r;
@@ -23,7 +23,7 @@ public class ASS extends Sphere2D implements Drawable, Collisional, Intersection
     private final float m;
 
 
-    public ASS(Space space, Vector2 v, float w, float x0, float y0, float r, Material material) {
+    public PhysicalSphere(Space space, Vector2 v, float w, float x0, float y0, float r, Material material) {
         super(x0, y0, r);
         this.x0 = x0;
         this.r = r;

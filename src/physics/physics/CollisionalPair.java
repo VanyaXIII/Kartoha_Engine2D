@@ -3,7 +3,7 @@ package physics.physics;
 
 import physics.geometry.*;
 import physics.limiters.Collisional;
-import physics.sphere.ASS;
+import physics.sphere.PhysicalSphere;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.FloatComparator;
 import physics.utils.Tools;
@@ -26,19 +26,19 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
     static {
         methodsMap = new TripleMap<>();
 
-        methodsMap.addFirstKey(ASS.class);
+        methodsMap.addFirstKey(PhysicalSphere.class);
         methodsMap.addFirstKey(Wall.class);
         methodsMap.addFirstKey(PhysicalPolygon.class);
 
-        methodsMap.putByFirstKey(ASS.class, Wall.class, CollisionalPair::sphereToWall);
-        methodsMap.putByFirstKey(ASS.class, ASS.class, CollisionalPair::sphereToSphere);
-        methodsMap.putByFirstKey(ASS.class, PhysicalPolygon.class, CollisionalPair::sphereToPolygon);
+        methodsMap.putByFirstKey(PhysicalSphere.class, Wall.class, CollisionalPair::sphereToWall);
+        methodsMap.putByFirstKey(PhysicalSphere.class, PhysicalSphere.class, CollisionalPair::sphereToSphere);
+        methodsMap.putByFirstKey(PhysicalSphere.class, PhysicalPolygon.class, CollisionalPair::sphereToPolygon);
 
-        methodsMap.putByFirstKey(Wall.class, ASS.class, CollisionalPair::sphereToWall);
+        methodsMap.putByFirstKey(Wall.class, PhysicalSphere.class, CollisionalPair::sphereToWall);
         methodsMap.putByFirstKey(Wall.class, PhysicalPolygon.class, CollisionalPair::polygonToWall);
 
         methodsMap.putByFirstKey(PhysicalPolygon.class, Wall.class, CollisionalPair::polygonToWall);
-        methodsMap.putByFirstKey(PhysicalPolygon.class, ASS.class, CollisionalPair::sphereToPolygon);
+        methodsMap.putByFirstKey(PhysicalPolygon.class, PhysicalSphere.class, CollisionalPair::sphereToPolygon);
         methodsMap.putByFirstKey(PhysicalPolygon.class, PhysicalPolygon.class, CollisionalPair::polygonToPolygon);
 
 
@@ -50,15 +50,15 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
     }
 
     private static void sphereToWall(Collisional thing1, Collisional thing2) {
-        ASS sphere;
+        PhysicalSphere sphere;
         Wall wall;
 
-        if (thing1 instanceof ASS) {
-            sphere = (ASS) thing1;
+        if (thing1 instanceof PhysicalSphere) {
+            sphere = (PhysicalSphere) thing1;
             wall = (Wall) thing2;
         } else {
             wall = (Wall) thing1;
-            sphere = (ASS) thing2;
+            sphere = (PhysicalSphere) thing2;
         }
 
         final Vector2 axisX = new Vector2(wall);
@@ -102,8 +102,8 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
     }
 
     private static void sphereToSphere(Collisional thing1, Collisional thing2) {
-        ASS sphere1 = (ASS) thing1;
-        ASS sphere2 = (ASS) thing2;
+        PhysicalSphere sphere1 = (PhysicalSphere) thing1;
+        PhysicalSphere sphere2 = (PhysicalSphere) thing2;
 
         final Point2 firstSpherePos = sphere1.getPosition(false);
         final Point2 secondSpherePos = sphere2.getPosition(false);
@@ -184,14 +184,14 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
 
     private static void sphereToPolygon(Collisional thing1, Collisional thing2) {
         PhysicalPolygon polygon;
-        ASS sphere;
+        PhysicalSphere sphere;
 
         if (thing1 instanceof PhysicalPolygon) {
             polygon = (PhysicalPolygon) thing1;
-            sphere = (ASS) thing2;
+            sphere = (PhysicalSphere) thing2;
         } else {
             polygon = (PhysicalPolygon) thing2;
-            sphere = (ASS) thing1;
+            sphere = (PhysicalSphere) thing1;
         }
         Point2 collisionPoint = null;
         Line axisLine = null;
@@ -259,7 +259,7 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
                 u1y = v1y - sign * Tools.sign(v1y + w1y * r) * fr * Math.abs(s) / m1;
                 u2y = v2y + sign * Tools.sign(v2y + w2y * rx) * fr * Math.abs(s) / m2;
                 fw1y = w1y - sign * Tools.sign(v1y + w1y * r) * 2f * fr * Math.abs(s) / (m1 * r);
-                fw2y = w2y + sign * Tools.sign(v2y + w2y * rx) * fr * Math.abs(s) / J2;
+                fw2y = w2y + sign * Tools.sign(v2y + w2y * rx) * fr * Math.abs(s * rx) / J2;
 //                System.out.println(u1y + fw1y * r);
 //                System.out.println(u2y + fw2y * rx);
 
@@ -268,7 +268,7 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
                 u1y = v1y - Tools.sign(v1y + w1y * r) * fr * Math.abs(s) / m1;
                 u2y = v2y - Tools.sign(v2y + w2y * rx) * fr * Math.abs(s) / m2;
                 fw1y = w1y - Tools.sign(v1y + w1y * r) * 2f * fr * Math.abs(s) / (m1 * r);
-                fw2y = w2y - Tools.sign(v2y + w2y * rx) * fr * Math.abs(s) / J2;
+                fw2y = w2y - Tools.sign(v2y + w2y * rx) * fr * Math.abs(s * rx) / J2;
 //                System.out.println(2);
 
             }
@@ -386,8 +386,8 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
 //                System.out.println(v2y + w2y * rx);
                 u1y = v1y - sign * Tools.sign(v1y + w1y * rx1) * fr * Math.abs(s) / m1;
                 u2y = v2y + sign * Tools.sign(v2y + w2y * rx2) * fr * Math.abs(s) / m2;
-                fw1y = w1y - sign * Tools.sign(v1y + w1y * rx1) * fr * Math.abs(s) / J1;
-                fw2y = w2y + sign * Tools.sign(v2y + w2y * rx2) * fr * Math.abs(s) / J2;
+                fw1y = w1y - sign * Tools.sign(v1y + w1y * rx1) * fr * Math.abs(s * rx1) / J1;
+                fw2y = w2y + sign * Tools.sign(v2y + w2y * rx2) * fr * Math.abs(s * rx2) / J2;
 //                System.out.println(u1y + fw1y * r);
 //                System.out.println(u2y + fw2y * rx);
 
@@ -395,8 +395,8 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
 
                 u1y = v1y - Tools.sign(v1y + w1y * rx1) * fr * Math.abs(s) / m1;
                 u2y = v2y - Tools.sign(v2y + w2y * rx2) * fr * Math.abs(s) / m2;
-                fw1y = w1y - Tools.sign(v1y + w1y * rx1) * fr * Math.abs(s) / J1;
-                fw2y = w2y - Tools.sign(v2y + w2y * rx2) * fr * Math.abs(s) / J2;
+                fw1y = w1y - Tools.sign(v1y + w1y * rx1) * fr * Math.abs(s * rx1) / J1;
+                fw2y = w2y - Tools.sign(v2y + w2y * rx2) * fr * Math.abs(s * rx2) / J2;
 //                System.out.println(2);
 
             }

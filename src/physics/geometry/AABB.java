@@ -1,6 +1,6 @@
 package physics.geometry;
 
-import physics.sphere.ASS;
+import physics.sphere.PhysicalSphere;
 import physics.polygons.PhysicalPolygon;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class AABB {
         max = new Point2(line.maxX(), line.maxY());
     }
 
-    public AABB(ASS sphere, boolean mode) {
+    public AABB(PhysicalSphere sphere, boolean mode) {
         Point2 position = sphere.getPosition(mode);
         min = new Point2(position.x - sphere.getR(), position.y - sphere.getR());
         max = new Point2(position.x + sphere.getR(), position.y + sphere.getR());

@@ -4,7 +4,7 @@ import physics.drawing.Drawable;
 import physics.geometry.Point2;
 import physics.geometry.PolygonCreator;
 import physics.geometry.Vector2;
-import physics.sphere.ASS;
+import physics.sphere.PhysicalSphere;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.Tools;
 
@@ -16,7 +16,7 @@ public class Space {
     public ArrayList<Drawable> drawables;
     private float fps = 0;
     private final ArrayList<Wall> walls;
-    private final ArrayList<ASS> spheres;
+    private final ArrayList<PhysicalSphere> spheres;
     private final ArrayList<Block> blocks;
     private final ArrayList<PhysicalPolygon> polygons;
     private final float DT;
@@ -108,13 +108,13 @@ public class Space {
     }
 
     public void addSphere(Vector2 v, float w, float x0, float y0, float r) {
-        ASS thing = new ASS(this, v, w, x0, y0, r, Material.Constantin);
+        PhysicalSphere thing = new PhysicalSphere(this, v, w, x0, y0, r, Material.Constantin);
         spheres.add(thing);
         drawables.add(thing);
     }
 
     public void addSphere(Vector2 v, float w, float x0, float y0, float r, Material material) {
-        ASS sphere = new ASS(this, v, w, x0, y0, r, material);
+        PhysicalSphere sphere = new PhysicalSphere(this, v, w, x0, y0, r, material);
         synchronized (spheres) {
             spheres.add(sphere);
             drawables.add(sphere);
@@ -157,7 +157,7 @@ public class Space {
         G = g;
     }
 
-    public synchronized ArrayList<ASS> getSpheres() {
+    public synchronized ArrayList<PhysicalSphere> getSpheres() {
         return spheres;
     }
 
@@ -171,7 +171,7 @@ public class Space {
 
     public synchronized void deleteDynamicObjects(){
         for (PhysicalPolygon polygon : polygons) drawables.remove(polygon);
-        for (ASS sphere : spheres) drawables.remove(sphere);
+        for (PhysicalSphere sphere : spheres) drawables.remove(sphere);
         polygons.clear();
         spheres.clear();
     }

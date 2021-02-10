@@ -2,7 +2,7 @@ package physics.geometry;
 
 import physics.limiters.Intersectional;
 import physics.physics.Intersecter;
-import physics.sphere.ASS;
+import physics.sphere.PhysicalSphere;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.TripleMap;
 
@@ -25,19 +25,19 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     static {
         methodsMap = new TripleMap<>();
 
-        methodsMap.addFirstKey(ASS.class);
+        methodsMap.addFirstKey(PhysicalSphere.class);
         methodsMap.addFirstKey(Line.class);
         methodsMap.addFirstKey(PhysicalPolygon.class);
 
-        methodsMap.putByFirstKey(ASS.class, Line.class, IntersectionalPair::sphereToLine);
-        methodsMap.putByFirstKey(ASS.class, ASS.class, IntersectionalPair::sphereToSphere);
-        methodsMap.putByFirstKey(ASS.class, PhysicalPolygon.class, IntersectionalPair::sphereToPolygon);
+        methodsMap.putByFirstKey(PhysicalSphere.class, Line.class, IntersectionalPair::sphereToLine);
+        methodsMap.putByFirstKey(PhysicalSphere.class, PhysicalSphere.class, IntersectionalPair::sphereToSphere);
+        methodsMap.putByFirstKey(PhysicalSphere.class, PhysicalPolygon.class, IntersectionalPair::sphereToPolygon);
 
-        methodsMap.putByFirstKey(Line.class, ASS.class, IntersectionalPair::sphereToLine);
+        methodsMap.putByFirstKey(Line.class, PhysicalSphere.class, IntersectionalPair::sphereToLine);
         methodsMap.putByFirstKey(Line.class, PhysicalPolygon.class, IntersectionalPair::polygonToWall);
 
         methodsMap.putByFirstKey(PhysicalPolygon.class, Line.class, IntersectionalPair::polygonToWall);
-        methodsMap.putByFirstKey(PhysicalPolygon.class, ASS.class, IntersectionalPair::sphereToPolygon);
+        methodsMap.putByFirstKey(PhysicalPolygon.class, PhysicalSphere.class, IntersectionalPair::sphereToPolygon);
         methodsMap.putByFirstKey(PhysicalPolygon.class, PhysicalPolygon.class, IntersectionalPair::polygonToPolygon);
     }
 
@@ -47,15 +47,15 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
 
     private static boolean sphereToLine(Intersectional thing1, Intersectional thing2) {
 
-        ASS sphere;
+        PhysicalSphere sphere;
         Line line;
 
-        if (thing1 instanceof ASS){
-            sphere = (ASS) thing1;
+        if (thing1 instanceof PhysicalSphere){
+            sphere = (PhysicalSphere) thing1;
             line = (Line) thing2;
         }
         else {
-            sphere = (ASS) thing2;
+            sphere = (PhysicalSphere) thing2;
             line = (Line) thing1;
         }
 
@@ -76,8 +76,8 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     private static boolean sphereToSphere(Intersectional thing1, Intersectional thing2) {
-        ASS sphere1 = (ASS) thing1;
-        ASS sphere2 = (ASS) thing2;
+        PhysicalSphere sphere1 = (PhysicalSphere) thing1;
+        PhysicalSphere sphere2 = (PhysicalSphere) thing2;
 
         if (!new AABB(sphere1, dynamicCollisionMode).isIntersectedWith(new AABB(sphere2, dynamicCollisionMode)))
             return false;
@@ -95,15 +95,15 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
 
     private static boolean sphereToPolygon(Intersectional thing1, Intersectional thing2) {
         PhysicalPolygon polygon;
-        ASS sphere;
+        PhysicalSphere sphere;
 
         if (thing1 instanceof PhysicalPolygon){
             polygon = (PhysicalPolygon) thing1;
-            sphere = (ASS) thing2;
+            sphere = (PhysicalSphere) thing2;
         }
         else{
             polygon = (PhysicalPolygon) thing2;
-            sphere = (ASS) thing1;
+            sphere = (PhysicalSphere) thing1;
         }
 
         if (!new AABB(sphere, dynamicCollisionMode).isIntersectedWith(new AABB(polygon, dynamicCollisionMode)))
@@ -158,14 +158,14 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     public SpheresIntersection getSpheresIntersection() {
-        if (!(firstThing instanceof ASS && secondThing instanceof ASS))
+        if (!(firstThing instanceof PhysicalSphere && secondThing instanceof PhysicalSphere))
             return new SpheresIntersection(false);
 
-        if (!new AABB((ASS) firstThing, staticCollisionMode).isIntersectedWith(new AABB((ASS) secondThing, staticCollisionMode)))
+        if (!new AABB((PhysicalSphere) firstThing, staticCollisionMode).isIntersectedWith(new AABB((PhysicalSphere) secondThing, staticCollisionMode)))
             return new SpheresIntersection(false);
 
-        ASS sphere1 = (ASS) firstThing;
-        ASS sphere2 = (ASS) secondThing;
+        PhysicalSphere sphere1 = (PhysicalSphere) firstThing;
+        PhysicalSphere sphere2 = (PhysicalSphere) secondThing;
         Point2 sphere1Pos = sphere1.getPosition(staticCollisionMode);
         Point2 sphere2Pos = sphere2.getPosition(staticCollisionMode);
         Vector2 distanceVector = new Vector2(sphere1Pos.x - sphere2Pos.x,
@@ -187,13 +187,13 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     public SphereToLineIntersection getSphereToLineIntersection() {
-        if (!(firstThing instanceof ASS && secondThing instanceof Line))
+        if (!(firstThing instanceof PhysicalSphere && secondThing instanceof Line))
             return new SphereToLineIntersection(false);
 
-        if (!new AABB((ASS) firstThing, staticCollisionMode).isIntersectedWith(new AABB((Line) secondThing)))
+        if (!new AABB((PhysicalSphere) firstThing, staticCollisionMode).isIntersectedWith(new AABB((Line) secondThing)))
             return new SphereToLineIntersection(false);
 
-        ASS sphere = (ASS) firstThing;
+        PhysicalSphere sphere = (PhysicalSphere) firstThing;
         Line line = (Line) secondThing;
         Point2 spherePos = sphere.getPosition(staticCollisionMode);
         float d = line.calcDistance(spherePos.x, spherePos.y);

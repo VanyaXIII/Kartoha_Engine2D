@@ -1,7 +1,7 @@
 package physics.physics;
 
 import physics.geometry.*;
-import physics.sphere.ASS;
+import physics.sphere.PhysicalSphere;
 import physics.polygons.PhysicalPolygon;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.ConcurrentModificationException;
 
 public class PhysicsHandler {
 
-    private final ArrayList<ASS> spheres;
+    private final ArrayList<PhysicalSphere> spheres;
     private final ArrayList<PhysicalPolygon> polygons;
     private final ArrayList<Wall> walls;
     private final int depth;
@@ -118,7 +118,7 @@ public class PhysicsHandler {
 
             sphereThread = new Thread(() -> {
                     synchronized (spheres) {
-                        spheres.forEach(ASS::update);
+                        spheres.forEach(PhysicalSphere::update);
                     }
             });
 

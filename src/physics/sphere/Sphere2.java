@@ -4,12 +4,12 @@ import physics.drawing.Drawable;
 
 import java.awt.*;
 
-public abstract class Sphere2D implements Drawable {
+public abstract class Sphere2 implements Drawable {
 
     public float x0, y0;
     private float r;
 
-    Sphere2D(float x0, float y0, float r) {
+    Sphere2(float x0, float y0, float r) {
         this.x0 = x0;
         this.y0 = y0;
         this.r = r;

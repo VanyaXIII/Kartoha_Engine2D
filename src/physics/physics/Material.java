@@ -17,7 +17,7 @@ public class Material {
         this.fillColor = new Color(outlineColor.getRed(), outlineColor.getGreen(), outlineColor.getBlue(), 100 );
     }
 
-    public static final Material Steel = new Material(7900, new Color(175, 175, 175),0.5f, 0.5f);
+    public static final Material Steel = new Material(7900, new Color(175, 175, 175),0.5f, 0.1f);
     public static final Material Wood = new Material(500, new Color(124, 67, 11),1f, 0f);
     public static final Material Stone = new Material(2500, new Color(90, 90, 90),1f, 0.5f);
     public static final Material Gold = new Material(19300, new Color(238, 198, 0),1f, 0.0f);

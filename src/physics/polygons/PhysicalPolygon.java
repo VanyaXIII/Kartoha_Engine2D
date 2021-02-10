@@ -12,7 +12,7 @@ import physics.utils.Tools;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class PhysicalPolygon extends Polygon implements Drawable, Collisional, Intersectional {
+public class PhysicalPolygon extends Polygon2 implements Drawable, Collisional, Intersectional {
 
     private Vector2 v;
     private final Space space;
