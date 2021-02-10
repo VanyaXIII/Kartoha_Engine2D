@@ -351,13 +351,12 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             final float w1x = axisY.createByFloat(radVector1.countProjectionOn(axisY)).getCrossProduct(polygon1.getW()).countProjectionOn(axisX) / ry1;
             final float w2x = axisY.createByFloat(radVector2.countProjectionOn(axisY)).getCrossProduct(polygon2.getW()).countProjectionOn(axisX) / ry2;
 
-            final float fw1x = (-k * (v1x + w1x * ry1 + v2x + w2x * ry2) + v2x - v1x + (ratio + 1) * J1 * w1x / (m1 * ry1) + w2x * ry2 + J1 * ry2 * ry2 * w1x / (J2 * ry1)) /
+            final float fw1x = (-k * (v1x + w1x * ry1 - v2x + w2x * ry2) + v2x - v1x + (ratio + 1) * J1 * w1x / (m1 * ry1) + w2x * ry2 + J1 * ry2 * ry2 * w1x / (J2 * ry1)) /
                     ((ratio + 1) * J1 / (m1 * ry1) + ry1 + J1 * ry2 * ry2 / (J2 * ry1));
 
             final float s = J1 * (fw1x - w1x) / ry1;
             final float u1x = v1x + s / m1;
-            System.out.println(v1x);
-            System.out.println(u1x);
+             
             final float u2x = v2x - s / m2;
             final float fw2x = s * ry2 / J2 + w2x;
 
@@ -411,6 +410,8 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
                 u1y = v1y + J1 * fw1y / (m1 * rx1) - J1 * w1y / (m1 * rx1);
                 u2y = v2y + ratio * (v1y - u1y);
                 fw2y = w2y + (-fw1y + w1y) * J1 * rx2 / (J2 * rx1);
+                System.out.println(u1y + fw1y * rx1);
+                System.out.println(u2y + fw2y * rx2);
 
 
             }
