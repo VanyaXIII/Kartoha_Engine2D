@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
-public class Frame extends JFrame {
+public final class Frame extends JFrame {
 
     private final Scene scene;
 

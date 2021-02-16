@@ -5,8 +5,7 @@ import physics.physics.Space;
 
 import java.awt.*;
 
-class Main {
-
+final class Main {
     public static void main(String[] args) {
         Scene scene = new Scene(new Space(0.0025f, 300f), Color.BLACK, 1600, 1000);
 //        scene.getSpace().addWall(1400, 600, 600, 900);

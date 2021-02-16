@@ -1,6 +1,6 @@
 package physics.utils;
 
-public class FloatComparator {
+public final class FloatComparator {
 
     private final static float epsilon = 0.001f;
 

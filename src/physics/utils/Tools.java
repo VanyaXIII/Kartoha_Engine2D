@@ -3,7 +3,7 @@ package physics.utils;
 import physics.geometry.Point2;
 import physics.geometry.Vector2;
 
-public class Tools {
+public final class Tools {
 
     public static int transformFloat(float d) {
         return (int) Math.round(d);

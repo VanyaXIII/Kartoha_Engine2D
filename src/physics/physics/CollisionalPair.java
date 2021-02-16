@@ -11,7 +11,7 @@ import physics.utils.TripleMap;
 
 import java.util.ArrayList;
 
-public class CollisionalPair<FirstThingType extends Collisional, SecondThingType extends Collisional> {
+public final class CollisionalPair<FirstThingType extends Collisional, SecondThingType extends Collisional> {
 
     private final FirstThingType firstThing;
     private final SecondThingType secondThing;
@@ -382,14 +382,10 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
             if (Math.signum(v1y + w1y * rx1) == Math.signum(v2y + w2y * rx2) && !FloatComparator.equals(v2y + w2y * rx2, v1y + w1y * rx1)) {
 
                 float sign = Math.signum(Math.abs(v1y + w1y * rx1) - Math.abs(v2y + w2y * rx2));
-//                System.out.println(v1y + w1y * r);
-//                System.out.println(v2y + w2y * rx);
                 u1y = v1y - sign * Tools.sign(v1y + w1y * rx1) * fr * Math.abs(s) / m1;
                 u2y = v2y + sign * Tools.sign(v2y + w2y * rx2) * fr * Math.abs(s) / m2;
                 fw1y = w1y - sign * Tools.sign(v1y + w1y * rx1) * fr * Math.abs(s * rx1) / J1;
                 fw2y = w2y + sign * Tools.sign(v2y + w2y * rx2) * fr * Math.abs(s * rx2) / J2;
-//                System.out.println(u1y + fw1y * r);
-//                System.out.println(u2y + fw2y * rx);
 
             } else if (!FloatComparator.equals(v2y + w2y * rx2, v1y + w1y * rx1)) {
 
@@ -397,7 +393,6 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
                 u2y = v2y - Tools.sign(v2y + w2y * rx2) * fr * Math.abs(s) / m2;
                 fw1y = w1y - Tools.sign(v1y + w1y * rx1) * fr * Math.abs(s * rx1) / J1;
                 fw2y = w2y - Tools.sign(v2y + w2y * rx2) * fr * Math.abs(s * rx2) / J2;
-//                System.out.println(2);
 
             }
 
@@ -410,8 +405,6 @@ public class CollisionalPair<FirstThingType extends Collisional, SecondThingType
                 u1y = v1y + J1 * fw1y / (m1 * rx1) - J1 * w1y / (m1 * rx1);
                 u2y = v2y + ratio * (v1y - u1y);
                 fw2y = w2y + (-fw1y + w1y) * J1 * rx2 / (J2 * rx1);
-                System.out.println(u1y + fw1y * rx1);
-                System.out.println(u2y + fw2y * rx2);
 
 
             }

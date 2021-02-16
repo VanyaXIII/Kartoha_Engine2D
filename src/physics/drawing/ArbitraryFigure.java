@@ -14,7 +14,7 @@ public class ArbitraryFigure {
         this.points = points;
     }
 
-    public Polygon getPolygon(){
+    public final Polygon getPolygon(){
         int[] xs = new int[points.size()];
         int[] ys = new int[points.size()];
         for (int i = 0; i < points.size(); i++){

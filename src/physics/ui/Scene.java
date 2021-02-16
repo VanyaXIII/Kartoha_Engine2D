@@ -29,9 +29,9 @@ public class Scene {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == 1)
-                    space.addPolygon(new Vector2(0, 0), 0f, e.getX(), e.getY(), 6, 180, Material.Steel);
+                    space.addPolygon(new Vector2(0, 0), 0f, e.getX(), e.getY(), 10, 180, Material.Steel);
                 else if (e.getButton() == 3)
-                    space.addSphere(new Vector2(00, 0), 0, e.getX(), e.getY(), 40, Material.Constantin);
+                    space.addPolygon(new Vector2(150, 0), 0f, e.getX(), e.getY(), 10, 180, Material.Steel);
                 else space.deleteDynamicObjects();
             }
 
@@ -46,7 +46,6 @@ public class Scene {
         }, new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
 
             @Override
