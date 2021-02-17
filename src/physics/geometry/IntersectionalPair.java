@@ -1,7 +1,6 @@
 package physics.geometry;
 
 import physics.limiters.Intersectional;
-import physics.physics.Intersecter;
 import physics.sphere.PhysicalSphere;
 import physics.polygons.PhysicalPolygon;
 import physics.utils.TripleMap;
@@ -41,8 +40,8 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
         methodsMap.putByFirstKey(PhysicalPolygon.class, PhysicalPolygon.class, IntersectionalPair::polygonToPolygon);
     }
 
-    public boolean isIntersected() {
-        return methodsMap.getElement(firstThing.getClass(), secondThing.getClass()).isIntersected(firstThing, secondThing);
+    public boolean areIntersected() {
+        return methodsMap.getElement(firstThing.getClass(), secondThing.getClass()).areIntersected(firstThing, secondThing);
     }
 
     private static boolean sphereToLine(Intersectional thing1, Intersectional thing2) {

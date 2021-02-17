@@ -30,7 +30,7 @@ public class PhysicsHandler {
                     for (int j = i + 1; j < spheres.size(); j++) {
                         synchronized (spheres.get(i)) {
                             synchronized (spheres.get(j)) {
-                                if (new IntersectionalPair<>(spheres.get(i), spheres.get(j)).isIntersected()) {
+                                if (new IntersectionalPair<>(spheres.get(i), spheres.get(j)).areIntersected()) {
                                     new CollisionalPair<>(spheres.get(i), spheres.get(j)).collide();
                                 }
 
@@ -47,7 +47,7 @@ public class PhysicsHandler {
                         walls.forEach(wall -> {
                             synchronized (sphere) {
                                 synchronized (wall) {
-                                    if (new IntersectionalPair<>(sphere, wall.toLine()).isIntersected()) {
+                                    if (new IntersectionalPair<>(sphere, wall.toLine()).areIntersected()) {
                                         new CollisionalPair<>(sphere, wall).collide();
                                     }
                                     SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, wall.toLine()).getSphereToLineIntersection();
@@ -64,7 +64,7 @@ public class PhysicsHandler {
 
                 for (int i = 0; i < polygons.size(); i++) {
                     for (int j = 0; j < polygons.size(); j++) {
-                        if (i != j && new IntersectionalPair<>(polygons.get(i), polygons.get(j)).isIntersected()){
+                        if (i != j && new IntersectionalPair<>(polygons.get(i), polygons.get(j)).areIntersected()){
                             new CollisionalPair<>(polygons.get(i), polygons.get(j)).collide();
                         }
 
@@ -83,7 +83,7 @@ public class PhysicsHandler {
                     walls.forEach(wall -> {
                         synchronized (polygon) {
                             synchronized (wall) {
-                                if (new IntersectionalPair<>(polygon, wall.toLine()).isIntersected()) {
+                                if (new IntersectionalPair<>(polygon, wall.toLine()).areIntersected()) {
                                     new CollisionalPair<>(polygon, wall).collide();
                                 }
                                 PolygonToLineIntersection polygonAndWallPair =
@@ -98,7 +98,7 @@ public class PhysicsHandler {
                     spheres.forEach(sphere ->  {
                         synchronized (polygon){
                             synchronized (sphere){
-                                if (new IntersectionalPair<>(polygon, sphere).isIntersected()){
+                                if (new IntersectionalPair<>(polygon, sphere).areIntersected()){
                                     new CollisionalPair<>(polygon, sphere).collide();
                                 }
                                 for (Line line : polygon.getLines(IntersectionalPair.getStaticCollisionMode())){
