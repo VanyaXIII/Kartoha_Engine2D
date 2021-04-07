@@ -4,13 +4,13 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class Controller {
+public class SceneController {
 
     private final MouseListener mouseListener;
     private final MouseMotionListener mouseMotionListener;
     private final KeyListener keyListener;
 
-    public Controller(MouseListener mouseListener, KeyListener keyListener, MouseMotionListener mouseMotionListener) {
+    public SceneController(MouseListener mouseListener, KeyListener keyListener, MouseMotionListener mouseMotionListener) {
         this.mouseListener = mouseListener;
         this.keyListener = keyListener;
         this.mouseMotionListener = mouseMotionListener;

@@ -6,11 +6,12 @@ import physics.limiters.Collisional;
 import physics.limiters.Intersectional;
 import physics.physics.Material;
 import physics.physics.Space;
+import physics.ui.Controllable;
 import physics.utils.Tools;
 
 import java.awt.*;
 
-public class PhysicalSphere extends Sphere2 implements Drawable, Collisional, Intersectional {
+public class PhysicalSphere extends Sphere2 implements Drawable, Collisional, Intersectional, Controllable {
 
     private float x0, y0;
     private final float r;
@@ -110,6 +111,23 @@ public class PhysicalSphere extends Sphere2 implements Drawable, Collisional, In
 
     public void setW(float w) {
         this.w = w;
+    }
+
+    @Override
+    public void rotate(float a){
+    }
+
+    @Override
+    public void move(Vector2 movement) {
+        x0 += movement.getX();
+        y0 += movement.getY();
+
+    }
+
+    @Override
+    public void setCords(Point2 newCords) {
+        x0 = newCords.x;
+        y0 = newCords.y;
     }
 
     public void setV(Vector2 v) {

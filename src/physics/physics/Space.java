@@ -175,4 +175,8 @@ public class Space {
         polygons.clear();
         spheres.clear();
     }
+
+    public ArrayList<Drawable> getDrawables() {
+        return drawables;
+    }
 }

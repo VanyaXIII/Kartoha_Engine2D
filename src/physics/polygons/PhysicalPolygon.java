@@ -7,12 +7,13 @@ import physics.limiters.Collisional;
 import physics.limiters.Intersectional;
 import physics.physics.Material;
 import physics.physics.Space;
+import physics.ui.Controllable;
 import physics.utils.Tools;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class PhysicalPolygon extends Polygon2 implements Drawable, Collisional, Intersectional {
+public class PhysicalPolygon extends Polygon2 implements Drawable, Collisional, Intersectional, Controllable {
 
     private Vector2 v;
     private final Space space;
@@ -138,6 +139,30 @@ public class PhysicalPolygon extends Polygon2 implements Drawable, Collisional, 
 
     public void setW(float w) {
         this.w = w;
+    }
+
+    @Override
+    public void rotate(float a) {
+        Point2 centre = new Point2(x0, y0);
+        for (Point2 point : getPoints()){
+            point.rotate(centre, a);
+        }
+    }
+
+    @Override
+    public void move(Vector2 movement) {
+        for (Point2 point : getPoints()){
+            point.x += movement.getX();
+            point.y += movement.getY();
+        }
+        x0 += movement.getX();
+        y0 += movement.getY();
+    }
+
+    @Override
+    public void setCords(Point2 newCords) {
+        Vector2 movement = new Vector2(getPositionOfCentre(false), newCords);
+        move(movement);
     }
 
     public Material getMaterial() {

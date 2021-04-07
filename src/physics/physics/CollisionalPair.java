@@ -227,7 +227,10 @@ public final class CollisionalPair<FirstThingType extends Collisional, SecondThi
             sphereRadVector.setLength(sphere.getR());
 
             final float rx = Math.abs(polygonRadVector.countProjectionOn(axisX));
-            final float ry = Math.abs(polygonRadVector.countProjectionOn(axisY));
+            float ry = Math.abs(polygonRadVector.countProjectionOn(axisY));
+            if (ry == 0){
+                ry += 0.01;
+            }
             final float r = sphere.getR();
 
             final float w2x = axisY.createByFloat(polygonRadVector.countProjectionOn(axisY)).getCrossProduct(polygon.getW()).countProjectionOn(axisX) / ry;
@@ -297,6 +300,11 @@ public final class CollisionalPair<FirstThingType extends Collisional, SecondThi
             sphere.setW(Vector2.getConstByCrossProduct(axisY.createByFloat(fw1y * r), sphereRadVector));
             sphere.setV(new Vector2(fv1x, fv1y));
             polygon.setV(new Vector2(fv2x, fv2y));
+            if (!FloatComparator.equals(sphere.getV().length(), (float) Math.sqrt(v1x*v1x + v1y * v1y))){
+                polygon.setV(new Vector2(0,0));
+                polygon.setW(0);
+                polygon.setCords(new Point2(-1000,-1000));
+            }
 
         }
     }
