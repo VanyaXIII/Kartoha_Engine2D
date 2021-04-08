@@ -1,4 +1,4 @@
-package physics.geometry;
+package KartohaEngine2D.geometry;
 
 public class SpheresIntersection {
 
