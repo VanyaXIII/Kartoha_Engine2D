@@ -67,7 +67,9 @@ final class Main {
                     a.setCords(new Point2(e.getX(), e.getY()));
                 }
                 if (e.getButton() == 2) {
-                    a.setV(new Vector2(400, 0));
+                    Vector2 v = new Vector2(a.getPositionOfCentre(false), new Point2(e.getX(), e.getY()));
+                    v.setLength(300);
+                    a.setV(v);
                 }
             }
 
@@ -80,12 +82,17 @@ final class Main {
             public void mouseExited(MouseEvent e) {
 
             }
-        }, null, new MouseWheelListener() {
+        }, new MouseMotionListener() {
             @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                a.rotate((float) (Math.PI  * e.getPreciseWheelRotation() / 25));
+            public void mouseDragged(MouseEvent e) {
+                a.setCords(new Point2(e.getX(), e.getY()));
             }
-        }));
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+            }
+        }, e -> a.rotate((float) (Math.PI * e.getPreciseWheelRotation() / 25))));
         scene.getSpace().getPolygons().add(a);
         scene.getSpace().getDrawables().add(a);
         scene.getSpace().addBlock(-1000, 920, 4000, 200, Material.Wood);

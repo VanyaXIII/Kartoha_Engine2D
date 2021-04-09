@@ -10,6 +10,7 @@ import KartohaEngine2D.utils.Tools;
 import KartohaEngine2D.utils.TripleMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public final class CollisionalPair<FirstThingType extends Collisional, SecondThingType extends Collisional> {
 
@@ -193,14 +194,17 @@ public final class CollisionalPair<FirstThingType extends Collisional, SecondThi
         }
         Point2 collisionPoint = null;
         Line axisLine = null;
+        HashMap<Line, Point2> collisionParams = new HashMap<>();
         for (Line line : polygon.getLines(true)) {
             SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, new Wall(line, Material.Constantin)).getSphereToLineIntersection();
             if (new IntersectionalPair<>(sphere, new Wall(line, Material.Constantin)).getSphereToLineIntersection().isIntersected) {
-                collisionPoint = sphereAndLinePair.getCollisionPoint();
-                axisLine = line;
+                collisionParams.put(line, sphereAndLinePair.getCollisionPoint());
             }
         }
-        if (collisionPoint != null) {
+        for (var param : collisionParams.entrySet()) {
+
+            axisLine = param.getKey();
+            collisionPoint = param.getValue();
 
             final float k = Tools.countAverage(polygon.getMaterial().coefOfReduction, sphere.getMaterial().coefOfReduction);
             final float fr = Tools.countAverage(polygon.getMaterial().coefOfFriction, sphere.getMaterial().coefOfFriction);
