@@ -192,8 +192,8 @@ public final class CollisionalPair<FirstThingType extends Collisional, SecondThi
             polygon = (PhysicalPolygon) thing2;
             sphere = (PhysicalSphere) thing1;
         }
-        Point2 collisionPoint = null;
-        Line axisLine = null;
+        Point2 collisionPoint;
+        Line axisLine;
         HashMap<Line, Point2> collisionParams = new HashMap<>();
         for (Line line : polygon.getLines(true)) {
             SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, new Wall(line, Material.Constantin)).getSphereToLineIntersection();
@@ -241,7 +241,7 @@ public final class CollisionalPair<FirstThingType extends Collisional, SecondThi
             final float fw2x = ((-s * ry) / J2) + w2x;
 
 
-            final float w1y = sphereRadVector.getCrossProduct(sphere.getW()).countProjectionOn(axisX) / sphere.getR();
+            final float w1y = sphereRadVector.getCrossProduct(sphere.getW()).countProjectionOn(axisY) / sphere.getR();
             final float w2y = axisX.createByFloat(polygonRadVector.countProjectionOn(axisX)).getCrossProduct(polygon.getW()).countProjectionOn(axisY) / rx;
 
             polygon.setW(polygon.getW() +
@@ -302,11 +302,8 @@ public final class CollisionalPair<FirstThingType extends Collisional, SecondThi
             sphere.setV(new Vector2(fv1x, fv1y));
             polygon.setV(new Vector2(fv2x, fv2y));
             if (!FloatComparator.equals(sphere.getV().length(), (float) Math.sqrt(v1x*v1x + v1y * v1y))){
-                polygon.setV(new Vector2(0,0));
-                polygon.setW(0);
                 polygon.setCords(new Point2(-1000,-1000));
             }
-
         }
     }
 

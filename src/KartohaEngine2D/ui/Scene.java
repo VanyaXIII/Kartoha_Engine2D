@@ -1,8 +1,11 @@
 package KartohaEngine2D.ui;
 
+import KartohaEngine2D.geometry.Vector2;
 import KartohaEngine2D.physics.Space;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class Scene {
 

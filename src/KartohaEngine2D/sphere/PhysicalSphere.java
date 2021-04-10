@@ -7,9 +7,14 @@ import KartohaEngine2D.limiters.Intersectional;
 import KartohaEngine2D.physics.Material;
 import KartohaEngine2D.physics.Space;
 import KartohaEngine2D.ui.Controllable;
+import KartohaEngine2D.utils.ImageReader;
 import KartohaEngine2D.utils.Tools;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class PhysicalSphere extends Sphere2 implements Drawable, Collisional, Intersectional, Controllable {
 
@@ -22,6 +27,13 @@ public class PhysicalSphere extends Sphere2 implements Drawable, Collisional, In
     private final Space space;
     private final Material material;
     private final float m;
+    private BufferedImage sprite;
+    private static float rotateAngle = 0;
+
+
+    {
+        sprite = null;
+    }
 
 
     public PhysicalSphere(Space space, Vector2 v, float w, float x0, float y0, float r, Material material) {
@@ -53,6 +65,10 @@ public class PhysicalSphere extends Sphere2 implements Drawable, Collisional, In
 
     private synchronized void rotate() {
         orientationVector.rotate(w * space.getDT());
+        rotateAngle += space.getDT() * w;
+        if (rotateAngle > Math.PI * 2){
+            rotateAngle -= Math.PI * 2;
+        }
     }
 
 
@@ -79,6 +95,13 @@ public class PhysicalSphere extends Sphere2 implements Drawable, Collisional, In
         return new Point2(x0 + m * v.getX() * space.getDT(), y0 + m * ((v.getY() + v.getY() + space.getG() * space.getDT()) * space.getDT() / 2.0f));
     }
 
+    public void setSprite(BufferedImage sprite) {
+        this.sprite = sprite;
+    }
+
+    public void setSprite(String path) throws IOException {
+        sprite = ImageReader.read(path);
+    }
 
     @Override
     public void draw(Graphics g) {
@@ -99,6 +122,20 @@ public class PhysicalSphere extends Sphere2 implements Drawable, Collisional, In
 
         g.setColor(material.fillColor);
         g.fillOval(cords[0], cords[1], cords[2], cords[2]);
+        if (sprite != null){
+            Graphics2D g2d = (Graphics2D) g;
+            AABB aabb = new AABB(this, false);
+            AffineTransform backup = g2d.getTransform();
+            AffineTransform tx = AffineTransform.getRotateInstance(rotateAngle, x0, y0);
+            g2d.setTransform(tx);
+
+            g2d.drawImage(sprite, Tools.transformFloat(aabb.getMin().x) -1, Tools.transformFloat(aabb.getMin().y) - 1,
+                    Tools.transformFloat(aabb.getMax().x - aabb.getMin().x) + 2,
+                    Tools.transformFloat(aabb.getMax().y - aabb.getMin().y) + 2, null);
+
+            g2d.setTransform(backup);
+
+        }
     }
 
     public Vector2 getV() {
