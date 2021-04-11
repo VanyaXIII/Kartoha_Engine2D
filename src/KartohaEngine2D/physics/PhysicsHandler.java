@@ -80,20 +80,20 @@ public class PhysicsHandler {
 
                 polygons.forEach(polygon -> {
 
-                    walls.forEach(wall -> {
-                        synchronized (polygon) {
-                            synchronized (wall) {
-                                if (new IntersectionalPair<>(polygon, wall.toLine()).areIntersected()) {
-                                    new CollisionalPair<>(polygon, wall).collide();
-                                }
-                                PolygonToLineIntersection polygonAndWallPair =
-                                        new IntersectionalPair<>(polygon, wall.toLine()).getPolygonToLineIntersection();
-                                if (polygonAndWallPair.isIntersected) {
-                                    polygon.pullFromLine(polygonAndWallPair);
-                                }
-                            }
-                        }
-                    });
+//                    walls.forEach(wall -> {
+//                        synchronized (polygon) {
+//                            synchronized (wall) {
+//                                if (new IntersectionalPair<>(polygon, wall.toLine()).areIntersected()) {
+//                                    new CollisionalPair<>(polygon, wall).collide();
+//                                }
+//                                PolygonToLineIntersection polygonAndWallPair =
+//                                        new IntersectionalPair<>(polygon, wall.toLine()).getPolygonToLineIntersection();
+//                                if (polygonAndWallPair.isIntersected) {
+//                                    polygon.pullFromLine(polygonAndWallPair);
+//                                }
+//                            }
+//                        }
+//                    });
 
                     spheres.forEach(sphere -> {
                         synchronized (polygon) {

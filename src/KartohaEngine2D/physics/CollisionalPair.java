@@ -301,10 +301,9 @@ public final class CollisionalPair<FirstThingType extends Collisional, SecondThi
             sphere.setW(Vector2.getConstByCrossProduct(axisY.createByFloat(fw1y * r), sphereRadVector));
             sphere.setV(new Vector2(fv1x, fv1y));
             polygon.setV(new Vector2(fv2x, fv2y));
-            if (!FloatComparator.equals(sphere.getV().length(), (float) Math.sqrt(v1x*v1x + v1y * v1y))){
-                polygon.setCords(new Point2(-1000,-1000));
-            }
         }
+        polygon.setW(0);
+        polygon.setV(new Vector2(0,0));
     }
 
     private static void polygonToPolygon(Collisional thing1, Collisional thing2) {

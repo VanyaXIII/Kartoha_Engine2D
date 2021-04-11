@@ -6,6 +6,7 @@ import KartohaEngine2D.geometry.PolygonCreator;
 import KartohaEngine2D.geometry.Vector2;
 import KartohaEngine2D.sphere.PhysicalSphere;
 import KartohaEngine2D.polygons.PhysicalPolygon;
+import KartohaEngine2D.utils.Executable;
 import KartohaEngine2D.utils.Tools;
 
 import java.util.ArrayList;
@@ -13,7 +14,8 @@ import java.util.Collections;
 
 public class Space {
 
-    public ArrayList<Drawable> drawables;
+    private final ArrayList<Drawable> drawables;
+    private final ArrayList<Executable> executables;
     private float fps = 0;
     private final ArrayList<Wall> walls;
     private final ArrayList<PhysicalSphere> spheres;
@@ -25,6 +27,7 @@ public class Space {
     private final PhysicsHandler physicsHandler;
 
     {
+        executables = new ArrayList<>();
         walls = new ArrayList<>();
         spheres = new ArrayList<>();
         polygons = new ArrayList<>();
@@ -45,6 +48,9 @@ public class Space {
 
         try {
             physicsHandler.update();
+            for (Executable executable : executables){
+                executable.execute();
+            }
         } catch (Exception ignored) {
         }
 
@@ -165,7 +171,7 @@ public class Space {
         return polygons;
     }
 
-    public ArrayList<Wall> getWalls() {
+    public synchronized ArrayList<Wall> getWalls() {
         return walls;
     }
 
@@ -175,6 +181,11 @@ public class Space {
         polygons.clear();
         spheres.clear();
     }
+
+    public ArrayList<Executable> getExecutables() {
+        return executables;
+    }
+
 
     public ArrayList<Drawable> getDrawables() {
         return drawables;

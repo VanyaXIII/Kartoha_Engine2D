@@ -120,7 +120,6 @@ public class Line implements Drawable, Intersectional {
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.BLUE);
         g.drawLine(Tools.transformFloat(x1),
                 Tools.transformFloat(y1),
                 Tools.transformFloat(x2),

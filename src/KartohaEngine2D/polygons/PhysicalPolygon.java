@@ -8,9 +8,13 @@ import KartohaEngine2D.limiters.Intersectional;
 import KartohaEngine2D.physics.Material;
 import KartohaEngine2D.physics.Space;
 import KartohaEngine2D.ui.Controllable;
+import KartohaEngine2D.utils.ImageReader;
 import KartohaEngine2D.utils.Tools;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PhysicalPolygon extends Polygon2 implements Drawable, Collisional, Intersectional, Controllable {
@@ -21,6 +25,7 @@ public class PhysicalPolygon extends Polygon2 implements Drawable, Collisional, 
     private final float m;
     private final float J;
     private final Material material;
+    private float rotateAngle;
 
 
 
@@ -41,6 +46,9 @@ public class PhysicalPolygon extends Polygon2 implements Drawable, Collisional, 
         updatePoints();
         x0 += v.getX() * space.getDT();
         y0 += ((v.getY() + v.getY() - space.getG()*space.getDT())/2.0f) * space.getDT();
+        if (rotateAngle > Math.PI * 2){
+            rotateAngle -= Math.PI * 2;
+        }
     }
 
     private void updateSpeed() {
@@ -59,6 +67,7 @@ public class PhysicalPolygon extends Polygon2 implements Drawable, Collisional, 
         for (Point2 point : getPoints()){
             point.rotate(centre, w * space.getDT());
         }
+        rotateAngle += space.getDT() * w;
 
     }
 
@@ -115,6 +124,10 @@ public class PhysicalPolygon extends Polygon2 implements Drawable, Collisional, 
                 Tools.transformFloat(y0 + v.getY()*space.getDT()));
     }
 
+    public float getRotateAngle() {
+        return rotateAngle;
+    }
+
     public float getJ() {
         assert J == 0 : "J is null";
         return J;
@@ -147,6 +160,7 @@ public class PhysicalPolygon extends Polygon2 implements Drawable, Collisional, 
         for (Point2 point : getPoints()){
             point.rotate(centre, a);
         }
+        rotateAngle += a;
     }
 
     @Override

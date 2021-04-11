@@ -34,16 +34,20 @@ public final class Frame extends JFrame {
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
         Graphics finalG = g;
-        Thread thread = new Thread(() -> {
-            for (Drawable drawable : scene.getSpace().drawables) {
-                drawable.draw(finalG);
 
-            }
+        Thread thread = new Thread(() -> {
+            try {
+                for (Drawable drawable : scene.getSpace().getDrawables()) {
+                    drawable.draw(finalG);
+
+                }
+            }catch (Exception ignored){}
             finalG.setColor(Color.WHITE);
             finalG.drawString(String.valueOf(scene.getSpace().getFps()), 20, 44);
         }
         );
         thread.start();
+
         try {
             thread.join();
         } catch (InterruptedException e) {

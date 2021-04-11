@@ -3,6 +3,7 @@ package KartohaEngine2D.geometry;
 import KartohaEngine2D.sphere.PhysicalSphere;
 import KartohaEngine2D.polygons.PhysicalPolygon;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class AABB {
@@ -69,5 +70,10 @@ public class AABB {
 
     public Point2 getMax() {
         return max;
+    }
+
+    public void draw(Graphics g){
+        g.setColor(Color.WHITE);
+        g.drawRect((int)min.x, (int)min.y, (int)(max.x - min.x), (int) (max.y - min.y));
     }
 }

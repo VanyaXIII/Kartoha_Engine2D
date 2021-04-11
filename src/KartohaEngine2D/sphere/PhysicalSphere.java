@@ -28,7 +28,7 @@ public class PhysicalSphere extends Sphere2 implements Drawable, Collisional, In
     private final Material material;
     private final float m;
     private BufferedImage sprite;
-    private static float rotateAngle = 0;
+    private float rotateAngle = 0;
 
 
     {

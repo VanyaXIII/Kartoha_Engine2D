@@ -6,6 +6,9 @@ import KartohaEngine2D.geometry.Vector2;
 import KartohaEngine2D.physics.Material;
 import KartohaEngine2D.physics.Space;
 import KartohaEngine2D.polygons.PhysicalPolygon;
+import KartohaEngine2D.utils.ImageReader;
+import billiard_example.Cue;
+import billiard_example.Pocket;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -27,78 +30,11 @@ final class Main {
         scene.getSpace().addBlock(-100, -100, 2000, 200, Material.Wood);
         scene.getSpace().addBlock(1500, -100, 200, 2000, Material.Wood);
         scene.getSpace().addBlock(-100, -100, 200, 2000, Material.Wood);
-        Point2 point1 = new Point2(200,505),
-                point2 = new Point2(200, 495),
-                point3 = new Point2(600, 495),
-                point4 = new Point2(600, 505);
-        ArrayList<Point2> points = new ArrayList<>();
-        points.add(point1);
-        points.add(point4);
-        points.add(point3);
-        points.add(point2);
-        PhysicalPolygon a = new PhysicalPolygon(scene.getSpace(), new Vector2(100,0), 0f,400,500, points, Material.Gold);
-        scene.addObjectController(new ObjectController(a, new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_G) {
-                    a.setCords(new Point2(-1000, -1000));
-                }
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        }, new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (e.getButton() == 1) {
-                    a.setCords(new Point2(e.getX(), e.getY()));
-                }
-                if (e.getButton() == 2) {
-                    Vector2 v = new Vector2(a.getPositionOfCentre(false), new Point2(e.getX(), e.getY()));
-                    v.setLength(300);
-                    a.setV(v);
-                }
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        }, new MouseMotionListener() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                a.setCords(new Point2(e.getX(), e.getY()));
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-
-            }
-        }, e -> a.rotate((float) (Math.PI * e.getPreciseWheelRotation() / 25))));
-        scene.getSpace().getPolygons().add(a);
-        scene.getSpace().getDrawables().add(a);
+        Cue cue = new Cue(ImageReader.read("kii.png"), scene, new Point2(500, 500), 400, 20);
+        Pocket pocket1 = new Pocket(scene, 30, 130,130),
+                pocket2 = new Pocket(scene, 30, 1470,130),
+                pocket3 = new Pocket(scene, 30, 130,890),
+                pocket4 = new Pocket(scene, 30, 1470,890);
         scene.getSpace().addBlock(-1000, 920, 4000, 200, Material.Wood);
         while (2 + 2 == 4) scene.update();
     }
