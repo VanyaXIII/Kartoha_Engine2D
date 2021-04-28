@@ -1,4 +1,4 @@
-package engine.geometry;
+package Kartoha_Engine2D.geometry;
 
 public class SpheresIntersection {
 
