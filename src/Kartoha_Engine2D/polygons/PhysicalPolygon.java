@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class PhysicalPolygon extends Polygon2 implements Collisional, Intersectional, Controllable, JsonAble {
 
     private Vector2 v;
+    private int z;
     private final Space space;
     private float w;
     private final float m;
@@ -24,6 +25,10 @@ public class PhysicalPolygon extends Polygon2 implements Collisional, Intersecti
     private float rotateAngle;
 
 
+
+    {
+        z = 0;
+    }
 
     public PhysicalPolygon(Space space, Vector2 v, float w, float x0, float y0, ArrayList<Point2> points, Material material) {
         super(x0, y0, points);
@@ -177,5 +182,14 @@ public class PhysicalPolygon extends Polygon2 implements Collisional, Intersecti
 
     public Material getMaterial() {
         return material;
+    }
+
+    @Override
+    public int getZ() {
+        return  z;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
     }
 }

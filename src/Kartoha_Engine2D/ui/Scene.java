@@ -7,7 +7,7 @@ import java.awt.*;
 public class Scene {
 
     private final Space space;
-    private final Kartoha_Engine2D.ui.Frame frame;
+    private final Frame frame;
 
 
     public Scene(Space space, Color bgColor, int width, int height) {
@@ -38,4 +38,8 @@ public class Scene {
             space.changeTime();
             frame.repaint();
         }
+
+    public Frame getFrame() {
+        return frame;
     }
+}

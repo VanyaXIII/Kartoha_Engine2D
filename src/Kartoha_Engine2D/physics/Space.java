@@ -193,4 +193,8 @@ public class Space {
     public Camera getCamera() {
         return camera;
     }
+
+    public ArrayList<Block> getBlocks() {
+        return blocks;
+    }
 }

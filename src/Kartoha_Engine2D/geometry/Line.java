@@ -9,8 +9,13 @@ import java.awt.*;
 public class Line implements Drawable, Intersectional {
 
     public float x1, x2, y1, y2;
+    private int z;
     private float k, b;
     private float A, B, C;
+
+    {
+        z = 0;
+    }
 
     public Line(float x1, float y1, float x2, float y2) {
         this.x1 = x1;
@@ -124,5 +129,14 @@ public class Line implements Drawable, Intersectional {
                 Tools.transformFloat(y1),
                 Tools.transformFloat(x2),
                 Tools.transformFloat(y2));
+    }
+
+    @Override
+    public int getZ() {
+        return z;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
     }
 }

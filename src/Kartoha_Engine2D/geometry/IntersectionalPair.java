@@ -46,6 +46,9 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
 
     private static boolean sphereToLine(Intersectional thing1, Intersectional thing2) {
 
+        if (thing1.getZ() != thing2.getZ())
+            return false;
+
         PhysicalSphere sphere;
         Line line;
 
@@ -75,6 +78,10 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     private static boolean sphereToSphere(Intersectional thing1, Intersectional thing2) {
+
+        if (thing1.getZ() != thing2.getZ())
+            return false;
+
         PhysicalSphere sphere1 = (PhysicalSphere) thing1;
         PhysicalSphere sphere2 = (PhysicalSphere) thing2;
 
@@ -93,6 +100,10 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     private static boolean sphereToPolygon(Intersectional thing1, Intersectional thing2) {
+
+        if (thing1.getZ() != thing2.getZ())
+            return false;
+
         PhysicalPolygon polygon;
         PhysicalSphere sphere;
 
@@ -119,6 +130,10 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     private static boolean polygonToWall(Intersectional thing1, Intersectional thing2) {
+
+        if (thing1.getZ() != thing2.getZ())
+            return false;
+
         PhysicalPolygon polygon;
         Line line;
 
@@ -143,6 +158,10 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     private static boolean polygonToPolygon(Intersectional thing1, Intersectional thing2){
+
+        if (thing1.getZ() != thing2.getZ())
+            return false;
+
         PhysicalPolygon polygon1 = (PhysicalPolygon) thing1;
         PhysicalPolygon polygon2 = (PhysicalPolygon) thing2;
 
@@ -157,6 +176,10 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     public SpheresIntersection getSpheresIntersection() {
+
+        if (firstThing.getZ() != secondThing.getZ())
+            return new SpheresIntersection(false);
+
         if (!(firstThing instanceof PhysicalSphere && secondThing instanceof PhysicalSphere))
             return new SpheresIntersection(false);
 
@@ -186,6 +209,10 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     public SphereToLineIntersection getSphereToLineIntersection() {
+
+        if (firstThing.getZ() != secondThing.getZ())
+            return new SphereToLineIntersection(false);
+
         if (!(firstThing instanceof PhysicalSphere && secondThing instanceof Line))
             return new SphereToLineIntersection(false);
 
@@ -217,6 +244,10 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
     }
 
     public PolygonToLineIntersection getPolygonToLineIntersection() {
+
+        if (firstThing.getZ() != secondThing.getZ())
+            return new PolygonToLineIntersection(false);
+
         if (!(firstThing instanceof PhysicalPolygon && secondThing instanceof Line))
             return new PolygonToLineIntersection(false);
 

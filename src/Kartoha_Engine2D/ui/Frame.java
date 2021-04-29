@@ -5,6 +5,10 @@ import Kartoha_Engine2D.drawing.Drawable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 
 public final class Frame extends JFrame {
 
@@ -38,11 +42,27 @@ public final class Frame extends JFrame {
         Graphics finalG1 = g;
         Thread thread = new Thread(() -> {
             try {
-                for (Drawable drawable : scene.getSpace().getDrawables()) {
-                    drawable.draw(finalG1);
-
+                LinkedList<Set<Drawable>> drawablesSet = new LinkedList<>();
+                int z = 0;
+                int counter;
+                do {
+                    counter = 0;
+                    drawablesSet.add(new HashSet<>());
+                    for (Drawable drawable : scene.getSpace().getDrawables()) {
+                        if (drawable.getZ() == z) {
+                            drawablesSet.getLast().add(drawable);
+                            counter++;
+                        }
+                    }
+                    z++;
+                } while (counter != 0);
+                for (Set<Drawable> set : drawablesSet) {
+                    for (Drawable drawable : set) {
+                        drawable.draw(finalG1);
+                    }
                 }
-            }catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
             finalG.setColor(Color.WHITE);
             finalG.drawString(String.valueOf(scene.getSpace().getFps()), 20, 44);
         }

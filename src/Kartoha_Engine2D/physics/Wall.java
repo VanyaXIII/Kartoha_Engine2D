@@ -13,7 +13,8 @@ import java.awt.*;
 public class Wall extends Line implements Collisional, Intersectional, JsonAble {
 
     private final Material material;
-    private final Space space;
+    private transient Space space;
+
 
     public Wall(float x1, float y1, float x2, float y2, Material material, Space space) {
         super(x1, y1, x2, y2);
@@ -45,6 +46,12 @@ public class Wall extends Line implements Collisional, Intersectional, JsonAble 
 
     public Line toLine(){
         return new Line(x1, y1, x2, y2);
+    }
+
+    public void setSpace(Space space) {
+        if (this.space == null) {
+            this.space = space;
+        }
     }
 
     @Override

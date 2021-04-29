@@ -7,18 +7,28 @@ import Kartoha_Engine2D.utils.JsonAble;
 
 import java.util.ArrayList;
 
-public class Level implements JsonAble {
+public class Level implements JsonAble{
 
     private final ArrayList<Block> blocks;
     private final ArrayList<Wall> walls;
-    private final PhysicalSphere sphere;
+    private PhysicalSphere sphere;
 
     {
+        sphere = null;
         blocks = new ArrayList<>();
         walls = new ArrayList<>();
     }
 
     public Level(PhysicalSphere sphere){
+        this.sphere = sphere;
+    }
+
+    public Level() {
+
+    }
+
+
+    public void setSphere(PhysicalSphere sphere) {
         this.sphere = sphere;
     }
 

@@ -18,6 +18,7 @@ import java.io.IOException;
 public class PhysicalSphere extends Sphere2 implements Collisional, Intersectional, Controllable, JsonAble {
 
     private float x0, y0;
+    private int z;
     private final float r;
     private Vector2 v;
     private float w;
@@ -32,6 +33,7 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
 
     {
         sprite = null;
+        z = 0;
     }
 
 
@@ -188,6 +190,15 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
     public float getR() {
         assert r == 0: "Radius is null";
         return r;
+    }
+
+    @Override
+    public int getZ() {
+        return z;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
     }
 }
 
