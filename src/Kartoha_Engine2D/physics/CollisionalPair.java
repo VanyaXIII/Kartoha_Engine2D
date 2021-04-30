@@ -196,8 +196,8 @@ public final class CollisionalPair<FirstThingType extends Collisional, SecondThi
         Line axisLine;
         HashMap<Line, Point2> collisionParams = new HashMap<>();
         for (Line line : polygon.getLines(true)) {
-            SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, new Wall(line, Material.Constantin, null)).getSphereToLineIntersection();
-            if (new IntersectionalPair<>(sphere, new Wall(line, Material.Constantin, null)).getSphereToLineIntersection().isIntersected) {
+            SphereToLineIntersection sphereAndLinePair = new IntersectionalPair<>(sphere, new Wall(line, Material.CONSTANTIN, null)).getSphereToLineIntersection();
+            if (new IntersectionalPair<>(sphere, new Wall(line, Material.CONSTANTIN, null)).getSphereToLineIntersection().isIntersected) {
                 collisionParams.put(line, sphereAndLinePair.getCollisionPoint());
             }
         }

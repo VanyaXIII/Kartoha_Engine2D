@@ -4,19 +4,23 @@ package Kartoha_Engine2D.ui;
 import Kartoha_Engine2D.geometry.Vector2;
 import Kartoha_Engine2D.physics.Material;
 import Kartoha_Engine2D.physics.Space;
+import Kartoha_Engine2D.utils.JsonReader;
+import climber_example.Level;
+import climber_example.level_creator.Container;
 
 
 import java.awt.*;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
 final class Main {
     public static void main(String[] args) {
         Scene scene = new Scene(new Space(0.0025f, 300f), new Color(0, 0, 0, 255), 1600, 1000);
-        scene.getSpace().addSphere(new Vector2(0, 0), 0f, 100, 790, 50, Material.Steel);
-        scene.getSpace().addBlock(0, 800, 2000, 1000, Material.Constantin);
-        scene.getSpace().addWall(500, 800, 550, 770, Material.Constantin);
-        scene.getSpace().addWall(550, 770, 600, 750, Material.Constantin);
+        Container container = new Container(scene.getSpace());
+        loadLevel(container);
+        scene.getSpace().addSphere(new Vector2(0, 0), 0f, 100, 790, 50, Material.STEEL);
         scene.addSceneController(new SceneController(null, new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -63,6 +67,22 @@ final class Main {
             }
         }, null, null, null));
         while (2 + 2 == 4) scene.update();
+    }
+
+    private static void loadLevel(Container container){
+        FileDialog dialog = new FileDialog((Frame) null);
+        dialog.setVisible(true);
+        String directory = dialog.getDirectory();
+        String filename = dialog.getFile();
+        dialog.dispose();
+        if (directory != null && filename != null) {
+            String path = directory + filename;
+            try {
+                container.setLevel((Level) (new JsonReader(path).read(Level.class)));
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
     }
 }
 

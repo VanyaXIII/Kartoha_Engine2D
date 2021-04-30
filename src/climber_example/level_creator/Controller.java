@@ -31,7 +31,12 @@ public class Controller {
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                for (ReferencePoint point : container.getPoints()){
+                    if (point.handleClick(e))
+                        return;
+                }
                 container.addPoint(new Point2(e.getX(), e.getY()));
+                container.addReferencePoint(new Point2(e.getX(), e.getY()));
             }
 
             @Override

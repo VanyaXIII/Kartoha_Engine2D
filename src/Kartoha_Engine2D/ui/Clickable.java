@@ -4,6 +4,6 @@ import java.awt.event.MouseEvent;
 
 public interface Clickable {
 
-    void handleClick(MouseEvent event);
+    boolean handleClick(MouseEvent event);
 
 }

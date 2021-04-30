@@ -85,13 +85,13 @@ public class Space {
 
 
     public void addWall(float x1, float y1, float x2, float y2) {
-        Wall wall = new Wall(x1, y1, x2, y2, Material.Constantin, this);
+        Wall wall = new Wall(x1, y1, x2, y2, Material.CONSTANTIN, this);
         walls.add(wall);
         drawables.add(wall);
     }
 
     public void addBlock(float x, float y, float w, float h) {
-        Block block = new Block(x, y, w, h, Material.Constantin, this);
+        Block block = new Block(x, y, w, h, Material.CONSTANTIN, this);
         blocks.add(block);
         drawables.add(block);
         Wall[] blockWalls = block.getWalls();
@@ -113,7 +113,7 @@ public class Space {
     }
 
     public void addSphere(Vector2 v, float w, float x0, float y0, float r) {
-        PhysicalSphere thing = new PhysicalSphere(this, v, w, x0, y0, r, Material.Constantin);
+        PhysicalSphere thing = new PhysicalSphere(this, v, w, x0, y0, r, Material.CONSTANTIN);
         spheres.add(thing);
         drawables.add(thing);
     }
@@ -137,7 +137,7 @@ public class Space {
     public void addPolygon(Vector2 v, float w, float x0, float y0, int numOfPoints, float r) {
         PolygonCreator creator = new PolygonCreator(new Point2(x0, y0), numOfPoints, r);
         Point2 centreOfMass = creator.getCentreOfMass();
-        PhysicalPolygon polygon = new PhysicalPolygon(this, v, w, centreOfMass.x, centreOfMass.y, creator.getPoints(), Material.Constantin);
+        PhysicalPolygon polygon = new PhysicalPolygon(this, v, w, centreOfMass.x, centreOfMass.y, creator.getPoints(), Material.CONSTANTIN);
         polygons.add(polygon);
         drawables.add(polygon);
     }

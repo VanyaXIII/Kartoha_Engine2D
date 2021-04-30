@@ -5,9 +5,9 @@ import Kartoha_Engine2D.physics.Block;
 import Kartoha_Engine2D.physics.Material;
 import Kartoha_Engine2D.physics.Space;
 import Kartoha_Engine2D.physics.Wall;
-import Kartoha_Engine2D.sphere.PhysicalSphere;
 import climber_example.Level;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Container {
@@ -16,16 +16,18 @@ public class Container {
     private boolean addingMode;
     private ArrayList<Wall> walls;
     private ArrayList<Block> blocks;
+    private final ArrayList<ReferencePoint> points;
     private Material currentMaterial;
     private Point2 point1, point2;
 
     {
+        points = new ArrayList<>();
         addingMode = false;
         point1 = null;
         point2 = null;
         walls = new ArrayList<>();
         blocks = new ArrayList<>();
-        currentMaterial = Material.Constantin;
+        currentMaterial = Material.CONSTANTIN;
     }
 
 
@@ -86,8 +88,10 @@ public class Container {
     public void setLevel(Level level){
         this.walls = level.getWalls();
         this.blocks = level.getBlocks();
+        points.clear();
         space.getWalls().clear();
         space.getBlocks().clear();
+        space.getDrawables().clear();
         walls.forEach(wall -> wall.setSpace(space));
         blocks.forEach(block -> block.setSpace(space));
         for (Wall wall : walls){
@@ -97,10 +101,33 @@ public class Container {
         for (Block block : blocks){
             space.addBlock(block.getX(), block.getY(), block.getW(), block.getH(), block.getMaterial());
         }
+        point1 = null;
+        point2 = null;
+    }
+
+    public void deleteAllObjects(){
+        walls.clear();
+        blocks.clear();
+        space.getWalls().clear();
+        space.getBlocks().clear();
+        space.getDrawables().clear();
+        for (ReferencePoint point : points){
+            space.getDrawables().remove(point);
+        }
+        points.clear();
     }
 
     public void changeAddingMode(){
         addingMode = !addingMode;
     }
 
+    public ArrayList<ReferencePoint> getPoints() {
+        return points;
+    }
+
+    public void addReferencePoint(Point2 point){
+        ReferencePoint referencePoint = new ReferencePoint(point, this);
+        points.add(referencePoint);
+        space.getDrawables().add(referencePoint);
+    }
 }

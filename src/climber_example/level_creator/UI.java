@@ -1,5 +1,6 @@
 package climber_example.level_creator;
 
+import Kartoha_Engine2D.physics.Material;
 import Kartoha_Engine2D.ui.Scene;
 import Kartoha_Engine2D.utils.JsonReader;
 import climber_example.Level;
@@ -19,11 +20,15 @@ public class UI {
         this.container = container;
     }
 
-    public void setUI(){
+    public void setUI() {
 
         JButton changeModeButton = new JButton("Изменить режим добавления");
         changeModeButton.addActionListener(e -> container.changeAddingMode());
         changeModeButton.setBounds(0, 0, 250, 40);
+
+        JButton deleteButton = new JButton("Удалить объекты");
+        deleteButton.addActionListener(e -> container.deleteAllObjects());
+        deleteButton.setBounds(250, 40, 250, 40);
 
         JButton setLevelButton = new JButton("Открыть уровень");
         setLevelButton.addActionListener(e -> {
@@ -62,18 +67,35 @@ public class UI {
                 }
             }
         });
-        saveLevelButton.setBounds(0,40,250,40);
+        saveLevelButton.setBounds(0, 40, 250, 40);
+
+        JPanel materialsPanel = new JPanel();
+        materialsPanel.setLayout(null);
+        materialsPanel.setBounds(0, 80, 500, 720);
+        int y = 0;
+        for (Material material : Material.values()) {
+            JButton button = new JButton(material.getName());
+            button.setBackground(material.outlineColor);
+            button.setBounds(0, y, 468, 40);
+            button.addActionListener(e -> container.setCurrentMaterial(material));
+            materialsPanel.add(button);
+            y += 40;
+        }
+        JScrollPane scroll = new JScrollPane(materialsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.setBounds(0, 80, 485, 682);
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
-        panel.setPreferredSize(new Dimension(500, 500));
+        panel.setPreferredSize(new Dimension(500, 800));
 
         panel.add(changeModeButton);
         panel.add(setLevelButton);
         panel.add(saveLevelButton);
+        panel.add(deleteButton);
+        panel.add(scroll);
 
         JFrame frame = new JFrame("Управление создателем уровней");
-        frame.setSize(500, 500);
+        frame.setSize(500, 800);
         frame.add(panel);
         frame.setVisible(true);
     }
