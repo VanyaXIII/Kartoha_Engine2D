@@ -50,22 +50,7 @@ public class UI {
 
         JButton saveLevelButton = new JButton("Сохранить уровень");
         saveLevelButton.addActionListener(e -> {
-            FileDialog dialog = new FileDialog((Frame) null);
-            dialog.setVisible(true);
-            String directory = dialog.getDirectory();
-            String filename = dialog.getFile();
-            dialog.dispose();
-            if (directory != null && filename != null) {
-                String path = directory + filename;
-                try {
-                    File file = new File(path);
-                    PrintWriter writer = new PrintWriter(file);
-                    writer.println(container.getLevel().toJson());
-                    writer.close();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            }
+            container.getLevel().save();
         });
         saveLevelButton.setBounds(0, 40, 250, 40);
 

@@ -1,9 +1,11 @@
 package Kartoha_Engine2D.ui;
 
 
+import Kartoha_Engine2D.geometry.Point2;
 import Kartoha_Engine2D.geometry.Vector2;
 import Kartoha_Engine2D.physics.Material;
 import Kartoha_Engine2D.physics.Space;
+import Kartoha_Engine2D.utils.BuildParams;
 import Kartoha_Engine2D.utils.JsonReader;
 import climber_example.Level;
 import climber_example.level_creator.Container;
@@ -17,10 +19,25 @@ import java.io.IOException;
 
 final class Main {
     public static void main(String[] args) {
+
+        BuildParams params = BuildParams.BY_LEVEL;
+
         Scene scene = new Scene(new Space(0.0025f, 300f), new Color(0, 0, 0, 255), 1600, 1000);
         Container container = new Container(scene.getSpace());
-        loadLevel(container);
-        scene.getSpace().addSphere(new Vector2(0, 0), 0f, 100, 790, 50, Material.STEEL);
+
+        if (params == BuildParams.BY_LEVEL) {
+            loadLevel(container);
+        }
+        if (params == BuildParams.RANDOM) {
+            Point2[] points = new Point2[100];
+            for (int i = 0; i < 100; i++) {
+                points[i] = new Point2((int) (i * 50 * (1 + Math.sqrt(2))), (int) (800 + (Math.random() - 0.5) * 2 * 50 * 0.5 * (1 + Math.sqrt(2))));
+            }
+            for (int i = 1; i < 100; i++) {
+                scene.getSpace().addWall(points[i - 1].x, points[i - 1].y, points[i].x, points[i].y, Material.WOOD);
+            }
+        }
+        scene.getSpace().addSphere(new Vector2(0, 0), 0f, 100, 690, 50, Material.WOOD);
         scene.addSceneController(new SceneController(null, new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -29,6 +46,8 @@ final class Main {
             @Override
             public void keyPressed(KeyEvent e) {
                 new Thread(() -> {
+                    if (e.getKeyCode() == KeyEvent.VK_S)
+                        saveLevel(scene);
                     if (e.getKeyCode() == KeyEvent.VK_RIGHT)
                         scene.getSpace().getCamera().moveX(3);
                     if (e.getKeyCode() == KeyEvent.VK_LEFT)
@@ -83,6 +102,10 @@ final class Main {
                 ioException.printStackTrace();
             }
         }
+    }
+
+    private static void saveLevel(Scene scene){
+        new Level(scene.getSpace()).save();
     }
 }
 
