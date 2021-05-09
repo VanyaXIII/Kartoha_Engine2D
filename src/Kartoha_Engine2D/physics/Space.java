@@ -2,11 +2,14 @@ package Kartoha_Engine2D.physics;
 
 import Kartoha_Engine2D.drawing.Drawable;
 import Kartoha_Engine2D.drawing.camera.Camera;
+import Kartoha_Engine2D.drawing.camera.Focusable;
+import Kartoha_Engine2D.drawing.camera.Resolution;
 import Kartoha_Engine2D.geometry.Point2;
 import Kartoha_Engine2D.geometry.PolygonCreator;
 import Kartoha_Engine2D.geometry.Vector2;
 import Kartoha_Engine2D.sphere.PhysicalSphere;
 import Kartoha_Engine2D.polygons.PhysicalPolygon;
+import Kartoha_Engine2D.ui.Scene;
 import Kartoha_Engine2D.utils.Executable;
 import Kartoha_Engine2D.utils.Tools;
 
@@ -25,10 +28,10 @@ public class Space {
     private float G;
     private double time;
     private final PhysicsHandler physicsHandler;
-    private final Camera camera;
+    private Camera camera;
 
     {
-        camera = new Camera(new Point2(0,0), null);
+        camera = new Camera(new Point2(0f, 0f), null);
         executables = new ArrayList<>();
         walls = new ArrayList<>();
         spheres = new ArrayList<>();
@@ -44,6 +47,10 @@ public class Space {
         this.G = g;
     }
 
+    public void initCamera(Resolution resolution){
+        if (camera.getResolution() == null) this.camera = new Camera(camera.getMin(), resolution);
+    }
+
     public synchronized void changeTime() {
 
         long time1 = System.nanoTime();
@@ -53,7 +60,10 @@ public class Space {
             for (Executable executable : executables){
                 executable.execute();
             }
-        } catch (Exception ignored) {}
+            camera.centre();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         float cTime = (float) ((System.nanoTime() - time1) / 1000000.0);
         float sleepTime = 0;
@@ -140,6 +150,10 @@ public class Space {
         PhysicalPolygon polygon = new PhysicalPolygon(this, v, w, centreOfMass.x, centreOfMass.y, creator.getPoints(), Material.CONSTANTIN);
         polygons.add(polygon);
         drawables.add(polygon);
+    }
+
+    public void focusCameraOnObject(Focusable objectToFocus){
+        camera.setFocusedObject(objectToFocus);
     }
 
     public double getTime() {

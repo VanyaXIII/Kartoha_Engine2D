@@ -1,6 +1,7 @@
 package Kartoha_Engine2D.polygons;
 
 import Kartoha_Engine2D.drawing.ArbitraryFigure;
+import Kartoha_Engine2D.drawing.camera.Focusable;
 import Kartoha_Engine2D.geometry.*;
 import Kartoha_Engine2D.limiters.Collisional;
 import Kartoha_Engine2D.limiters.Intersectional;
@@ -13,7 +14,7 @@ import Kartoha_Engine2D.utils.Tools;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class PhysicalPolygon extends Polygon2 implements Collisional, Intersectional, Controllable, JsonAble {
+public class PhysicalPolygon extends Polygon2 implements Collisional, Intersectional, Controllable, JsonAble, Focusable {
 
     private Vector2 v;
     private int z;
@@ -191,5 +192,10 @@ public class PhysicalPolygon extends Polygon2 implements Collisional, Intersecti
 
     public void setZ(int z) {
         this.z = z;
+    }
+
+    @Override
+    public Point2 getPositionOfCentre() {
+        return getPositionOfCentre(false);
     }
 }

@@ -106,8 +106,8 @@ public final class CollisionalPair<FirstThingType extends Collisional, SecondThi
         PhysicalSphere sphere1 = (PhysicalSphere) thing1;
         PhysicalSphere sphere2 = (PhysicalSphere) thing2;
 
-        final Point2 firstSpherePos = sphere1.getPosition(false);
-        final Point2 secondSpherePos = sphere2.getPosition(false);
+        final Point2 firstSpherePos = sphere1.getPositionOfCentre(false);
+        final Point2 secondSpherePos = sphere2.getPositionOfCentre(false);
         final Vector2 axisX = new Vector2(firstSpherePos.x - secondSpherePos.x,
                 firstSpherePos.y - secondSpherePos.y);
 
@@ -224,7 +224,7 @@ public final class CollisionalPair<FirstThingType extends Collisional, SecondThi
             final float v2y = polygon.getV().countProjectionOn(axisY);
 
             final Vector2 polygonRadVector = new Vector2(polygon.getPositionOfCentre(true), collisionPoint);
-            final Vector2 sphereRadVector = new Vector2(sphere.getPosition(true), collisionPoint);
+            final Vector2 sphereRadVector = new Vector2(sphere.getPositionOfCentre(true), collisionPoint);
             sphereRadVector.setLength(sphere.getR());
 
             final float rx = Math.abs(polygonRadVector.countProjectionOn(axisX));

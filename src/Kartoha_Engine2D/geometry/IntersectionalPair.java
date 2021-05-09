@@ -64,7 +64,7 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
         if (!new AABB(sphere, dynamicCollisionMode).isIntersectedWith(new AABB(Objects.requireNonNull(line))))
             return false;
 
-        Point2 spherePos = sphere.getPosition(dynamicCollisionMode);
+        Point2 spherePos = sphere.getPositionOfCentre(dynamicCollisionMode);
         float d = line.calcDistance(spherePos.x, spherePos.y);
 
         if (d <= sphere.getR()) {
@@ -86,8 +86,8 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
         if (!new AABB(sphere1, dynamicCollisionMode).isIntersectedWith(new AABB(sphere2, dynamicCollisionMode)))
             return false;
 
-        Point2 sphere1Pos = sphere1.getPosition(dynamicCollisionMode);
-        Point2 sphere2Pos = sphere2.getPosition(dynamicCollisionMode);
+        Point2 sphere1Pos = sphere1.getPositionOfCentre(dynamicCollisionMode);
+        Point2 sphere2Pos = sphere2.getPositionOfCentre(dynamicCollisionMode);
         Vector2 distanceVector = new Vector2(sphere1Pos.x - sphere2Pos.x,
                 sphere1Pos.y - sphere2Pos.y);
         if (distanceVector.getSquare() <= (sphere1.getR() + sphere2.getR()) * (sphere1.getR() + sphere2.getR())) {
@@ -186,8 +186,8 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
 
         PhysicalSphere sphere1 = (PhysicalSphere) firstThing;
         PhysicalSphere sphere2 = (PhysicalSphere) secondThing;
-        Point2 sphere1Pos = sphere1.getPosition(staticCollisionMode);
-        Point2 sphere2Pos = sphere2.getPosition(staticCollisionMode);
+        Point2 sphere1Pos = sphere1.getPositionOfCentre(staticCollisionMode);
+        Point2 sphere2Pos = sphere2.getPositionOfCentre(staticCollisionMode);
         Vector2 distanceVector = new Vector2(sphere1Pos.x - sphere2Pos.x,
                 sphere1Pos.y - sphere2Pos.y);
         float distance = distanceVector.length();
@@ -219,7 +219,7 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
 
         PhysicalSphere sphere = (PhysicalSphere) firstThing;
         Line line = (Line) secondThing;
-        Point2 spherePos = sphere.getPosition(staticCollisionMode);
+        Point2 spherePos = sphere.getPositionOfCentre(staticCollisionMode);
         float d = line.calcDistance(spherePos.x, spherePos.y);
 
         if (d <= sphere.getR()) {

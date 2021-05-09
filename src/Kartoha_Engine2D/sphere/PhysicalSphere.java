@@ -1,5 +1,6 @@
 package Kartoha_Engine2D.sphere;
 
+import Kartoha_Engine2D.drawing.camera.Focusable;
 import Kartoha_Engine2D.geometry.*;
 import Kartoha_Engine2D.limiters.Collisional;
 import Kartoha_Engine2D.limiters.Intersectional;
@@ -15,7 +16,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class PhysicalSphere extends Sphere2 implements Collisional, Intersectional, Controllable, JsonAble {
+public class PhysicalSphere extends Sphere2 implements Collisional, Intersectional, Controllable, JsonAble, Focusable {
 
     private float x0, y0;
     private int z;
@@ -83,7 +84,7 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
 
     public synchronized void pullFromLine(SphereToLineIntersection intersection) {
         if (intersection.getValue() != 0){
-            Vector2 movementVector = new Vector2(intersection.getCollisionPoint(), getPosition(false));
+            Vector2 movementVector = new Vector2(intersection.getCollisionPoint(), getPositionOfCentre(false));
             Point2 nCords = movementVector.movePoint(new Point2(x0, y0), intersection.getValue());
             this.x0 = nCords.x;
             this.y0 = nCords.y;
@@ -91,7 +92,7 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
     }
 
 
-    public synchronized Point2 getPosition(boolean mode) {
+    public synchronized Point2 getPositionOfCentre(boolean mode) {
         float m = mode ? 1.0f : 0.0f;
         return new Point2(x0 + m * v.getX() * space.getDT(), y0 + m * ((v.getY() + v.getY() + space.getG() * space.getDT()) * space.getDT() / 2.0f));
     }
@@ -103,6 +104,7 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
     public void setSprite(String path) throws IOException {
         sprite = ImageReader.read(path);
     }
+
 
     @Override
     public void draw(Graphics g) {
@@ -199,6 +201,11 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
 
     public void setZ(int z) {
         this.z = z;
+    }
+
+    @Override
+    public Point2 getPositionOfCentre() {
+        return getPositionOfCentre(false);
     }
 }
 

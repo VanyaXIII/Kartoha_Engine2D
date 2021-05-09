@@ -27,7 +27,7 @@ public class AABB {
     }
 
     public AABB(PhysicalSphere sphere, boolean mode) {
-        Point2 position = sphere.getPosition(mode);
+        Point2 position = sphere.getPositionOfCentre(mode);
         min = new Point2(position.x - sphere.getR(), position.y - sphere.getR());
         max = new Point2(position.x + sphere.getR(), position.y + sphere.getR());
     }

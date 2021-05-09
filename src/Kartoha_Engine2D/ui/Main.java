@@ -1,6 +1,7 @@
 package Kartoha_Engine2D.ui;
 
 
+import Kartoha_Engine2D.drawing.camera.Resolution;
 import Kartoha_Engine2D.geometry.Point2;
 import Kartoha_Engine2D.geometry.Vector2;
 import Kartoha_Engine2D.physics.Material;
@@ -20,9 +21,10 @@ import java.io.IOException;
 final class Main {
     public static void main(String[] args) {
 
-        BuildParams params = BuildParams.BY_LEVEL;
+        BuildParams params = BuildParams.RANDOM;
 
         Scene scene = new Scene(new Space(0.0025f, 300f), new Color(0, 0, 0, 255), 1600, 1000);
+        scene.getSpace().initCamera(new Resolution(1600, 1000));
         Container container = new Container(scene.getSpace());
 
         if (params == BuildParams.BY_LEVEL) {
@@ -38,6 +40,7 @@ final class Main {
             }
         }
         scene.getSpace().addSphere(new Vector2(0, 0), 0f, 100, 690, 50, Material.WOOD);
+        scene.getSpace().focusCameraOnObject(scene.getSpace().getSpheres().get(0));
         scene.addSceneController(new SceneController(null, new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -46,7 +49,7 @@ final class Main {
             @Override
             public void keyPressed(KeyEvent e) {
                 new Thread(() -> {
-                    if (e.getKeyCode() == KeyEvent.VK_S)
+                    if (e.getKeyCode() == KeyEvent.VK_Q)
                         saveLevel(scene);
                     if (e.getKeyCode() == KeyEvent.VK_RIGHT)
                         scene.getSpace().getCamera().moveX(3);
