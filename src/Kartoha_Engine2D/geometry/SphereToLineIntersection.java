@@ -1,9 +1,13 @@
 package Kartoha_Engine2D.geometry;
 
+import lombok.Getter;
+
 public class SphereToLineIntersection {
 
     public final boolean isIntersected;
+    @Getter
     private Point2 collisionPoint;
+    @Getter
     private float value;
 
     public SphereToLineIntersection(boolean isIntersected){this.isIntersected = isIntersected;}
@@ -14,11 +18,4 @@ public class SphereToLineIntersection {
         this.collisionPoint = collisionPoint;
     }
 
-    public float getValue() {
-        return value;
-    }
-
-    public Point2 getCollisionPoint() {
-        return collisionPoint;
-    }
 }

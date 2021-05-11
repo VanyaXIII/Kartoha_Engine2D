@@ -1,9 +1,12 @@
 package Kartoha_Engine2D.geometry;
 
 import Kartoha_Engine2D.utils.FloatComparator;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Vector2 {
 
+    @Getter @Setter
     private float x, y;
 
     public Vector2(float x, float y) {
@@ -49,14 +52,6 @@ public class Vector2 {
 
     public Vector2 getMultipliedVector(float mul) {
         return new Vector2(x * mul, y * mul);
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
     }
 
     public void addY(float a) {
@@ -153,14 +148,6 @@ public class Vector2 {
         float d = length();
         x = (x / d) * len;
         y = (y / d) * len;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public void setY(float y) {
-        this.y = y;
     }
 
     public Vector2 createNormal() {

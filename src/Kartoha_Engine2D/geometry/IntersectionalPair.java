@@ -4,6 +4,7 @@ import Kartoha_Engine2D.limiters.Intersectional;
 import Kartoha_Engine2D.sphere.PhysicalSphere;
 import Kartoha_Engine2D.polygons.PhysicalPolygon;
 import Kartoha_Engine2D.utils.TripleMap;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -12,7 +13,9 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
 
     private final FirstThingType firstThing;
     private final SecondThingType secondThing;
+    @Getter
     private final static boolean dynamicCollisionMode = true;
+    @Getter
     private final static boolean staticCollisionMode = false;
     private final static TripleMap<Class, Class, Intersecter> methodsMap;
 
@@ -273,13 +276,6 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
 
         return new PolygonToLineIntersection(false);
 
-    }
-
-    public static boolean getStaticCollisionMode(){
-        return staticCollisionMode;
-    }
-    public static boolean getDynamicCollisionMode(){
-        return dynamicCollisionMode;
     }
 
 }

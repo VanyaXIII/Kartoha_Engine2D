@@ -1,9 +1,12 @@
 package Kartoha_Engine2D.geometry;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 
 public class PolygonCreator {
 
+    @Getter
     private ArrayList<Point2> points;
     private final ArrayList<Triangle> triangles;
 
@@ -39,10 +42,6 @@ public class PolygonCreator {
             points.add(radVector.movePoint(centrePoint, r));
             if (i != numOfPoints - 1) radVector.rotate(2 * (float) Math.PI * angles[i]);
         }
-    }
-
-    public ArrayList<Point2> getPoints() {
-        return points;
     }
 
     public void triangulate() {

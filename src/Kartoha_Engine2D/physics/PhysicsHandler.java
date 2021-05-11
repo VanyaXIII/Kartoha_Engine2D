@@ -98,7 +98,7 @@ public class PhysicsHandler {
                     spheres.forEach(sphere -> {
                         synchronized (polygon) {
                             synchronized (sphere) {
-                                for (Line line : polygon.getLines(IntersectionalPair.getDynamicCollisionMode())) {
+                                for (Line line : polygon.getLines(true)) {
                                     if (new IntersectionalPair<>(line, sphere).areIntersected()) {
                                         new CollisionalPair<>(polygon, sphere).collide();
                                     }

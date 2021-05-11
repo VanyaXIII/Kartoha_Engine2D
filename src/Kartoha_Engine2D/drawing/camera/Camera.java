@@ -1,12 +1,17 @@
 package Kartoha_Engine2D.drawing.camera;
 
 import Kartoha_Engine2D.geometry.Point2;
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class Camera {
 
+    @Getter
     private Point2 min;
+    @Getter
     private final Resolution resolution;
+    @Getter @Setter
     private Focusable focusedObject;
 
     {
@@ -18,43 +23,27 @@ public class Camera {
         this.resolution = resolution;
     }
 
-    private void setCentre(Point2 centre){
+    private void setCentre(Point2 centre) {
         if (resolution != null) min = new Point2(centre.x - resolution.width / 2f, centre.y - resolution.height / 2f);
     }
 
-    public void centre(){
+    public void centre() {
         if (focusedObject != null) setCentre(focusedObject.getPositionOfCentre());
     }
 
-    public void moveX(float x){
+    public void moveX(float x) {
         this.min.x += x;
     }
 
-    public void moveY(float y){
-        this.min.y +=y;
+    public void moveY(float y) {
+        this.min.y += y;
     }
 
-    public float getXMovement(){
+    public float getXMovement() {
         return this.min.x;
     }
 
-    public float getYMovement(){
+    public float getYMovement() {
         return this.min.y;
-    }
-
-    public Focusable getFocusedObject() {
-        return focusedObject;
-    }
-
-    public Point2 getMin() {
-        return min;
-    }
-
-    public void setFocusedObject(Focusable focusedObject) {
-        this.focusedObject = focusedObject;
-    }
-
-    public Resolution getResolution() {
-        return resolution;
     }
 }

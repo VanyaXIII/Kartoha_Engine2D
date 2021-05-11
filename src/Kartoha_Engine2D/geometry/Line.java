@@ -3,12 +3,15 @@ package Kartoha_Engine2D.geometry;
 import Kartoha_Engine2D.drawing.Drawable;
 import Kartoha_Engine2D.limiters.Intersectional;
 import Kartoha_Engine2D.utils.Tools;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 
 public class Line implements Drawable, Intersectional {
 
     public float x1, x2, y1, y2;
+    @Getter @Setter
     private int z;
     private float k, b;
     private float A, B, C;
@@ -131,12 +134,4 @@ public class Line implements Drawable, Intersectional {
                 Tools.transformFloat(y2));
     }
 
-    @Override
-    public int getZ() {
-        return z;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
-    }
 }

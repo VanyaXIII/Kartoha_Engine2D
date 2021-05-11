@@ -10,12 +10,20 @@ import Kartoha_Engine2D.ui.Controllable;
 import Kartoha_Engine2D.utils.ImageReader;
 import Kartoha_Engine2D.utils.JsonAble;
 import Kartoha_Engine2D.utils.Tools;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.With;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+@Getter
+@Setter
+@Builder
+@With
 public class PhysicalSphere extends Sphere2 implements Collisional, Intersectional, Controllable, JsonAble, Focusable {
 
     private float x0, y0;
@@ -143,18 +151,6 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
         }
     }
 
-    public Vector2 getV() {
-        return v;
-    }
-
-    public float getW() {
-        return w;
-    }
-
-    public void setW(float w) {
-        this.w = w;
-    }
-
     @Override
     public void rotate(float a){
     }
@@ -170,37 +166,6 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
     public void setCords(Point2 newCords) {
         x0 = newCords.x;
         y0 = newCords.y;
-    }
-
-    public void setV(Vector2 v) {
-        this.v = v;
-    }
-
-    public Material getMaterial() {
-        return material;
-    }
-
-    public float getM() {
-        assert m == 0: "Mass is null";
-        return m;
-    }
-
-    public float getJ() {
-        return J;
-    }
-
-    public float getR() {
-        assert r == 0: "Radius is null";
-        return r;
-    }
-
-    @Override
-    public int getZ() {
-        return z;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
     }
 
     @Override

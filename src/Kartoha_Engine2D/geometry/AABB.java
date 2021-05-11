@@ -2,13 +2,16 @@ package Kartoha_Engine2D.geometry;
 
 import Kartoha_Engine2D.sphere.PhysicalSphere;
 import Kartoha_Engine2D.polygons.PhysicalPolygon;
+import lombok.Getter;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class AABB {
 
+    @Getter
     private final Point2 min;
+    @Getter
     private final Point2 max;
 
     public AABB(Point2 point1, Point2 point2) {
@@ -62,14 +65,6 @@ public class AABB {
     public boolean doesContainPoint(Point2 point) {
         return point.x >= min.x && point.x <= max.x
                 && point.y >= min.y && point.y <= max.y;
-    }
-
-    public Point2 getMin() {
-        return min;
-    }
-
-    public Point2 getMax() {
-        return max;
     }
 
     public void draw(Graphics g){

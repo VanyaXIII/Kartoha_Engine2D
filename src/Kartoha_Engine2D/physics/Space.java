@@ -9,12 +9,14 @@ import Kartoha_Engine2D.geometry.PolygonCreator;
 import Kartoha_Engine2D.geometry.Vector2;
 import Kartoha_Engine2D.sphere.PhysicalSphere;
 import Kartoha_Engine2D.polygons.PhysicalPolygon;
-import Kartoha_Engine2D.ui.Scene;
 import Kartoha_Engine2D.utils.Executable;
 import Kartoha_Engine2D.utils.Tools;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
+@Getter @Setter
 public class Space {
 
     private final ArrayList<Drawable> drawables;
@@ -26,7 +28,6 @@ public class Space {
     private final ArrayList<PhysicalPolygon> polygons;
     private final float DT;
     private float G;
-    private double time;
     private final PhysicsHandler physicsHandler;
     private Camera camera;
 
@@ -39,7 +40,6 @@ public class Space {
         drawables = new ArrayList<>();
         blocks = new ArrayList<>();
         physicsHandler = new PhysicsHandler(this, 1);
-        time = 0;
     }
 
     public Space(float dt, float g) {
@@ -78,7 +78,6 @@ public class Space {
             e.printStackTrace();
         }
 
-        time += DT;
         long time2 = System.nanoTime();
         fps = 1000f / ((time2 - time1) / 1000000f);
 
@@ -156,38 +155,6 @@ public class Space {
         camera.setFocusedObject(objectToFocus);
     }
 
-    public double getTime() {
-        return time;
-    }
-
-    public float getFps() {
-        return fps;
-    }
-
-    public float getDT() {
-        return DT;
-    }
-
-    public float getG() {
-        return G;
-    }
-
-    public void setG(float g) {
-        G = g;
-    }
-
-    public synchronized ArrayList<PhysicalSphere> getSpheres() {
-        return spheres;
-    }
-
-    public synchronized ArrayList<PhysicalPolygon> getPolygons() {
-        return polygons;
-    }
-
-    public synchronized ArrayList<Wall> getWalls() {
-        return walls;
-    }
-
     public synchronized void deleteDynamicObjects(){
         for (PhysicalPolygon polygon : polygons) drawables.remove(polygon);
         for (PhysicalSphere sphere : spheres) drawables.remove(sphere);
@@ -195,20 +162,4 @@ public class Space {
         spheres.clear();
     }
 
-    public ArrayList<Executable> getExecutables() {
-        return executables;
-    }
-
-
-    public ArrayList<Drawable> getDrawables() {
-        return drawables;
-    }
-
-    public Camera getCamera() {
-        return camera;
-    }
-
-    public ArrayList<Block> getBlocks() {
-        return blocks;
-    }
 }

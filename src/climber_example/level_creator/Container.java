@@ -6,17 +6,20 @@ import Kartoha_Engine2D.physics.Material;
 import Kartoha_Engine2D.physics.Space;
 import Kartoha_Engine2D.physics.Wall;
 import climber_example.Level;
+import lombok.Getter;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Container {
 
     private final Space space;
     private boolean addingMode;
+    @Getter
     private ArrayList<Wall> walls;
+    @Getter
     private ArrayList<Block> blocks;
     private final ArrayList<ReferencePoint> points;
+    @Getter
     private Material currentMaterial;
     private Point2 point1, point2;
 
@@ -62,18 +65,6 @@ public class Container {
 
     public void setCurrentMaterial(Material currentMaterial) {
         this.currentMaterial = currentMaterial;
-    }
-
-    public Material getCurrentMaterial() {
-        return currentMaterial;
-    }
-
-    public ArrayList<Wall> getWalls() {
-        return walls;
-    }
-
-    public ArrayList<Block> getBlocks() {
-        return blocks;
     }
 
     public Level getLevel(){

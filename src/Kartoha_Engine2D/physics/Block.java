@@ -3,16 +3,22 @@ package Kartoha_Engine2D.physics;
 import Kartoha_Engine2D.drawing.Drawable;
 import Kartoha_Engine2D.utils.JsonAble;
 import Kartoha_Engine2D.utils.Tools;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 
 public final class Block implements Drawable, JsonAble {
 
-    private final float x;
-    private final float y;
+    @Getter
+    private final float x, y;
+    @Getter @Setter
     private int z;
+    @Getter
     private final float w, h;
+    @Getter
     private final Material material;
+    @Setter
     private transient Space space;
 
     {
@@ -47,40 +53,5 @@ public final class Block implements Drawable, JsonAble {
         g.drawRect(Tools.transformFloat(x - space.getCamera().getXMovement()), Tools.transformFloat(y - space.getCamera().getYMovement()), Tools.transformFloat(w), Tools.transformFloat(h));
         g.setColor(material.fillColor);
         g.fillRect(Tools.transformFloat(x - space.getCamera().getXMovement()), Tools.transformFloat(y- space.getCamera().getYMovement()), Tools.transformFloat(w), Tools.transformFloat(h));
-    }
-
-    @Override
-    public int getZ() {
-        return z;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public float getH() {
-        return h;
-    }
-
-    public float getW() {
-        return w;
-    }
-
-    public Material getMaterial() {
-        return material;
-    }
-
-    public void setSpace(Space space) {
-        if (this.space == null) {
-            this.space = space;
-        }
     }
 }

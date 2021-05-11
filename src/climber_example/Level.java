@@ -5,6 +5,10 @@ import Kartoha_Engine2D.physics.Space;
 import Kartoha_Engine2D.physics.Wall;
 import Kartoha_Engine2D.sphere.PhysicalSphere;
 import Kartoha_Engine2D.utils.JsonAble;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.With;
 
 import java.awt.*;
 import java.io.File;
@@ -12,6 +16,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+
+@Getter
+@Setter
+@Builder
+@With
 public class Level implements JsonAble{
 
     private ArrayList<Block> blocks;
@@ -57,20 +66,4 @@ public class Level implements JsonAble{
         }
     }
 
-
-    public void setSphere(PhysicalSphere sphere) {
-        this.sphere = sphere;
-    }
-
-    public ArrayList<Block> getBlocks() {
-        return blocks;
-    }
-
-    public ArrayList<Wall> getWalls() {
-        return walls;
-    }
-
-    public PhysicalSphere getSphere() {
-        return sphere;
-    }
 }

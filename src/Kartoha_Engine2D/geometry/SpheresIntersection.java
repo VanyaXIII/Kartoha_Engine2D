@@ -1,9 +1,12 @@
 package Kartoha_Engine2D.geometry;
 
+import lombok.Getter;
+
 public class SpheresIntersection {
 
     public final boolean isIntersected;
     public Vector2 centralLine;
+    @Getter
     private float value;
 
     public SpheresIntersection(boolean isIntersected, Vector2 cl, float value) {
@@ -16,7 +19,4 @@ public class SpheresIntersection {
         this.isIntersected = isIntersected;
     }
 
-    public float getValue() {
-        return value;
-    }
 }

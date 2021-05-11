@@ -3,10 +3,12 @@ package climber_example.level_creator;
 import Kartoha_Engine2D.geometry.Point2;
 import Kartoha_Engine2D.ui.Scene;
 import Kartoha_Engine2D.ui.SceneController;
+import lombok.Getter;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+@Getter
 public class Controller {
 
     private final Container container;

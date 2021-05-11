@@ -21,7 +21,7 @@ import java.io.IOException;
 final class Main {
     public static void main(String[] args) {
 
-        BuildParams params = BuildParams.RANDOM;
+        BuildParams params = BuildParams.BY_LEVEL;
 
         Scene scene = new Scene(new Space(0.0025f, 300f), new Color(0, 0, 0, 255), 1600, 1000);
         scene.getSpace().initCamera(new Resolution(1600, 1000));
@@ -40,6 +40,7 @@ final class Main {
             }
         }
         scene.getSpace().addSphere(new Vector2(0, 0), 0f, 100, 690, 50, Material.WOOD);
+        scene.getSpace().getSpheres().get(0).setZ(0);
         scene.getSpace().focusCameraOnObject(scene.getSpace().getSpheres().get(0));
         scene.addSceneController(new SceneController(null, new KeyListener() {
             @Override

@@ -10,10 +10,17 @@ import Kartoha_Engine2D.physics.Space;
 import Kartoha_Engine2D.ui.Controllable;
 import Kartoha_Engine2D.utils.JsonAble;
 import Kartoha_Engine2D.utils.Tools;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.With;
 
 import java.awt.*;
 import java.util.ArrayList;
 
+@Getter @Setter
+@With
+@Builder
 public class PhysicalPolygon extends Polygon2 implements Collisional, Intersectional, Controllable, JsonAble, Focusable {
 
     private Vector2 v;
@@ -126,36 +133,6 @@ public class PhysicalPolygon extends Polygon2 implements Collisional, Intersecti
                 Tools.transformFloat(y0 - space.getCamera().getYMovement() + v.getY()*space.getDT()));
     }
 
-    public float getRotateAngle() {
-        return rotateAngle;
-    }
-
-    public float getJ() {
-        assert J == 0 : "J is null";
-        return J;
-    }
-
-    public float getW() {
-        return w;
-    }
-
-    public float getM() {
-        assert m == 0 : "Mass is null";
-        return m;
-    }
-
-    public Vector2 getV() {
-        return v;
-    }
-
-    public void setV(Vector2 v) {
-        this.v = v;
-    }
-
-    public void setW(float w) {
-        this.w = w;
-    }
-
     @Override
     public void rotate(float a) {
         Point2 centre = new Point2(x0, y0);
@@ -179,19 +156,6 @@ public class PhysicalPolygon extends Polygon2 implements Collisional, Intersecti
     public void setCords(Point2 newCords) {
         Vector2 movement = new Vector2(getPositionOfCentre(false), newCords);
         move(movement);
-    }
-
-    public Material getMaterial() {
-        return material;
-    }
-
-    @Override
-    public int getZ() {
-        return  z;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
     }
 
     @Override

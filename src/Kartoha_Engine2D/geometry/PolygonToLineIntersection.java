@@ -1,10 +1,15 @@
 package Kartoha_Engine2D.geometry;
 
+import lombok.Getter;
+
 public class PolygonToLineIntersection {
 
     public final boolean isIntersected;
+    @Getter
     private Point2 collisionPoint;
+    @Getter
     private Point2 pointOfPolygon;
+    @Getter
     private float value;
 
     public PolygonToLineIntersection(boolean isIntersected) {
@@ -18,15 +23,4 @@ public class PolygonToLineIntersection {
         this.value = value;
     }
 
-    public float getValue() {
-        return value;
-    }
-
-    public Point2 getPointOfPolygon() {
-        return pointOfPolygon;
-    }
-
-    public Point2 getCollisionPoint() {
-        return collisionPoint;
-    }
 }
