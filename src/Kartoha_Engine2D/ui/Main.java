@@ -14,6 +14,7 @@ import climber_example.Level;
 import climber_example.boosters.Applicable;
 import climber_example.boosters.Booster;
 import climber_example.level_creator.Container;
+import com.google.gson.Gson;
 
 
 import java.awt.*;
@@ -62,6 +63,8 @@ final class Main {
                 scene.getSpace().getSpheres().get(0).setCords(new Point2(0,0));
             }
         };
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(applicable));
         Booster booster = new Booster(500, applicable);
         booster.setDrawingParams(new PhysicalSphere(scene.getSpace(), 500, 500, 500));
         scene.getSpace().getDrawables().add(booster);

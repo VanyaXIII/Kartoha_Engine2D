@@ -43,6 +43,8 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
 
     public PhysicalSphere(Space space, float x0, float y0, float r){
         super(x0, y0, r);
+        this.x0 = x0;
+        this.y0 = y0;
         J = 0;
         m = 0;
         orientationVector = new Vector2(0,0);

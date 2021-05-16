@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 @Getter
@@ -39,6 +38,7 @@ public class Level implements JsonAble{
         this.sphere = space.getSpheres().get(0);
         this.walls = space.getWalls();
         this.blocks = space.getBlocks();
+        this.g = space.getG();
     }
 
     public Level(Space space, ArrayList<Booster> boosters){
