@@ -6,9 +6,13 @@ import Kartoha_Engine2D.geometry.Point2;
 import Kartoha_Engine2D.geometry.Vector2;
 import Kartoha_Engine2D.physics.Material;
 import Kartoha_Engine2D.physics.Space;
+import Kartoha_Engine2D.sphere.PhysicalSphere;
 import Kartoha_Engine2D.utils.BuildParams;
+import Kartoha_Engine2D.utils.Executable;
 import Kartoha_Engine2D.utils.JsonReader;
 import climber_example.Level;
+import climber_example.boosters.Applicable;
+import climber_example.boosters.Booster;
 import climber_example.level_creator.Container;
 
 
@@ -27,6 +31,9 @@ final class Main {
         scene.getSpace().initCamera(new Resolution(1600, 1000));
         Container container = new Container(scene.getSpace());
 
+
+
+
         if (params == BuildParams.BY_LEVEL) {
             loadLevel(container);
         }
@@ -42,6 +49,28 @@ final class Main {
         scene.getSpace().addSphere(new Vector2(0, 0), 0f, 100, 690, 50, Material.WOOD);
         scene.getSpace().getSpheres().get(0).setZ(0);
         scene.getSpace().focusCameraOnObject(scene.getSpace().getSpheres().get(0));
+        Applicable applicable = new Applicable() {
+            @Override
+            public void apply() {
+                scene.getSpace().setG(0);
+                scene.getSpace().getSpheres().get(0).setV(new Vector2(0,0));
+                scene.getSpace().getSpheres().get(0).setW(0);
+            }
+
+            @Override
+            public void disable() {
+                scene.getSpace().getSpheres().get(0).setCords(new Point2(0,0));
+            }
+        };
+        Booster booster = new Booster(500, applicable);
+        booster.setDrawingParams(new PhysicalSphere(scene.getSpace(), 500, 500, 500));
+        scene.getSpace().getDrawables().add(booster);
+        scene.getSpace().getExecutables().add(() -> {
+            booster.reduceDuration();
+            if (booster.checkCollision(scene.getSpace().getSpheres().get(0)))
+                booster.apply();
+            booster.check();
+        });
         scene.addSceneController(new SceneController(null, new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {

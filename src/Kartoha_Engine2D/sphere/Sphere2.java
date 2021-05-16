@@ -1,12 +1,15 @@
 package Kartoha_Engine2D.sphere;
 
 import Kartoha_Engine2D.drawing.Drawable;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 
-public abstract class Sphere2 implements Drawable {
+@Getter @Setter
+public class Sphere2 implements Drawable {
 
-    transient public float x0, y0;
+    transient private float x0, y0;
     final transient private float r;
 
     Sphere2(float x0, float y0, float r) {
@@ -21,6 +24,11 @@ public abstract class Sphere2 implements Drawable {
     public void draw(Graphics g) {
         int[] coords = new int[]{(int) Math.round(x0 - (double) r), (int) Math.round(y0 - (double) r), Math.round(r * 2)};
         g.drawOval(coords[0], coords[1], coords[2], coords[2]);
+    }
+
+    @Override
+    public int getZ() {
+        return 0;
     }
 
 }

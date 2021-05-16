@@ -7,6 +7,7 @@ import Kartoha_Engine2D.physics.Space;
 import Kartoha_Engine2D.physics.Wall;
 import climber_example.Level;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,8 @@ public class Container {
 
     private final Space space;
     private boolean addingMode;
+    @Getter @Setter
+    private float g;
     @Getter
     private ArrayList<Wall> walls;
     @Getter
@@ -73,6 +76,7 @@ public class Container {
             level.getWalls().add(wall);
         for (Block block : blocks)
             level.getBlocks().add(block);
+        level.setG(g);
         return level;
     }
 
@@ -83,6 +87,7 @@ public class Container {
         space.getWalls().clear();
         space.getBlocks().clear();
         space.getDrawables().clear();
+        space.setG(level.getG());
         walls.forEach(wall -> wall.setSpace(space));
         blocks.forEach(block -> block.setSpace(space));
         for (Wall wall : walls){

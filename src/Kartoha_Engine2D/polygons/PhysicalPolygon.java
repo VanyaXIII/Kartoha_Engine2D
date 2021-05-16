@@ -19,8 +19,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 @Getter @Setter
-@With
-@Builder
 public class PhysicalPolygon extends Polygon2 implements Collisional, Intersectional, Controllable, JsonAble, Focusable {
 
     private Vector2 v;

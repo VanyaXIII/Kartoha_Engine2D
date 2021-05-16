@@ -9,7 +9,7 @@ public enum Material {
     GOLD(19300, new Color(238, 198, 0),0.7f, 0.0f, "Золото"),
     CONSTANTIN(1000, Color.RED, 0.7f, 0.7f, "Константин"),
     OSMIUM(22500, new Color(148, 157, 191),1f, 0f, "Осмий"),
-    WOOD(500, new Color(124, 67, 11),0.5f, 0.5f, "Дерево"),
+    WOOD(500, new Color(124, 67, 11),0.5f, 0.2f, "Дерево"),
     LAZULI(2500, new Color(0, 34, 255), 0.9f, 0.1f, "Лазурит"),
     SAND(2600, new Color(239, 239, 105), 0.1f, 0.4f, "Песок"  ),
     RED_STONE(2500, new Color(236, 81, 81),1f, 0.5f, "Красный Камень"),

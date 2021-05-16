@@ -10,20 +10,15 @@ import Kartoha_Engine2D.ui.Controllable;
 import Kartoha_Engine2D.utils.ImageReader;
 import Kartoha_Engine2D.utils.JsonAble;
 import Kartoha_Engine2D.utils.Tools;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.With;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-@Getter
-@Setter
-@Builder
-@With
+@Getter @Setter
 public class PhysicalSphere extends Sphere2 implements Collisional, Intersectional, Controllable, JsonAble, Focusable {
 
     private float x0, y0;
@@ -45,6 +40,17 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
         z = 0;
     }
 
+
+    public PhysicalSphere(Space space, float x0, float y0, float r){
+        super(x0, y0, r);
+        J = 0;
+        m = 0;
+        orientationVector = new Vector2(0,0);
+        v = new Vector2(0,0);
+        material = Material.CONSTANTIN;
+        this.r = r;
+        this.space = space;
+    }
 
     public PhysicalSphere(Space space, Vector2 v, float w, float x0, float y0, float r, Material material) {
         super(x0, y0, r);

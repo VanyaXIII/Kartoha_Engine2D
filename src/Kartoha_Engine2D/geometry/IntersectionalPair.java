@@ -73,6 +73,8 @@ public class IntersectionalPair<FirstThingType extends Intersectional, SecondThi
         if (d <= sphere.getR()) {
             Point2 collisionPoint = line.findIntPointWith(new Line(new Point2(spherePos.x, spherePos.y), new Vector2(line).createNormal()));
             return line.isPointInBoundingBox(collisionPoint);
+//                    new Vector2(spherePos, new Point2(line.x2, line.y2)).length() <= sphere.getR()  ||
+//                    new Vector2(spherePos, new Point2(line.x1, line.y1)).length() <= sphere.getR();
         }
 
         return false;

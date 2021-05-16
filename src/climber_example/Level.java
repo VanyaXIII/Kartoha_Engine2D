@@ -5,38 +5,45 @@ import Kartoha_Engine2D.physics.Space;
 import Kartoha_Engine2D.physics.Wall;
 import Kartoha_Engine2D.sphere.PhysicalSphere;
 import Kartoha_Engine2D.utils.JsonAble;
-import lombok.Builder;
+import climber_example.boosters.Booster;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.With;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 @Getter
 @Setter
-@Builder
-@With
 public class Level implements JsonAble{
 
     private ArrayList<Block> blocks;
     private ArrayList<Wall> walls;
     transient private PhysicalSphere sphere;
+    private float g;
+    private ArrayList<Booster> boosters;
 
     {
         sphere = null;
+        boosters = new ArrayList<>();
         blocks = new ArrayList<>();
         walls = new ArrayList<>();
+        g = 300;
     }
 
     public Level(Space space){
         this.sphere = space.getSpheres().get(0);
         this.walls = space.getWalls();
         this.blocks = space.getBlocks();
+    }
+
+    public Level(Space space, ArrayList<Booster> boosters){
+        this(space);
+        this.boosters = boosters;
     }
 
     public Level(PhysicalSphere sphere){
@@ -66,4 +73,11 @@ public class Level implements JsonAble{
         }
     }
 
+    public void setG(float g) {
+        this.g = g;
+    }
+
+    public float getG() {
+        return g;
+    }
 }
