@@ -23,7 +23,7 @@ public class ReferencePoint implements Clickable, Drawable {
     public boolean handleClick(MouseEvent event) {
         if (new AABB(
                 new Point2(point.x - 7f, point.y - 7f),
-                new Point2(point.x + 7f, point.y + 7f)).doesContainPoint(new Point2(event.getX(), event.getY()))){
+                new Point2(point.x + 7f, point.y + 7f)).doesContainPoint(new Point2(event.getX() + container.getSpace().getCamera().getXMovement(), event.getY() + container.getSpace().getCamera().getYMovement()))){
             container.addPoint(point);
             return true;
         }
@@ -33,7 +33,7 @@ public class ReferencePoint implements Clickable, Drawable {
     @Override
     public void draw(Graphics g) {
         g.setColor(new Color(138, 0, 255, 255));
-        g.fillOval(Tools.transformFloat(point.x - 7f), Tools.transformFloat(point.y - 7f), 14, 14);
+        g.fillOval(Tools.transformFloat(point.x - container.getSpace().getCamera().getXMovement() - 7f), Tools.transformFloat(point.y - container.getSpace().getCamera().getYMovement()- 7f), 14, 14);
     }
 
     @Override

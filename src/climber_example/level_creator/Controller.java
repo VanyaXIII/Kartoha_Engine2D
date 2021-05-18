@@ -37,8 +37,8 @@ public class Controller {
                     if (point.handleClick(e))
                         return;
                 }
-                container.addPoint(new Point2(e.getX(), e.getY()));
-                container.addReferencePoint(new Point2(e.getX(), e.getY()));
+                container.addPoint(new Point2(e.getX() + container.getSpace().getCamera().getXMovement(), e.getY() + container.getSpace().getCamera().getYMovement()));
+                container.addReferencePoint(new Point2(e.getX() + container.getSpace().getCamera().getXMovement(), e.getY() + container.getSpace().getCamera().getYMovement()));
             }
 
             @Override

@@ -8,13 +8,13 @@ import Kartoha_Engine2D.physics.Material;
 import Kartoha_Engine2D.physics.Space;
 import Kartoha_Engine2D.sphere.PhysicalSphere;
 import Kartoha_Engine2D.utils.BuildParams;
-import Kartoha_Engine2D.utils.Executable;
 import Kartoha_Engine2D.utils.JsonReader;
 import climber_example.Level;
 import climber_example.boosters.Applicable;
 import climber_example.boosters.Booster;
+import climber_example.boosters.Boosters;
 import climber_example.level_creator.Container;
-import com.google.gson.Gson;
+import lombok.SneakyThrows;
 
 
 import java.awt.*;
@@ -22,8 +22,10 @@ import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 final class Main {
+    @SneakyThrows
     public static void main(String[] args) {
 
         BuildParams params = BuildParams.BY_LEVEL;
@@ -47,6 +49,7 @@ final class Main {
                 scene.getSpace().addWall(points[i - 1].x, points[i - 1].y, points[i].x, points[i].y, Material.WOOD);
             }
         }
+
         scene.getSpace().addSphere(new Vector2(0, 0), 0f, 100, 690, 50, Material.WOOD);
         scene.getSpace().getSpheres().get(0).setZ(0);
         scene.getSpace().focusCameraOnObject(scene.getSpace().getSpheres().get(0));
@@ -63,8 +66,6 @@ final class Main {
                 scene.getSpace().getSpheres().get(0).setCords(new Point2(0,0));
             }
         };
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(applicable));
         Booster booster = new Booster(500, applicable);
         booster.setDrawingParams(new PhysicalSphere(scene.getSpace(), 500, 500, 500));
         scene.getSpace().getDrawables().add(booster);

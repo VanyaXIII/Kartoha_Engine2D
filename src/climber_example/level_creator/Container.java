@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class Container {
 
+    @Getter
     private final Space space;
     private boolean addingMode;
     @Getter @Setter
