@@ -10,9 +10,6 @@ import Kartoha_Engine2D.sphere.PhysicalSphere;
 import Kartoha_Engine2D.utils.BuildParams;
 import Kartoha_Engine2D.utils.JsonReader;
 import climber_example.Level;
-import climber_example.boosters.Applicable;
-import climber_example.boosters.Booster;
-import climber_example.boosters.Boosters;
 import climber_example.level_creator.Container;
 import lombok.SneakyThrows;
 
@@ -22,7 +19,6 @@ import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 final class Main {
     @SneakyThrows
@@ -32,7 +28,8 @@ final class Main {
 
         Scene scene = new Scene(new Space(0.0025f, 300f), new Color(0, 0, 0, 255), 1600, 1000);
         scene.getSpace().initCamera(new Resolution(1600, 1000));
-        scene.getSpace().addSphere(new Vector2(0, 0), 0f, 100, 690, 50, Material.WOOD);
+        PhysicalSphere sphere = new PhysicalSphere(scene.getSpace(), new Vector2(0,0), 0, 100, 690, 50, Material.WOOD);
+        scene.getSpace().getSpheres().add(sphere);
         scene.getSpace().getSpheres().get(0).setZ(0);
         scene.getSpace().focusCameraOnObject(scene.getSpace().getSpheres().get(0));
         Container container = new Container(scene.getSpace());
@@ -54,6 +51,8 @@ final class Main {
                 scene.getSpace().addWall(points[i - 1].x, points[i - 1].y, points[i].x, points[i].y, Material.WOOD);
             }
         }
+
+        scene.getSpace().getDrawables().add(sphere);
 
         scene.addSceneController(new SceneController(null, new KeyListener() {
             @Override
