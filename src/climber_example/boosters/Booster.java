@@ -4,6 +4,7 @@ package climber_example.boosters;
 import Kartoha_Engine2D.drawing.Drawable;
 import Kartoha_Engine2D.geometry.IntersectionalPair;
 import Kartoha_Engine2D.sphere.PhysicalSphere;
+import Kartoha_Engine2D.utils.Executable;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,31 +32,41 @@ public class Booster implements Drawable {
         this.applicable = applicable;
     }
 
-    public boolean checkCollision(PhysicalSphere sphere){
+    public boolean checkCollision(PhysicalSphere sphere) {
         return new IntersectionalPair<>(drawingParams, sphere).areIntersected();
     }
 
-    public void apply(){
-        applicable.apply();
+    public void apply() {
+        if (!applied)
+            applicable.apply();
         applied = true;
     }
 
-    public void disable(){
+    public void disable() {
         applicable.disable();
     }
 
-    public void check(){
-       if (duration == 0 && applied)
-           applicable.disable();
+    public void check() {
+        if (duration == 0 && applied)
+            applicable.disable();
     }
 
-    public void reduceDuration(){
+    public void reduceDuration() {
         if (applied) duration--;
+    }
+
+    public Executable getExecutable(PhysicalSphere sphere) {
+        return () -> {
+            reduceDuration();
+            if (checkCollision(sphere))
+                apply();
+            check();
+        };
     }
 
     @Override
     public void draw(Graphics g) {
-        if (drawingParams != null){
+        if (drawingParams != null) {
             drawingParams.draw(g);
         }
     }

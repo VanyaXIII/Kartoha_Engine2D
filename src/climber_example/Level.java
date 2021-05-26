@@ -5,6 +5,7 @@ import Kartoha_Engine2D.physics.Space;
 import Kartoha_Engine2D.physics.Wall;
 import Kartoha_Engine2D.sphere.PhysicalSphere;
 import Kartoha_Engine2D.utils.JsonAble;
+import Kartoha_Engine2D.utils.Pair;
 import climber_example.boosters.Booster;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,16 +23,17 @@ public class Level implements JsonAble{
 
     private ArrayList<Block> blocks;
     private ArrayList<Wall> walls;
+    private ArrayList<Pair<String, PhysicalSphere>> boosterPairs;
     transient private PhysicalSphere sphere;
+
     private float g;
-    private ArrayList<Booster> boosters;
 
     {
         sphere = null;
-        boosters = new ArrayList<>();
         blocks = new ArrayList<>();
         walls = new ArrayList<>();
         g = 300;
+        boosterPairs = new ArrayList<>();
     }
 
     public Level(Space space){
@@ -39,15 +41,6 @@ public class Level implements JsonAble{
         this.walls = space.getWalls();
         this.blocks = space.getBlocks();
         this.g = space.getG();
-    }
-
-    public Level(Space space, ArrayList<Booster> boosters){
-        this(space);
-        this.boosters = boosters;
-    }
-
-    public Level(PhysicalSphere sphere){
-        this.sphere = sphere;
     }
 
     public Level() {

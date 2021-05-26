@@ -28,7 +28,7 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
     private float w;
     private final float J;
     private final Vector2 orientationVector;
-    private final Space space;
+    private transient Space space;
     private final Material material;
     private final float m;
     private BufferedImage sprite;
@@ -147,7 +147,7 @@ public class PhysicalSphere extends Sphere2 implements Collisional, Intersection
             Graphics2D g2d = (Graphics2D) g;
             AABB aabb = new AABB(this, false);
             AffineTransform backup = g2d.getTransform();
-            AffineTransform tx = AffineTransform.getRotateInstance(rotateAngle, x0, y0);
+            AffineTransform tx = AffineTransform.getRotateInstance(rotateAngle, x0 - space.getCamera().getXMovement(), y0 - space.getCamera().getYMovement());
             g2d.setTransform(tx);
 
             g2d.drawImage(sprite, Tools.transformFloat(aabb.getMin().x - space.getCamera().getXMovement()) - 1, Tools.transformFloat(aabb.getMin().y- space.getCamera().getYMovement()) - 1,

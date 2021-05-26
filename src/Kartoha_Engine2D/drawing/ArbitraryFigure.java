@@ -32,6 +32,6 @@ public class ArbitraryFigure {
             xs[i] = Tools.transformFloat(points.get(i).x - camera.getXMovement());
             ys[i] = Tools.transformFloat(points.get(i).y - camera.getYMovement());
         }
-        return new Polygon(xs, ys, points.size()) ;
+        return new Polygon(xs, ys, points.size());
     }
 }

@@ -5,7 +5,11 @@ import Kartoha_Engine2D.physics.Block;
 import Kartoha_Engine2D.physics.Material;
 import Kartoha_Engine2D.physics.Space;
 import Kartoha_Engine2D.physics.Wall;
+import Kartoha_Engine2D.sphere.PhysicalSphere;
+import Kartoha_Engine2D.utils.Pair;
 import climber_example.Level;
+import climber_example.boosters.Booster;
+import climber_example.boosters.Boosters;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,13 +19,17 @@ public class Container {
 
     @Getter
     private final Space space;
-    private boolean addingMode;
+    @Getter @Setter
+    private String boosterName;
+    private AddingMode addingMode;
     @Getter @Setter
     private float g;
     @Getter
     private ArrayList<Wall> walls;
     @Getter
     private ArrayList<Block> blocks;
+    @Getter
+    private ArrayList<Pair<String, PhysicalSphere>> boosterPairs;
     private final ArrayList<ReferencePoint> points;
     @Getter
     private Material currentMaterial;
@@ -29,12 +37,15 @@ public class Container {
 
     {
         points = new ArrayList<>();
-        addingMode = false;
+        boosterName = "Jumper";
+        addingMode = AddingMode.BLOCKS;
         point1 = null;
         point2 = null;
         walls = new ArrayList<>();
         blocks = new ArrayList<>();
         currentMaterial = Material.CONSTANTIN;
+        boosterPairs = new ArrayList<>();
+        g = 300f;
     }
 
 
@@ -56,12 +67,21 @@ public class Container {
         point2 = null;
     }
 
+    private void addBooster(Point2 point){
+        PhysicalSphere sphere = new PhysicalSphere(space, point.x, point.y, 50);
+        space.getDrawables().add(sphere);
+        boosterPairs.add(new Pair<>(boosterName, sphere));
+    }
+
     public void addPoint(Point2 point){
+        if (addingMode == AddingMode.BOOSTERS){
+            addBooster(point);
+        }
         if (point1 != null && point2 == null){
             point2 = point;
-            if (addingMode)
+            if (addingMode == AddingMode.WALLS)
                 addWall();
-            else
+            else if (addingMode == AddingMode.BLOCKS)
                 addBlock();
         }
         else point1 = point;
@@ -78,6 +98,7 @@ public class Container {
         for (Block block : blocks)
             level.getBlocks().add(block);
         level.setG(g);
+        level.setBoosterPairs(boosterPairs);
         return level;
     }
 
@@ -87,7 +108,6 @@ public class Container {
         points.clear();
         space.getWalls().clear();
         space.getBlocks().clear();
-        space.getDrawables().clear();
         space.setG(level.getG());
         walls.forEach(wall -> wall.setSpace(space));
         blocks.forEach(block -> block.setSpace(space));
@@ -98,6 +118,15 @@ public class Container {
         for (Block block : blocks){
             space.addBlock(block.getX(), block.getY(), block.getW(), block.getH(), block.getMaterial());
         }
+        boosterPairs = level.getBoosterPairs();
+        boosterPairs.forEach(stringPhysicalSpherePair -> {
+            stringPhysicalSpherePair.getValue().setSpace(space);
+            space.getDrawables().add(stringPhysicalSpherePair.getValue());
+            Boosters boosters = new Boosters(space.getSpheres().get(0), 0);
+            Booster booster = boosters.getBoosterMap().get(stringPhysicalSpherePair.getKey());
+            booster.setDrawingParams(stringPhysicalSpherePair.getValue());
+            space.getExecutables().add(booster.getExecutable(space.getSpheres().get(0)));
+        });
         point1 = null;
         point2 = null;
     }
@@ -115,7 +144,17 @@ public class Container {
     }
 
     public void changeAddingMode(){
-        addingMode = !addingMode;
+        if (addingMode == AddingMode.BLOCKS) {
+            addingMode = AddingMode.WALLS;
+            return;
+        }
+        if (addingMode == AddingMode.WALLS){
+            addingMode = AddingMode.BOOSTERS;
+            return;
+        }
+        if (addingMode == AddingMode.BOOSTERS) {
+            addingMode = AddingMode.BLOCKS;
+        }
     }
 
     public ArrayList<ReferencePoint> getPoints() {

@@ -32,7 +32,12 @@ final class Main {
 
         Scene scene = new Scene(new Space(0.0025f, 300f), new Color(0, 0, 0, 255), 1600, 1000);
         scene.getSpace().initCamera(new Resolution(1600, 1000));
+        scene.getSpace().addSphere(new Vector2(0, 0), 0f, 100, 690, 50, Material.WOOD);
+        scene.getSpace().getSpheres().get(0).setZ(0);
+        scene.getSpace().focusCameraOnObject(scene.getSpace().getSpheres().get(0));
         Container container = new Container(scene.getSpace());
+
+
 
 
 
@@ -50,31 +55,6 @@ final class Main {
             }
         }
 
-        scene.getSpace().addSphere(new Vector2(0, 0), 0f, 100, 690, 50, Material.WOOD);
-        scene.getSpace().getSpheres().get(0).setZ(0);
-        scene.getSpace().focusCameraOnObject(scene.getSpace().getSpheres().get(0));
-        Applicable applicable = new Applicable() {
-            @Override
-            public void apply() {
-                scene.getSpace().setG(0);
-                scene.getSpace().getSpheres().get(0).setV(new Vector2(0,0));
-                scene.getSpace().getSpheres().get(0).setW(0);
-            }
-
-            @Override
-            public void disable() {
-                scene.getSpace().getSpheres().get(0).setCords(new Point2(0,0));
-            }
-        };
-        Booster booster = new Booster(500, applicable);
-        booster.setDrawingParams(new PhysicalSphere(scene.getSpace(), 500, 500, 500));
-        scene.getSpace().getDrawables().add(booster);
-        scene.getSpace().getExecutables().add(() -> {
-            booster.reduceDuration();
-            if (booster.checkCollision(scene.getSpace().getSpheres().get(0)))
-                booster.apply();
-            booster.check();
-        });
         scene.addSceneController(new SceneController(null, new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {

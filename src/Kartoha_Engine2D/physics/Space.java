@@ -23,9 +23,9 @@ public class Space {
     private final ArrayList<Executable> executables;
     private float fps = 0;
     private final ArrayList<Wall> walls;
-    private final ArrayList<PhysicalSphere> spheres;
-    private final ArrayList<Block> blocks;
-    private final ArrayList<PhysicalPolygon> polygons;
+    transient private final ArrayList<PhysicalSphere> spheres;
+    transient private final ArrayList<Block> blocks;
+    transient private final ArrayList<PhysicalPolygon> polygons;
     private final float DT;
     private float G;
     private final PhysicsHandler physicsHandler;

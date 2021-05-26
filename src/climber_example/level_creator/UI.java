@@ -64,9 +64,18 @@ public class UI {
         });
         saveG.setBounds(250, 80, 250, 40);
 
+        JTextField boosterText = new JTextField();
+        boosterText.setBounds(0, 120, 250, 40);
+
+        JButton saveBooster = new JButton("Сохранить название бустера");
+        saveBooster.addActionListener(e -> {
+            container.setBoosterName(boosterText.getText());
+        });
+        saveBooster.setBounds(250, 120, 250, 40);
+
         JPanel materialsPanel = new JPanel();
         materialsPanel.setLayout(null);
-        materialsPanel.setBounds(0, 120, 500, 720);
+        materialsPanel.setBounds(0, 160, 500, 720);
         int y = 0;
         for (Material material : Material.values()) {
             JButton button = new JButton(material.getName());
@@ -77,7 +86,7 @@ public class UI {
             y += 40;
         }
         JScrollPane scroll = new JScrollPane(materialsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scroll.setBounds(0, 120, 485, 682);
+        scroll.setBounds(0, 160, 485, 682);
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -86,6 +95,8 @@ public class UI {
         panel.add(changeModeButton);
         panel.add(gText);
         panel.add(saveG);
+        panel.add(saveBooster);
+        panel.add(boosterText);
         panel.add(setLevelButton);
         panel.add(saveLevelButton);
         panel.add(deleteButton);
