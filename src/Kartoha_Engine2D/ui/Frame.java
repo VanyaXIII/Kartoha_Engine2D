@@ -1,14 +1,15 @@
 package Kartoha_Engine2D.ui;
 
+import Kartoha_Engine2D.drawing.ArbitraryFigure;
 import Kartoha_Engine2D.drawing.Drawable;
+import Kartoha_Engine2D.geometry.Point2;
+import Kartoha_Engine2D.physics.Block;
+import Kartoha_Engine2D.physics.Space;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 public final class Frame extends JFrame {
 
@@ -61,6 +62,22 @@ public final class Frame extends JFrame {
                         drawable.draw(finalG1);
                     }
                 }
+                Space space = scene.getSpace();
+                int n = space.getWalls().size();
+                ArrayList<Point2> points = new ArrayList<>();
+                for(int i = 0; i < n; i++){
+                    if (i == 0){
+                        points.add(new Point2(space.getWalls().get(0).getPoint1().x, 3000));
+                    }
+                    points.add(space.getWalls().get(i).getPoint1());
+                    points.add(space.getWalls().get(i).getPoint2());
+                    if (i == n -1){
+                        points.add(new Point2(space.getWalls().get(n-1).getPoint2().x, 3000));
+                    }
+                }
+                ArbitraryFigure arbitraryFigure = new ArbitraryFigure(points);
+                finalG1.setColor(space.getWalls().get(0).getMaterial().fillColor);
+                finalG1.fillPolygon(arbitraryFigure.getPolygon(space.getCamera()));
             } catch (Exception ignored) {
             }
             finalG.setColor(Color.WHITE);

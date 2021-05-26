@@ -23,13 +23,13 @@ public class LevelCreator {
             public void keyPressed(KeyEvent e) {
                 new Thread(() -> {
                     if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-                        scene.getSpace().getCamera().moveX(3);
+                        scene.getSpace().getCamera().moveX(100);
                     if (e.getKeyCode() == KeyEvent.VK_LEFT)
-                        scene.getSpace().getCamera().moveX(-3);
+                        scene.getSpace().getCamera().moveX(-100);
                     if (e.getKeyCode() == KeyEvent.VK_UP)
-                        scene.getSpace().getCamera().moveY(-3);
+                        scene.getSpace().getCamera().moveY(-100);
                     if (e.getKeyCode() == KeyEvent.VK_DOWN)
-                        scene.getSpace().getCamera().moveY(3);
+                        scene.getSpace().getCamera().moveY(100);
                 }).start();
             }
 

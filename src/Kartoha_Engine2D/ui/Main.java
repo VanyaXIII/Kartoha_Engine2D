@@ -1,6 +1,7 @@
 package Kartoha_Engine2D.ui;
 
 
+import Kartoha_Engine2D.drawing.ArbitraryFigure;
 import Kartoha_Engine2D.drawing.camera.Resolution;
 import Kartoha_Engine2D.geometry.Point2;
 import Kartoha_Engine2D.geometry.Vector2;
@@ -19,6 +20,7 @@ import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 final class Main {
     @SneakyThrows
@@ -122,6 +124,22 @@ final class Main {
 
     private static void saveLevel(Scene scene){
         new Level(scene.getSpace()).save();
+    }
+
+    private static void initGround(Space space){
+        int n = space.getWalls().size();
+        ArrayList<Point2> points = new ArrayList<>();
+        for(int i = 0; i < n; i++){
+            if (i == 0){
+                points.add(new Point2(space.getWalls().get(0).getPoint1().x, 3000));
+            }
+            points.add(space.getWalls().get(i).getPoint1());
+            points.add(space.getWalls().get(i).getPoint2());
+            if (i == n -1){
+                points.add(new Point2(space.getWalls().get(n-1).getPoint2().x, 3000));
+            }
+        }
+        ArbitraryFigure arbitraryFigure = new ArbitraryFigure(points);
     }
 }
 
